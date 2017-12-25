@@ -122,4 +122,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# macOS
+.DS_Store
+
 # End of https://www.gitignore.io/api/python,microsoftoffice
