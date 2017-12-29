@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, json
+import os, json, enum
 import argparse
 
 # local
@@ -23,7 +23,7 @@ class TableReConstructor:
     args = self.ARGS
     fileloc = os.path.abspath(os.path.expanduser(args.file))
     x = xlsx.XLSX(fileloc, args.output, args.output_format)
-    x.generateCSVs()
+    x.generateJSON()
     pass
 
   @staticmethod
@@ -49,6 +49,25 @@ def __print(str, flag=TableReConstructor.DEBUG):
   if flag:
     print(str)
   pass
+
+class Validator(str, enum.Enum):
+  """ 対応validator """
+  jsonschema = 'jsonschema'
+
+class TypeSign(str, enum.Enum):
+  """ Type adhoc """
+  # https://tools.ietf.org/html/draft-zyp-json-schema-04
+  # RFC 4627#2.1 https://tools.ietf.org/html/rfc4627
+  OBJ = 'object'
+  ARRAY = 'array'
+
+  STRING = 'string'
+  NUM = 'number'
+  FALSE = 'false'
+  TRUE = 'true'
+
+  JSON_NULL = 'null'
+
 
 if __name__ == '__main__':
   ins = TableReConstructor()

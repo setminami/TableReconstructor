@@ -2,45 +2,60 @@
 # this made for python3
 import os
 import csv, openpyxl
-from openpyxl.worksheet.hyperlink import Hyperlink
-from table_reconstructor import TableReConstructor
+from table_reconstructor import TableReConstructor, Validator
 
 class XLSX:
   """ """
   DEBUG = True
+  # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
+  # topレベルを示すシート名
   root_name = 'root'
 
   def __init__(self, file, output_path, forms=None):
-      print(file)
-      self.filepath = file
-      self.output_path = output_path
-      self.format = forms
-      self.book = openpyxl.load_workbook(self.filepath, keep_vba=False)
-      pass
+    print(file)
+    self.filepath = file
+    self.output_path = output_path
+    self.format = forms
+    self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
+    pass
 
-  def generateCSVs(self):
+  def generateJSON(self, sheet_name=root_name):
     dest_dir = self.output_path
-    print(dest_dir)
     os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
     sheet_names = list(sheets.keys())
-    assert XLSX.root_name in sheet_names
-    root_sheet = sheets[XLSX.root_name]
-    for row in root_sheet.iter_rows():
+    print(sheet_name)
+    print(sheet_names)
+    print(sheets)
+    assert sheet_name in sheet_names
+    root_sheet = sheets[sheet_name]
+    columns = []
+    for i, row in enumerate(root_sheet.iter_rows()):
       if self.format:
         self.__outputCSV(dest_dir, root_sheet)
         pass
-      for cell in row:
+      for j, cell in enumerate(row):
         v = cell.value
         print(v)
-        if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
-          link = v.lstrip(XLSX.sheet_link_sign)
-          if link in sheet_names:
-            self.__outputCSV(dest_dir, sheets[link])
+        if i == 0:
+          # cell.commentは必ずつくが、中身がない場合はNone
+          if hasattr(cell, "comment") and cell.comment:
+            # column 準備
+            columns.append((v, cell.comment.text))
+            print('%s : %s'%(columns[j], v))
+        else:
+          if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
+            link = v.lstrip(XLSX.sheet_link_sign)
+            if link in sheet_names:
+              self.generateJSON(link)
+            else:
+              self.errorout(1)
+              pass
           else:
-            self.errorout(1)
-          pass
+            print(j)
+            print('%s : %s'%(columns[j][0], v))
+            self.typeValidator(v, columns[j])
     pass
 
   def __outputCSV(self, base_path, sheet):
@@ -57,7 +72,7 @@ class XLSX:
   def __nameToSheets(self):
     """
     sheetを{sheet名:sheet}形式にして返す
-    実行中のExcel更新は考えない
+    instance 生成後、実行中のExcel更新は考えない
     """
     if not hasattr(self, '__sheets_cache'):
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
@@ -68,6 +83,17 @@ class XLSX:
     errors = ['OK', 'sheets link not found.']
     assert e < len(errors)
     print(errors[e])
+
+  def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
+    """ Validator switch"""
+    __type = type_desc[0]
+    raw = '\"{}\": {}'.format(type_desc[0], '\"%s\"'%(value if __type == ))
+    # jsonschema による型チェック
+    if validator == Validator.jsonschema:
+      from jsonschema import Draft4Validator
+      print('%s < %s : %s >'%(value, type_desc[0], type_desc[1]))
+      pass
+
 
 def __print(str, flag=XLSX.DEBUG):
   if flag:
