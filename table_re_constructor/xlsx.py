@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # this made for python3
-import os
+import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor, Validator
+from table_reconstructor import TableReConstructor, Validator, TypeSign
+from util import Util
 
 class XLSX:
   """ """
@@ -42,15 +43,17 @@ class XLSX:
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
             # column 準備
-            columns.append((v, cell.comment.text))
+            columns.append((v, Util.runtimeDictionary(cell.comment.text)))
             print('%s : %s'%(columns[j], v))
+          else:
+            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, i, j))
         else:
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
               self.generateJSON(link)
             else:
-              self.errorout(1)
+              self.errorout(1, 'sheet = from {} to {}, col = {}, row = {}'.format(sheet_name, link, i, j))
               pass
           else:
             print(j)
@@ -78,16 +81,17 @@ class XLSX:
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
     return self.__sheets_cache
 
-  def errorout(self, e):
+  def errorout(self, e, additonal=''):
     """ 出力細部はあとで調整すること """
-    errors = ['OK', 'sheets link not found.']
+    errors = ['OK', 'sheets link not found.', 'scheme not found.']
     assert e < len(errors)
-    print(errors[e])
+    print('{} : {}'.format(errors[e], additonal))
+    sys.exit(e)
 
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch"""
     __type = type_desc[0]
-    raw = '\"{}\": {}'.format(type_desc[0], '\"%s\"'%(value if __type == ))
+    raw = '\"{}\": {}'.format(type_desc[0], '%s'%('\"%s\"'%value if __type == TypeSign.STRING else value))
     # jsonschema による型チェック
     if validator == Validator.jsonschema:
       from jsonschema import Draft4Validator

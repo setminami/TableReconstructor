@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, json, enum
+import os, json, enum, re
 import argparse
 
 # local
@@ -9,7 +9,7 @@ import xlsx
 VERSION = '0.0.1'
 
 class TableReConstructor:
-  """ """
+  """ 具象操作に流すための、utility的位置づけ"""
   DEBUG = True
   # DEBUG出力用 jsonは別扱い
   output_formats = ['csv','tsv']
@@ -63,6 +63,7 @@ class TypeSign(str, enum.Enum):
 
   STRING = 'string'
   NUM = 'number'
+
   FALSE = 'false'
   TRUE = 'true'
 
