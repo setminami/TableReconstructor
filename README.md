@@ -15,6 +15,8 @@
 
   2. root itemを示すsheetは`root`をシート名とすること
 
+      - `-r sheet名`で指定、`-r`がない場合のみxlsxは`root`という名前のsheetを持たなければならない
+
   3. カラムはキーとして解釈されること
 
   4. 1階層下にitemを持たせる場合は別sheetとし、item名カラムにsheetへのハイパーリンクを張ること
@@ -33,5 +35,7 @@
   6. Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
 ## エラー
-  - root sheetがない
-  - 指定されたシートが見つからない
+
+  1. 指定されたシートが見つからない : sheets link not found.
+  2. schema記述が欠けているcolumnが見つかった : scheme not found.
+  3. root sheetがない : root sheet not found.
