@@ -1,3 +1,4 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
 # JSON_XLSX_Manager
 ## What I wanna do and What is convenient
   - テストや設定データを興味を持つところのみにこだわり、平易に管理したい
