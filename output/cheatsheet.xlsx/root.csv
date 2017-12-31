@@ -1,5 +1,5 @@
 color,title,desc-ja,desc-en,items
-ff0000,Anchors,,,sheet://items-Anchors
+fff000,Anchors,,,sheet://items-Anchors
 f00000,Character Classes,,Character classes can be used in ranges.,sheet://items-CharClass
 0000FF,POSIX Character Classes,,"POSIX Character Classes must be used in bracket expressions, e.g. [a-z[:upper:]].",sheet://items-POSIX-CHAR
 0f000f,Groups,,,sheet://items-Groups

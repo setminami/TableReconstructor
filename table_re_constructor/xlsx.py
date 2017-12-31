@@ -78,7 +78,7 @@ class XLSX:
       exit(-3)
     return accumrator
 
-  def __outputCSV(self, base_path, sheet):
+  def __outputCSV(self, base_path, sheet, enc='utf-8'):
     """
     CSV, TSV出力
     """
@@ -87,7 +87,7 @@ class XLSX:
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, sheet.title + '.' + self.format)
     print(" > %s"%xdest_path)
-    with open(xdest_path, 'w', encoding='utf-8') as f:
+    with open(xdest_path, 'w', encoding=enc) as f:
       writer = csv.writer(f)
       for cols in sheet.rows:
         writer.writerow([str(col.value or '') for col in cols])

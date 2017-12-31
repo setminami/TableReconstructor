@@ -28,9 +28,15 @@ class TableReConstructor:
       print(tmp)
     else:
       fileloc = os.path.abspath(os.path.expanduser(args.file))
+      # ToDo: openpyxlでecodeが取れるか確認
+      enc = 'utf-8'
       x = xlsx.XLSX(fileloc, args.output, args.output_format)
       # sys.setrecursionlimit(1024 * 8)
-      print('>>>> %s'%x.generateJSON())
+      j = x.generateJSON()
+      _file, _ = os.path.splitext(fileloc)
+      with open(fr'{_file}.json', 'w', encoding=enc) as f:
+        f.write(json.dumps(j, sort_keys=True, indent=args.human_readable) \
+                                    if args.human_readable > 0 else json.dumps(j))
     pass
 
   @staticmethod
@@ -43,7 +49,7 @@ class TableReConstructor:
                         action='version', version='TableReConstructor %s'%VERSION)
     argParser.add_argument('-f', '--file',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
-                            help='')
+                            help='Set path/to/xlsx filename.')
     argParser.add_argument('-of', '--output_format',
                             nargs='?', type=str, default='',
                             help='-of %s \nOutput with the format, If you set, output formfiles to /path/to/output/%s This IS DEBUG feature'%(outs, outs))
@@ -56,6 +62,9 @@ class TableReConstructor:
                             help='-gx filename(.xlsx) \nThis is an initialize helper option.\n\
                             Generate template xlsx file based on same filename.yaml.\
                             \nAnd if you set this, other options are ignored.')
+    argParser.add_argument('-hr', '--human_readable',
+                            type=int, default=0,
+                            help='set indent size by numeric value, Output humanreadable json files.')
     return argParser.parse_args()
 
 def __print(str, flag=TableReConstructor.DEBUG):
