@@ -32,7 +32,7 @@ class TableReConstructor:
       enc = 'utf-8'
       x = xlsx.XLSX(fileloc, args.output, args.output_format)
       # sys.setrecursionlimit(1024 * 8)
-      j = x.generateJSON()
+      j = x.generateJSON(sheet_name=args.root_sheet)
       _file, _ = os.path.splitext(fileloc)
       with open(fr'{_file}.json', 'w', encoding=enc) as f:
         f.write(json.dumps(j, sort_keys=True, indent=args.human_readable) \
@@ -65,6 +65,9 @@ class TableReConstructor:
     argParser.add_argument('-hr', '--human_readable',
                             type=int, default=0,
                             help='set indent size by numeric value, Output humanreadable json files.')
+    argParser.add_argument('-r', '--root_sheet',
+                            nargs='?', type=str, default='root',
+                            help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
     return argParser.parse_args()
 
 def __print(str, flag=TableReConstructor.DEBUG):

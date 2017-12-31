@@ -33,5 +33,7 @@
   6. Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
 ## エラー
-  - root sheetがない
-  - 指定されたシートが見つからない
+
+  1. 指定されたシートが見つからない : sheets link not found.
+  2. schema記述が欠けているcolumnが見つかった : scheme not found.
+  3. root sheetがない : root sheet not found.

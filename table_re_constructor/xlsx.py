@@ -10,8 +10,6 @@ class XLSX:
   DEBUG = True
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
-  # topレベルを示すシート名
-  root_name = 'root'
 
   def __init__(self, file, output_path, forms=None):
     print(file)
@@ -22,7 +20,7 @@ class XLSX:
     self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
     pass
 
-  def generateJSON(self, acc=[], sheet_name=root_name):
+  def generateJSON(self, sheet_name, acc=[]):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
@@ -57,7 +55,7 @@ class XLSX:
               col_name = columns[j][0]
               print(f'process {col_name} -> {link}')
               print(f'current acc = {acc}')
-              self.__store({col_name:self.generateJSON(acc=[], sheet_name=link)}, subacc)
+              self.__store({col_name:self.generateJSON(sheet_name=link, acc=[])}, subacc)
             else:
               self.errorout(1, 'sheet = from {} to {}, col = {}, row = {}'.format(sheet_name, link, j, i))
               pass
@@ -103,7 +101,7 @@ class XLSX:
 
   def errorout(self, e, additonal=''):
     """ 出力細部はあとで調整すること """
-    errors = ['OK', 'sheets link not found.', 'scheme not found.']
+    errors = ['OK', 'sheets link not found.', 'scheme not found.', 'root sheet not found.']
     assert e < len(errors)
     print('{} : {}'.format(errors[e], additonal))
     sys.exit(e)
