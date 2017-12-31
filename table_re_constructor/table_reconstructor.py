@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, json, enum, re
+import os, sys, json, enum, re
 import argparse
 
 # local
@@ -21,9 +21,15 @@ class TableReConstructor:
 
   def test(self):
     args = self.ARGS
-    fileloc = os.path.abspath(os.path.expanduser(args.file))
-    x = xlsx.XLSX(fileloc, args.output, args.output_format)
-    x.generateJSON()
+    argvs = sys.argv
+    if '-gx' in argvs or '--generate_template_xlsx' in argvs:
+      # 初期化モード
+      tmp = 'template.xlsx' if args.generate_template_xlsx == None else args.generate_template_xlsx
+      print(tmp)
+    else:
+      fileloc = os.path.abspath(os.path.expanduser(args.file))
+      x = xlsx.XLSX(fileloc, args.output, args.output_format)
+      x.generateJSON()
     pass
 
   @staticmethod
@@ -43,6 +49,12 @@ class TableReConstructor:
     argParser.add_argument('-o', '--output',
                             nargs='?', type=str, default='output',
                             help='-o /path/to/output \nOutput interpreted json files.')
+    # Memo: command形式の方が素直か？
+    argParser.add_argument('-gx', '--generate_template_xlsx',
+                            nargs='?', type=str, default='',
+                            help='-gx filename(.xlsx) \nThis is an initialize helper option.\n\
+                            Generate template xlsx file based on same filename.yaml.\
+                            \nAnd if you set this, other options are ignored.')
     return argParser.parse_args()
 
 def __print(str, flag=TableReConstructor.DEBUG):

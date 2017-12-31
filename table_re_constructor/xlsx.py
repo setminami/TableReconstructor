@@ -26,9 +26,9 @@ class XLSX:
     os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
     sheet_names = list(sheets.keys())
-    print(sheet_name)
-    print(sheet_names)
-    print(sheets)
+#    print(sheet_name)
+#    print(sheet_names)
+#    print(sheets)
     assert sheet_name in sheet_names
     root_sheet = sheets[sheet_name]
     columns = []
@@ -38,22 +38,22 @@ class XLSX:
         pass
       for j, cell in enumerate(row):
         v = cell.value
-        print(v)
-        if i == 0:
+        if v is None: continue # cell check
+        if i == 0: # column check
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
-            # column 準備
+            # column 準備 / schemeは遅延せずこの時点で辞書として成立している事を保証
             columns.append((v, Util.runtimeDictionary(cell.comment.text)))
             print('%s : %s'%(columns[j], v))
           else:
-            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, i, j))
+            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
               self.generateJSON(link)
             else:
-              self.errorout(1, 'sheet = from {} to {}, col = {}, row = {}'.format(sheet_name, link, i, j))
+              self.errorout(1, 'sheet = from {} to {}, col = {}, row = {}'.format(sheet_name, link, j, i))
               pass
           else:
             print(j)
@@ -62,6 +62,9 @@ class XLSX:
     pass
 
   def __outputCSV(self, base_path, sheet):
+    """
+    CSV, TSV出力
+    """
     assert self.format in TableReConstructor.output_formats
     xdest = os.path.join(base_path, self.format)
     os.makedirs(xdest, exist_ok=True)
@@ -90,13 +93,26 @@ class XLSX:
 
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch"""
-    __type = type_desc[0]
-    raw = '\"{}\": {}'.format(type_desc[0], '%s'%('\"%s\"'%value if __type == TypeSign.STRING else value))
+    __type = type_desc[1]['type']
+    # ToDo: type switch
+    raw = Util.convEscapedKV(__type, type_desc[0], value)
     # jsonschema による型チェック
     if validator == Validator.jsonschema:
-      from jsonschema import Draft4Validator
-      print('%s < %s : %s >'%(value, type_desc[0], type_desc[1]))
+      from jsonschema import validate, ValidationError
+      # as jsonschema style
+      # 課題: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
+      schema = {'type':'object'}
+      if 'required' in type_desc[1].keys():
+        schema['required'] = [type_desc[0]]
+      schema['properties'] = {type_desc[0] : {'type':type_desc[1]['type']}}
+      print('%s < %s : %s >\n%s'%(value, type_desc[0], schema, raw))
+      try:
+        validate(Util.runtimeDictionary('{%s}'%raw), schema)
+      except ValidationError as e:
+        print('jsonschema Error has found.\n%s'%e)
+        exit(-1)
       pass
+
 
 
 def __print(str, flag=XLSX.DEBUG):
