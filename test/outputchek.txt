@@ -1,3 +1,4 @@
+一列のみのケース
 === [
       {'color': 'ff0000',
        'title': 'Anchors',
@@ -6,6 +7,7 @@
        ]}
     ] ===
 
+全列チェック
 === [
 {'color': 'ff0000', 'title': 'Anchors',
   'items': [

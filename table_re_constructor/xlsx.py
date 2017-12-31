@@ -16,6 +16,7 @@ class XLSX:
   def __init__(self, file, output_path, forms=None):
     print(file)
     self.filepath = file
+    self.filename = os.path.basename(file)
     self.output_path = output_path
     self.format = forms
     self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
@@ -29,9 +30,7 @@ class XLSX:
     os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
     sheet_names = list(sheets.keys())
-#    print(sheet_name)
-#    print(sheet_names)
-#    print(sheets)
+    print(f'in process {sheet_name} ')
     assert sheet_name in sheet_names
     root_sheet = sheets[sheet_name]
     columns = []
@@ -67,7 +66,6 @@ class XLSX:
         pass # pass columns
       Util.checkEmptyOr(lambda x: self.__store(x, acc), subacc)
       pass # pass a row
-    print('=== %s ==='%acc)
     return acc
 
   def __store(self, item, accumrator):
@@ -85,7 +83,7 @@ class XLSX:
     CSV, TSV出力
     """
     assert self.format in TableReConstructor.output_formats
-    xdest = os.path.join(base_path, self.format)
+    xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, sheet.title + '.' + self.format)
     print(" > %s"%xdest_path)
