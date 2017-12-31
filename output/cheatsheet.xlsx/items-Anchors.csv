@@ -1,0 +1,8 @@
+sign,desc-ja,desc-en
+^,,Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default.
+$,,Matches at the end of string or end of line if multi-line mode is  enabled. Many regex implementations have multi-line mode enabled by default.
+\A,,Matches at the start of the search string.
+\Z,,"Matches at the end of the search string, or before a newline at the end of the string."
+\z,,Matches at the end of the search string.
+\b,,Matches at word boundaries.
+\B,,Matches anywhere but word boundaries.

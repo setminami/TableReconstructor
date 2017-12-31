@@ -1,0 +1,5 @@
+sign,desc-en,desc-ja
+foo(?=bar),Lookahead assertion. The pattern foo will only match if followed by a match of pattern bar.,
+foo(?!bar),Negative lookahead assertion. The pattern foo will only match if not followed by a match of pattern bar.,
+(?<=foo)bar,Lookbehind assertion. The pattern bar will only match if preceded by a match of pattern foo.,
+(?<!foo)bar,Negative lookbehind assertion. The pattern bar will only match if not preceded by a match of pattern foo.,
