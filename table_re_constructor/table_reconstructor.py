@@ -29,7 +29,8 @@ class TableReConstructor:
     else:
       fileloc = os.path.abspath(os.path.expanduser(args.file))
       x = xlsx.XLSX(fileloc, args.output, args.output_format)
-      x.generateJSON()
+      # sys.setrecursionlimit(1024 * 8)
+      print('>>>> %s'%x.generateJSON())
     pass
 
   @staticmethod

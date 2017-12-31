@@ -17,7 +17,7 @@ class Util:
     """ このmodule で固有の読み替え問題を解決 """
     local = cls.stripComments(raw_value)
     local = cls.__convPyBoolean(local)
-    print('>>> %s'%local)
+    # print('>>> %s'%local)
     # ToDo: 真面目な構文チェック
     if not (local.startswith('{') and local.endswith('}')):
       asDic = '{%s}'%local
@@ -44,3 +44,13 @@ class Util:
     value = '{!s}'.format('"%s"'%value if TypeSign.STRING in type else value)
     local = f'"{key}": {value}'
     return local
+
+  @classmethod
+  def checkEmptyOr(self, proc, item):
+    """
+    itemが空(list, dict, '', None...)なら何もしない、空でなければprocを実行
+    """
+    if bool(item):
+      proc(item)
+    else:
+      print('item is Empty!')
