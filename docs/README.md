@@ -39,7 +39,16 @@
 
   6. Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
-## エラー
+## Sample Files
+  - 用意するファイルと、`table_reconstructor.py -of csv -hr 2` 出力例
+    [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
+  - local git環境に設定調整を強要しないxlsx git管理の模索
+    [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
+  - xlsx初期化用template yamlファイル
+    [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
+  - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
+
+## Appendix. エラー
 
   1. 指定されたシートが見つからない : sheets link not found.
   2. schema記述が欠けているcolumnが見つかった : scheme not found.
