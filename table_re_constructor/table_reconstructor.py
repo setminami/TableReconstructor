@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, sys, json, enum, re
+import os, sys, json, re
 import argparse
 
 # local
@@ -41,12 +41,13 @@ class TableReConstructor:
 
   @staticmethod
   def ArgParser():
+    progname = os.path.basename(__file__)
     argParser = argparse.ArgumentParser(prog=__file__, description='',
-                                        usage='table_reconstructor [options]')
+                                        usage=f'{progname} [options]')
     outs = '[ csv | tsv ]'
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
-                        action='version', version='TableReConstructor %s'%VERSION)
+                        action='version', version=f'{progname} {VERSION}')
     argParser.add_argument('-f', '--file',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
                             help='Set path/to/xlsx filename.')
@@ -74,26 +75,6 @@ def __print(str, flag=TableReConstructor.DEBUG):
   if flag:
     print(str)
   pass
-
-class Validator(str, enum.Enum):
-  """ 対応validator """
-  jsonschema = 'jsonschema'
-
-class TypeSign(str, enum.Enum):
-  """ Type adhoc """
-  # https://tools.ietf.org/html/draft-zyp-json-schema-04
-  # RFC 4627#2.1 https://tools.ietf.org/html/rfc4627
-  OBJ = 'object'
-  ARRAY = 'array'
-
-  STRING = 'string'
-  NUM = 'number'
-
-  FALSE = 'false'
-  TRUE = 'true'
-
-  JSON_NULL = 'null'
-
 
 if __name__ == '__main__':
   ins = TableReConstructor()
