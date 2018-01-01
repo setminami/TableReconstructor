@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-
 import re, ast
-from table_reconstructor import TypeSign
 
 class Util:
   comment_sign = ['#', '/{2}']
 
   @classmethod
   def stripComments(cls, rawStr):
+    assert isinstance(rawStr, str)
     # ‘/\*/?([^/]|[^*]/)*\*/’ Ctype
     return re.sub(r'\n*[%s].*\n'%''.join(cls.comment_sign), '', rawStr.strip())
-
 
   @classmethod
   def __checkValidDictionary(cls, raw_value):
@@ -39,6 +37,7 @@ class Util:
 
   @classmethod
   def convEscapedKV(cls, type, key, value, enc='utf-8'):
+    from schema_helper import TypeSign
     key = key.encode('unicode-escape').decode(enc)
     value = value.encode('unicode-escape').decode(enc)
     value = '{!s}'.format('"%s"'%value if TypeSign.STRING in type else value)

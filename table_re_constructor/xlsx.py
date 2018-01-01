@@ -2,7 +2,8 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor, Validator, TypeSign
+from table_reconstructor import TableReConstructor
+from schema_helper import Schema, Validator
 from util import Util
 
 class XLSX:
@@ -44,7 +45,7 @@ class XLSX:
         if i == 0: # column check
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
-            # column 準備 / schemeは遅延せずこの時点で辞書として成立している事を保証
+            # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
             columns.append((v, Util.runtimeDictionary(cell.comment.text)))
           else:
             self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
@@ -101,38 +102,20 @@ class XLSX:
 
   def errorout(self, e, additonal=''):
     """ 出力細部はあとで調整すること """
-    errors = ['OK', 'sheets link not found.', 'scheme not found.', 'root sheet not found.']
+    errors = ['OK', 'sheets link not found.', 'schema not found.', 'root sheet not found.']
     assert e < len(errors)
     print('{} : {}'.format(errors[e], additonal))
     sys.exit(e)
 
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
-    """ Validator switch"""
-    __type = type_desc[1]['type']
-    # ToDo: type switch
-    raw = Util.convEscapedKV(__type, type_desc[0], value)
-    # jsonschema による型チェック
-    if validator == Validator.jsonschema:
-      from jsonschema import validate, ValidationError, SchemaError
-      # as jsonschema style
-      # 課題: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
-      schema = {'type':'object'}
-      if 'required' in type_desc[1].keys():
-        schema['required'] = [type_desc[0]]
-      schema['properties'] = {type_desc[0] : {'type':type_desc[1]['type']}}
-      # print('%s < %s : %s >\n%s'%(value, type_desc[0], schema, raw))
-      instance = '{%s}'%raw
-      try:
-        validate(Util.runtimeDictionary(instance), schema)
-      except ValidationError as ve:
-        print('Validation Error has found.\n%s'%ve)
-        exit(-1)
-      except SchemaError as se:
-        print('Schema Error has found.\n%s'%se)
-        exit(-2)
-      pass
+    """ Validator switch """
+    if not hasattr(self, '__schema'):
+      self.__schema = Schema(validator)
+    raw = Util.convEscapedKV(type_desc[1]['type'], type_desc[0], value)
+    instance = Util.runtimeDictionary('{%s}'%raw)
+    self.__schema.validate(instance, type_desc)
     assert instance is not None
-    return Util.runtimeDictionary(instance)
+    return instance
 
 def __print(str, flag=XLSX.DEBUG):
   if flag:

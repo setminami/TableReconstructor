@@ -1,13 +1,14 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
 # JSON_XLSX_Manager
-## What I wanna do and What is convenient
-  - テストや設定データを興味を持つところのみにこだわり、平易に管理したい
+## What I wanna do and Where advantage
+  - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
     - 雑音を排除し、必要条件を満たすことに集中できる
   - Excelなど抽象表現からJSON, Yaml, md...etcの具象表現を振り分け自動生成したい
     - 抽象表現を建てることにより、∃具象表現のみを必要とするだけで他は必要になるまで出力の必要がなくなる
     - 抽象的に興味の対象を記述することで、未認知含め∀具象表現はそれぞれの下層レイヤでの限定都合で整形することに集中できる
   - 小粒度ファイルを多人数にmap, reduceして作業の集中と並列化を図る
     - 例えば、初期化したexcelからsheetをばらして配って各自入力、回収時finalizeすると巨大なJSONファイルが出力されるとか。
+    - 詳細仕様は一部の人間だけが握って正確に記述することで、各自は担当する部位だけ知っていればすむような、知識の分散管理を図りたい
 
 ## excel構築と編集
   - git管理をする場合は必ずxlsx形式であること
@@ -19,6 +20,9 @@
       - `-r sheet名`で指定、`-r`がない場合のみxlsxは`root`という名前のsheetを持たなければならない
 
   3. カラムはキーとして解釈されること
+
+      - 各カラムには、該当itemについてのjsonschemaを**コメントで**書き入れる
+      - xlsx初期化コマンドで、yamlからjsonschemaの設定内容が読み込まれ、上述コメントが埋め込まれたテンプレートファイルを生成する
 
   4. 1階層下にitemを持たせる場合は別sheetとし、item名カラムにsheetへのハイパーリンクを張ること
 
