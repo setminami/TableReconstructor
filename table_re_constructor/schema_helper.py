@@ -39,7 +39,6 @@ class Schema:
       return schema
 
     def _validate(self, evl, schema):
-      assert isinstance(evl, list) or isinstance(evl, dict)
       from jsonschema import validate, ValidationError, SchemaError
       # jsonschema による型チェック
       try:
@@ -61,10 +60,12 @@ class Schema:
 
   def makeSchema(self, desc):
     """ 一項目ずつの定義であることに留意 """
+    assert isinstance(desc[0], str) and isinstance(desc[1], dict)
     # 課題: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
     return self.schema._makeSchema(desc)
 
   def validate(self, evl, desc):
     sc = self.makeSchema(desc)
+    assert isinstance(evl, list) or isinstance(evl, dict)
     self.schema._validate(evl, sc)
     pass
