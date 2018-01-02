@@ -39,10 +39,12 @@
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
 ## Appendix.1 エラー
+sys.exit by each index.
 
-  1. 指定されたシートが見つからない : sheets link not found.
-  2. schema記述が欠けているcolumnが見つかった : scheme not found.
-  3. root sheetがない : root sheet not found.
+```
+errors = ['OK', 'sheets link not found.', 'schema not found.',
+             'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!']
+```
 
 ## Appendix 2. Help
 ```

@@ -1,0 +1,5 @@
+sign	desc-en	desc-ja
+(?i)	Case insensitive mode. Make the remainder of the pattern or subpattern case insensitive.	
+(?m)	Multi-line mode. Make $ and ^ in the remainder of the pattern or subpattern match before/after newline.	
+(?s)	Single-line mode. Make the . (dot) in the remainder of the pattern or subpattern match newline.	
+(?x)	Free spacing mode. Ignore white space in the remainder of the pattern or subpattern.	

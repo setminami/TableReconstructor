@@ -1,0 +1,6 @@
+sign	desc-en	desc-ja
+[adf]	Matches characters a or d or f.	
+[^adf]	Matches anything but characters a, d and f.	
+[a-f]	Match any lowercase letter between a and f inclusive.	
+[A-F]	Match any uppercase letter between A and F inclusive.	
+[0-9]	Match any digit between 0 and 9 inclusive.	

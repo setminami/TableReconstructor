@@ -10,6 +10,7 @@ class TableReConstructor:
   DEBUG = True
   # DEBUG出力用 jsonは別扱い
   output_formats = ['csv', 'tsv']
+  output_delimiters = [',', '\t']
 
   def __init__(self):
     if __name__ == '__main__':
@@ -27,8 +28,10 @@ class TableReConstructor:
       print(tmp)
     else:
       fileloc = os.path.abspath(os.path.expanduser(args.file))
-      # ToDo: openpyxlでecodeが取れるか確認
-      x = XLSX(fileloc, args.output, enc, args.output_format)
+      # Memo: @property 使う
+      o = self.output_formats.index(args.output_format)
+      out = (self.output_formats[o], self.output_delimiters[o])
+      x = XLSX(fileloc, args.output, enc, out)
       # sys.setrecursionlimit(1024 * 8)
       j = x.generateJSON(sheet_name=args.root_sheet)
       _file, _ = os.path.splitext(fileloc)
@@ -82,7 +85,7 @@ def __print(str, flag=TableReConstructor.DEBUG):
 def errorout(e, additonal=''):
   """ 出力細部はあとで調整すること """
   errors = ['OK', 'sheets link not found.', 'schema not found.',
-              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumrator!']
+              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!']
   assert e < len(errors) and e >= 0
   print(f'{errors[e]} : {additonal}')
   sys.exit(e)

@@ -1,0 +1,15 @@
+sign	desc-en	desc-ja
+[:upper:]	Matches uppercase letters. Equivalent to A-Z.	
+[:lower:]	Matches lowercase letters. Equivalent to a-z.	
+[:alpha:]	Matches letters. Equivalent to A-Za-z.	
+[:alnum:]	Matches letters and digits. Equivalent to A-Za-z0-9.	
+[:ascii:]	Matches ASCII characters. Equivalent to \\x00-\\x7f.	
+[:word:]	Matches letters, digits and underscores. Equivalent to \\w.	
+[:digit:]	Matches digits. Equivalent to 0-9.	
+[:xdigit:]	Matches characters that can be used in hexadecimal codes.	
+[:punct:]	Matches punctuation.	
+[:blank:]	Matches space and tab. Equivalent to [ \\t].	
+[:space:]	Matches space, tab and newline. Equivalent to \\s.	
+[:cntrl:]	Matches control characters. Equivalent to [\\x00-\\x1F\\x7F].	
+[:graph:]	Matches printed characters. Equivalent to [\\x21-\\x7E].	
+[:print:]	Matches printed characters and spaces. Equivalent to [\\x21-\\x7E].	

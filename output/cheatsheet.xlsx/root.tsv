@@ -1,0 +1,12 @@
+color	title	desc-ja	desc-en	items
+fff000	Anchors			sheet://items-Anchors
+f00000	Character Classes		Character classes can be used in ranges.	sheet://items-CharClass
+0000FF	POSIX Character Classes		POSIX Character Classes must be used in bracket expressions, e.g. [a-z[:upper:]].	sheet://items-POSIX-CHAR
+0f000f	Groups			sheet://items-Groups
+000f0f	Bracket Expressions			sheet://items-bracketEx
+0f0f0f	Quantifiers			sheet://items-Quantifiers
+0f00ff	Special Characters			sheet://items-spchar
+00ff0f	Assertions			sheet://items-assertion
+000000	Back References		Back references are used in replacements.	sheet://items-assertion
+000000	Case Modifiers		Case modifiers are used in replacements.	sheet://items-Case Modifiers
+000000	Modifiers		Modifiers can be grouped together, e.g. (?ixm).	sheet://items-Modifiers
