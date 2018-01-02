@@ -7,13 +7,12 @@ from schema_helper import Schema, TypeSign, Validator
 from util import Util
 
 class XLSX:
-  """ """
-  DEBUG = True
+  """ xlsx 具象操作クラス """
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
 
   def __init__(self, file, output_path, enc, forms=None):
-    print(file)
+    print(f'Read from {file}')
     self.filepath = file
     self.filename = os.path.basename(file)
     self.output_path = output_path
@@ -33,12 +32,12 @@ class XLSX:
     sheets = self.__nameToSheets()
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
-    print(f'in process {sheet_name} ')
+    self.__print(f'in process {sheet_name}')
     assert sheet_name in sheet_names
     root_sheet = sheets[sheet_name]
     self.checkCharEncode(root_sheet)
     columns = []
-    print(f'I\'ll update {acc}')
+    self.__print(f'I\'ll update {acc}')
     # Memo: 処理速度に問題が出るようであれば分散処理検討
     # A1, B1...で場所を特定するか、indexで回すか
     for i, row in enumerate(root_sheet.iter_rows()):
@@ -59,11 +58,13 @@ class XLSX:
         else:
           # ToDo: 関数へ置き換え type = array, objectのケース をカバー
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
+            # Memo: sheetであることがarray, objectの必要条件になってしまっている
+            # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
               col_name = columns[j][0]
-              print(f'process {col_name} -> {link}')
-              print(f'current acc = {acc}')
+              self.__print(f'process {col_name} -> {link}')
+              self.__print(f'current acc = {acc}')
               new_acc = self.__brandnewAccForType(columns[j][1])
               self.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
@@ -108,7 +109,7 @@ class XLSX:
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, f'{sheet.title}.{self.format}')
-    print(f' > {xdest_path}')
+    self.__print(f' > {xdest_path}')
     with open(xdest_path, 'w', encoding=enc) as f:
       writer = csv.writer(f, delimiter=self.format_delimiter)
       for cols in sheet.rows:
@@ -129,7 +130,7 @@ class XLSX:
             isinstance(item, openpyxl.worksheet.Worksheet) or \
             isinstance(item, openpyxl.cell.Cell)
     enc = valid_enc if bool(valid_enc) else self.char_encode
-    print(enc)
+    self.__print(enc)
     if not (item.encoding == enc):
       # ToDo: sheet, cellごとにエラーを上げる場合の処理
       if isinstance(item, openpyxl.workbook.workbook.Workbook):
@@ -141,6 +142,7 @@ class XLSX:
       print('*'*50)
       print(add)
       print('*'*50)
+      # ToDo: excel rw
       item.encoding = enc
       pass
     pass
@@ -155,7 +157,7 @@ class XLSX:
     assert instance is not None
     return instance
 
-def __print(str, flag=XLSX.DEBUG):
-  if flag:
-    print(str)
-  pass
+  def __print(self, str, flag=False):
+    if flag:
+      print(str)
+    pass

@@ -45,11 +45,8 @@ class Util:
     return local
 
   @classmethod
-  def checkEmptyOr(self, proc, item):
+  def checkEmptyOr(cls, proc, item):
     """
     itemが空(list, dict, '', None...)なら何もしない、空でなければprocを実行
     """
-    if bool(item):
-      proc(item)
-    else:
-      print('item is Empty!')
+    if bool(item): proc(item)
