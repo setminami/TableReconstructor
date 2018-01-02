@@ -60,13 +60,13 @@ class XLSX:
               col_name = columns[j][0]
               print(f'process {col_name} -> {link}')
               print(f'current acc = {acc}')
-              new_acc = self.__generateNewAccumlatorForType(columns[j][1])
+              new_acc = self.__brandnewAccForType(columns[j][1])
               self.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
               self.errorout(1, f'sheet = from {sheet_name} to {link}, col = {j}, row = {i}')
               pass
           else:
-            self.__store(self.typeValidator(v, columns[j]), accumrator=subacc)
+            self.__store(self.typeValidator(v, columns[j]), accumulator=subacc)
         pass # pass columns
       Util.checkEmptyOr(lambda x: self.__store(x, acc), subacc)
       pass # pass a row
@@ -76,7 +76,7 @@ class XLSX:
     assert 'type' in schema.keys()
     return schema['type']
 
-  def __generateNewAccumlatorForType(self, schema):
+  def __brandnewAccForType(self, schema):
     assert isinstance(schema, dict)
     _type = self.__getType(schema)
     if _type == TypeSign.ARRAY:
@@ -86,14 +86,14 @@ class XLSX:
     else:
       errorout(4, _type)
 
-  def __store(self, item, accumrator):
-    if isinstance(accumrator, dict):
-      accumrator.update(item)
-    elif isinstance(accumrator, list):
-      accumrator.append(item)
+  def __store(self, item, accumulator):
+    if isinstance(accumulator, dict):
+      accumulator.update(item)
+    elif isinstance(accumulator, list):
+      accumulator.append(item)
     else:
       errorout(5)
-    return accumrator
+    return accumulator
 
   def __outputCSV(self, base_path, sheet, enc='utf-8'):
     """
@@ -132,7 +132,7 @@ class XLSX:
       elif isinstance(item, openpyxl.worksheet.Worksheet):
         add = f'sheet_name = {item.title}'
       else: # Cell
-        add = f'parent = {item.parent} index = {item.column}{item.col_idx}'
+        add = f'parent = {item.parent} index = {item.cordinate}'
       print('*'*50)
       print(add)
       print('*'*50)
