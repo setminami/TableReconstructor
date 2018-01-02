@@ -17,7 +17,9 @@ class XLSX:
     self.filepath = file
     self.filename = os.path.basename(file)
     self.output_path = output_path
-    self.format = forms
+    if forms:
+      self.format = forms[0]
+      self.format_delimiter = forms[1]
     self.char_encode = enc
     self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
     pass
@@ -37,15 +39,17 @@ class XLSX:
     self.checkCharEncode(root_sheet)
     columns = []
     print(f'I\'ll update {acc}')
+    # Memo: 処理速度に問題が出るようであれば分散処理検討
+    # A1, B1...で場所を特定するか、indexで回すか
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
         self.__outputCSV(dest_dir, root_sheet)
         pass
       for j, cell in enumerate(row):
-        v = cell.value
+        v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
         if v is None: continue # cell check
-        if i == 0: # column check
+        if i == 0: # 初行 column check
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
@@ -99,13 +103,14 @@ class XLSX:
     """
     CSV, TSV出力
     """
+    if not self.format: return
     assert self.format in TableReConstructor.output_formats
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, f'{sheet.title}.{self.format}')
     print(f' > {xdest_path}')
     with open(xdest_path, 'w', encoding=enc) as f:
-      writer = csv.writer(f)
+      writer = csv.writer(f, delimiter=self.format_delimiter)
       for cols in sheet.rows:
         writer.writerow([str(col.value or '') for col in cols])
 

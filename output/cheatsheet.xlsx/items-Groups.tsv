@@ -1,0 +1,6 @@
+sign	desc-en	desc-ja
+(foo|bar)	Matches pattern foo or bar.	
+(foo)	Define a group (or subpattern) consisting of pattern foo. Matches within the group can be referenced in a replacement using a backreference.	
+(?<foo>bar)	Define a named group named {foo} consisting of pattern bar. Matches within the group can be referenced in a replacement using the backreference foo.	
+(?:foo)	Define a passive group consisting of pattern foo. Passive groups cannot be referenced in a replacement using a backreference.	
+(?>foo+)bar	Define an atomic group consisting of pattern foo+. Once foo+ has been matched, the regex engine will not try to find other variable length matches of foo+ in order to find a match followed by a maßtch of bar. Atomic groups may be used for perforamce reasons.	

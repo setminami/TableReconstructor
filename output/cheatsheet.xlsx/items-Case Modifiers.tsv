@@ -1,0 +1,5 @@
+sign	desc-en	desc-ja
+\\\u	Make the next character in the replacement uppercase.	
+\\\l	Make the next character in the replacement lowercase.	
+\\\U	Make the remaining characters in the replacement uppercase.	
+\\\L	Make the remaining characters in the replacement lowercase.	
