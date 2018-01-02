@@ -34,10 +34,15 @@ class TableReConstructor:
       x = XLSX(fileloc, args.output, enc, out)
       # sys.setrecursionlimit(1024 * 8)
       j = x.generateJSON(sheet_name=args.root_sheet)
-      _file, _ = os.path.splitext(fileloc)
-      with open(fr'{_file}.json', 'w', encoding=enc) as f:
-        f.write(json.dumps(j, sort_keys=True, indent=args.human_readable) \
-                                    if args.human_readable > 0 else json.dumps(j))
+      jsonfilename = fr'{os.path.splitext(fileloc)[0]}.json'
+      with open(jsonfilename, 'w', encoding=enc) as f:
+        try:
+          f.write(json.dumps(j, sort_keys=True, indent=args.human_readable) \
+                                        if args.human_readable > 0 else json.dumps(j))
+        except:
+          errorout(6, jsonfilename)
+        else:
+          print(f'Output json Success -> {jsonfilename}')
     pass
 
   @staticmethod
@@ -77,17 +82,13 @@ class TableReConstructor:
                             help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
     return argParser.parse_args()
 
-def __print(str, flag=TableReConstructor.DEBUG):
-  if flag:
-    print(str)
-  pass
-
 def errorout(e, additonal=''):
-  """ 出力細部はあとで調整すること """
+  """ 強制的に止める sys.stderr へ出力 """
   errors = ['OK', 'sheets link not found.', 'schema not found.',
-              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!']
+              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
+              'Output json has failed.']
   assert e < len(errors) and e >= 0
-  print(f'{errors[e]} : {additonal}')
+  print(f'{errors[e]} : {additonal}', file=sys.stderr)
   sys.exit(e)
 
 if __name__ == '__main__':

@@ -23,6 +23,7 @@ class TypeSign(str, enum.Enum):
 
 class Schema:
   """ abstract """
+  DEBUG = False
   class JsonSchema:
     """ concrete 1 as jsonschema style """
     def __init__(self):
@@ -43,10 +44,10 @@ class Schema:
       try:
         validate(evl, schema)
       except ValidationError as ve:
-        print('Validation Error has found.\n%s'%ve)
+        self.__print('Validation Error has found.\n%s'%ve)
         sys.exit(-1)
       except SchemaError as se:
-        print('Schema Error has found.\n%s'%se)
+        self.__print('Schema Error has found.\n%s'%se)
         sys.exit(-2)
       pass
 
@@ -68,3 +69,8 @@ class Schema:
     assert isinstance(evl, list) or isinstance(evl, dict)
     self.schema._validate(evl, sc)
     pass
+
+    def __print(self, str, flag=False):
+      if flag:
+        print(str)
+      pass
