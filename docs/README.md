@@ -18,6 +18,7 @@
   - カラムはキーとして解釈されること
     - 各カラムには、該当itemについてのjsonschemaを**コメントで**書き入れる
     - xlsx初期化コマンドで、yamlからjsonschemaの設定内容が読み込まれ、上述コメントが埋め込まれたテンプレートファイルを生成する
+    - schemaで'type':'array'の場合はsheet内全てのitem配列、'object'の場合はsheet**最後のrow**をobjectとして追加される
   - 1階層下にitemを持たせる場合は別sheetとし、item名カラムにsheetへのハイパーリンクを張ること
     - 1階層下を配列にしたくない場合はカラム行とコンテンツ1行とする
     - 1階層下が配列の場合は、コンテンツ行が2行以上存在させることで対応する
@@ -26,7 +27,6 @@
     - 操作ライブラリでのhyperlink記述がExcel記入方法、OSにより揺れることがあるため、リンクする際は手動とする
     - `sheet://`以降をそのままsheet名とするため、encode上whitespaceを許す
     - typoが見つかった場合は、コマンドのエラーとして上げる see. エラー
-    - schemaで'type':'array'の場合はsheet内全てのitem配列、'object'の場合はsheet**最後のrow**をobjectとして追加される
   - Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
 ## Sample Files
@@ -38,8 +38,42 @@
     - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
-## Appendix. エラー
+## Appendix.1 エラー
 
   1. 指定されたシートが見つからない : sheets link not found.
   2. schema記述が欠けているcolumnが見つかった : scheme not found.
   3. root sheetがない : root sheet not found.
+
+## Appendix 2. Help
+```
+./table_re_constructor/table_reconstructor.py -h
+usage: table_reconstructor.py [options]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -f [path/to/inputfile], --file [path/to/inputfile]
+                        Set path/to/input xlsx filename.
+  -of [csv | tsv], --output_format [csv | tsv]
+                        -of [csv | tsv] Output with the format, If you set,
+                        output formfiles to
+                        /path/to/output/Excelfilename/sheetname[csv | tsv]
+                        This IS DEBUG feature
+  -o [path/to/outputfile(.json)], --output [path/to/outputfile(.json)]
+                        -o path/to/outputfile Output interpreted json files.
+  -gx [path/to/outputfile(.xlsx)], --generate_template_xlsx [path/to/outputfile(.xlsx)]
+                        This is an initialize helper option. Generate template
+                        xlsx file based on same filename.yaml. **And if you
+                        set this, other options are ignored.** will be
+                        subcommand.
+  -hr tabsize, --human_readable tabsize
+                        set indent size by numeric value, Output humanreadable
+                        json files.
+  -e "python codec sign", --encode "python codec sign"
+                        set default charactor code. When not set this, it
+                        treated with "utf-8"
+  -r [sheetname], --root_sheet [sheetname]
+                        set a sheetname in xlsx book have. construct json tree
+                        from the sheet as root item. "root" is Default root
+                        sheet name.
+```

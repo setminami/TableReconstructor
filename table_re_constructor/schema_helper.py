@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys, enum
-from util import Util
 
 
 class Validator(str, enum.Enum):
