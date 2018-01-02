@@ -3,16 +3,13 @@
 import os, sys, json, re
 import argparse
 
-# local
-import xlsx
-
-VERSION = '0.0.1'
+VERSION = '0.1.0'
 
 class TableReConstructor:
   """ 具象操作に流すための、utility的位置づけ"""
   DEBUG = True
   # DEBUG出力用 jsonは別扱い
-  output_formats = ['csv','tsv']
+  output_formats = ['csv', 'tsv']
 
   def __init__(self):
     if __name__ == '__main__':
@@ -22,6 +19,8 @@ class TableReConstructor:
   def test(self):
     args = self.ARGS
     argvs = sys.argv
+    enc = args.encode
+    from xlsx import XLSX
     if '-gx' in argvs or '--generate_template_xlsx' in argvs:
       # 初期化モード
       tmp = 'template.xlsx' if args.generate_template_xlsx == None else args.generate_template_xlsx
@@ -29,8 +28,7 @@ class TableReConstructor:
     else:
       fileloc = os.path.abspath(os.path.expanduser(args.file))
       # ToDo: openpyxlでecodeが取れるか確認
-      enc = 'utf-8'
-      x = xlsx.XLSX(fileloc, args.output, args.output_format)
+      x = XLSX(fileloc, args.output, enc, args.output_format)
       # sys.setrecursionlimit(1024 * 8)
       j = x.generateJSON(sheet_name=args.root_sheet)
       _file, _ = os.path.splitext(fileloc)
@@ -44,30 +42,35 @@ class TableReConstructor:
     progname = os.path.basename(__file__)
     argParser = argparse.ArgumentParser(prog=__file__, description='',
                                         usage=f'{progname} [options]')
-    outs = '[ csv | tsv ]'
+    outs = 'csv | tsv'
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
                         action='version', version=f'{progname} {VERSION}')
     argParser.add_argument('-f', '--file',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
-                            help='Set path/to/xlsx filename.')
+                            metavar='path/to/inputfile',
+                            help='Set path/to/input xlsx filename.')
     argParser.add_argument('-of', '--output_format',
-                            nargs='?', type=str, default='',
-                            help='-of %s \nOutput with the format, If you set, output formfiles to /path/to/output/%s This IS DEBUG feature'%(outs, outs))
+                            nargs='?', type=str, default='', metavar=f'{outs}',
+                            help=f'-of [{outs}] \nOutput with the format, If you set, output formfiles to /path/to/output/Excelfilename/sheetname[{outs}] \nThis IS DEBUG feature')
     argParser.add_argument('-o', '--output',
-                            nargs='?', type=str, default='output',
-                            help='-o /path/to/output \nOutput interpreted json files.')
+                            nargs='?', type=str, default='output', metavar='path/to/outputfile(.json)',
+                            help='-o path/to/outputfile \nOutput interpreted json files.')
     # Memo: command形式の方が素直か？
     argParser.add_argument('-gx', '--generate_template_xlsx',
-                            nargs='?', type=str, default='',
-                            help='-gx filename(.xlsx) \nThis is an initialize helper option.\n\
+                            nargs='?', type=str, default='', metavar='path/to/outputfile(.xlsx)',
+                            help='This is an initialize helper option.\n\
                             Generate template xlsx file based on same filename.yaml.\
-                            \nAnd if you set this, other options are ignored.')
+                            \n**And if you set this, other options are ignored.** will be subcommand.')
     argParser.add_argument('-hr', '--human_readable',
-                            type=int, default=0,
+                            type=int, default=0, metavar='tabsize',
                             help='set indent size by numeric value, Output humanreadable json files.')
+    argParser.add_argument('-e', '--encode',
+                            type=str, default='utf-8', metavar='"python codec sign"',
+                            help='set default charactor code. When not set this, it treated with "utf-8"')
     argParser.add_argument('-r', '--root_sheet',
-                            nargs='?', type=str, default='root',
+                            nargs='?', type=str, default='root', # Default root sheet name
+                            metavar='sheetname',
                             help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
     return argParser.parse_args()
 

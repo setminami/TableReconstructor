@@ -12,12 +12,13 @@ class XLSX:
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
 
-  def __init__(self, file, output_path, forms=None):
+  def __init__(self, file, output_path, enc, forms=None):
     print(file)
     self.filepath = file
     self.filename = os.path.basename(file)
     self.output_path = output_path
     self.format = forms
+    self.char_encode = enc
     self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
     pass
 
@@ -28,12 +29,14 @@ class XLSX:
     dest_dir = self.output_path
     os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
+    # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
     print(f'in process {sheet_name} ')
     assert sheet_name in sheet_names
     root_sheet = sheets[sheet_name]
+    self.checkCharEncode(root_sheet)
     columns = []
-    print('I\'ll update %s'%acc)
+    print(f'I\'ll update {acc}')
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
@@ -48,7 +51,7 @@ class XLSX:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
             columns.append((v, Util.runtimeDictionary(cell.comment.text)))
           else:
-            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
+            self.errorout(2, f'sheet = {sheet_name}, col = {j}, row = {i}')
         else:
           # ToDo: 関数へ置き換え type = array, objectのケース をカバー
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
@@ -99,8 +102,8 @@ class XLSX:
     assert self.format in TableReConstructor.output_formats
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
-    xdest_path = os.path.join(xdest, sheet.title + '.' + self.format)
-    print(" > %s"%xdest_path)
+    xdest_path = os.path.join(xdest, f'{sheet.title}.{self.format}')
+    print(f' > {xdest_path}')
     with open(xdest_path, 'w', encoding=enc) as f:
       writer = csv.writer(f)
       for cols in sheet.rows:
@@ -111,9 +114,31 @@ class XLSX:
     sheetを{sheet名:sheet}形式にして返す
     instance 生成後、実行中のExcel更新は考えない
     """
+    # ToDo: get_sheet_names(), get_sheet_by_by_name()で代用できるか検討
     if not hasattr(self, '__sheets_cache'):
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
     return self.__sheets_cache
+
+  def checkCharEncode(self, item, valid_enc=None):
+    assert isinstance(item, openpyxl.workbook.workbook.Workbook) or \
+            isinstance(item, openpyxl.worksheet.Worksheet) or \
+            isinstance(item, openpyxl.cell.Cell)
+    enc = valid_enc if bool(valid_enc) else self.char_encode
+    print(enc)
+    if not (item.encoding == enc):
+      # ToDo: sheet, cellごとにエラーを上げる場合の処理
+      if isinstance(item, openpyxl.workbook.workbook.Workbook):
+        add = f'sheet_names = {item.sheet_names}'
+      elif isinstance(item, openpyxl.worksheet.Worksheet):
+        add = f'sheet_name = {item.title}'
+      else: # Cell
+        add = f'parent = {item.parent} index = {item.column}{item.col_idx}'
+      print('*'*50)
+      print(add)
+      print('*'*50)
+      item.encoding = enc
+      pass
+    pass
 
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
