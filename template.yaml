@@ -21,7 +21,13 @@ root: # root sheet named as special setting item because it must be only one.
     notes: 'English description'
   - columns: True
     name: 'items'
-    scheme: {"type" : ["string"], "required" : true}
+    scheme: {"type" : ["array"], "required" : true}
+    # arrayなので配列値がほしい
+    # ここはxlsxコピペ作業と記入ではなく、記述で設定してこのitem値はautofillにしたい
+    child_names: ['items-Anchors', 'items-Modifiers', 'items-bracketEx',
+                  'items-Case Modifiers', 'items-POSIX-CHAR', 'items-spchar',
+                  'items-CharClass', 'items-Quantifiers',
+                  'items-Groups', 'items-assertion']
     notes: 'このカラムの内容を示す実記述sheetへのリンク'
     relations: child_type1
 

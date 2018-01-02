@@ -76,6 +76,14 @@ def __print(str, flag=TableReConstructor.DEBUG):
     print(str)
   pass
 
+def errorout(e, additonal=''):
+  """ 出力細部はあとで調整すること """
+  errors = ['OK', 'sheets link not found.', 'schema not found.',
+              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumrator!']
+  assert e < len(errors) and e >= 0
+  print(f'{errors[e]} : {additonal}')
+  sys.exit(e)
+
 if __name__ == '__main__':
   ins = TableReConstructor()
   ins.test()
