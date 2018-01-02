@@ -1,6 +1,0 @@
-sign,desc-en,desc-ja
-\,Escape character.,
-\n,Matches newline.,
-\t,Matches tab.,
-\r,Matches carriage return.,
-\v,Matches form feed/page break.,

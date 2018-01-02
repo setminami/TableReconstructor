@@ -43,7 +43,8 @@ sys.exit by each index.
 
 ```
 errors = ['OK', 'sheets link not found.', 'schema not found.',
-             'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!']
+              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
+              'Output json has failed.']
 ```
 
 ## Appendix 2. Help
