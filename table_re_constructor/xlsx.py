@@ -2,8 +2,8 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor
-from schema_helper import Schema, Validator
+from table_reconstructor import TableReConstructor, errorout
+from schema_helper import Schema, TypeSign, Validator
 from util import Util
 
 class XLSX:
@@ -50,15 +50,17 @@ class XLSX:
           else:
             self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
+          # ToDo: 関数へ置き換え type = array, objectのケース をカバー
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
               col_name = columns[j][0]
               print(f'process {col_name} -> {link}')
               print(f'current acc = {acc}')
-              self.__store({col_name:self.generateJSON(sheet_name=link, acc=[])}, subacc)
+              new_acc = self.__generateNewAccumlatorForType(columns[j][1])
+              self.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
-              self.errorout(1, 'sheet = from {} to {}, col = {}, row = {}'.format(sheet_name, link, j, i))
+              self.errorout(1, f'sheet = from {sheet_name} to {link}, col = {j}, row = {i}')
               pass
           else:
             self.__store(self.typeValidator(v, columns[j]), accumrator=subacc)
@@ -67,14 +69,27 @@ class XLSX:
       pass # pass a row
     return acc
 
+  def __getType(self, schema):
+    assert 'type' in schema.keys()
+    return schema['type']
+
+  def __generateNewAccumlatorForType(self, schema):
+    assert isinstance(schema, dict)
+    _type = self.__getType(schema)
+    if _type == TypeSign.ARRAY:
+      return []
+    elif _type == TypeSign.OBJ:
+      return {}
+    else:
+      errorout(4, _type)
+
   def __store(self, item, accumrator):
     if isinstance(accumrator, dict):
       accumrator.update(item)
     elif isinstance(accumrator, list):
       accumrator.append(item)
     else:
-      print('Unknown accumrator!')
-      exit(-3)
+      errorout(5)
     return accumrator
 
   def __outputCSV(self, base_path, sheet, enc='utf-8'):
@@ -100,18 +115,11 @@ class XLSX:
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
     return self.__sheets_cache
 
-  def errorout(self, e, additonal=''):
-    """ 出力細部はあとで調整すること """
-    errors = ['OK', 'sheets link not found.', 'schema not found.', 'root sheet not found.']
-    assert e < len(errors)
-    print('{} : {}'.format(errors[e], additonal))
-    sys.exit(e)
-
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
     if not hasattr(self, '__schema'):
       self.__schema = Schema(validator)
-    raw = Util.convEscapedKV(type_desc[1]['type'], type_desc[0], value)
+    raw = Util.convEscapedKV(self.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
     self.__schema.validate(instance, type_desc)
     assert instance is not None

@@ -12,40 +12,30 @@
 
 ## excel構築と編集
   - git管理をする場合は必ずxlsx形式であること
-
-  1. 1階層1sheetとして管理すること
-
-  2. root itemを示すsheetは`root`をシート名とすること
-
-      - `-r sheet名`で指定、`-r`がない場合のみxlsxは`root`という名前のsheetを持たなければならない
-
-  3. カラムはキーとして解釈されること
-
-      - 各カラムには、該当itemについてのjsonschemaを**コメントで**書き入れる
-      - xlsx初期化コマンドで、yamlからjsonschemaの設定内容が読み込まれ、上述コメントが埋め込まれたテンプレートファイルを生成する
-
-  4. 1階層下にitemを持たせる場合は別sheetとし、item名カラムにsheetへのハイパーリンクを張ること
-
-      - 1階層下を配列にしたくない場合はカラム行とコンテンツ1行とする
-      - 1階層下が配列の場合は、コンテンツ行が2行以上存在させることで対応する
-      - よって、`{"parent1":[{"child1":"foo", "child2": "bar"}]}`のような1itemしかない配列は表現できないことを許容する
-
-  5. cell内に文字列で`sheet://sheet名`とすることにより個別sheetを指すこと
-
-      - Excelからいちいちメニューを選んで別シートへのハイパーリンクを張るのが思いのほかめんどくさい
-      - 操作ライブラリでのhyperlink記述がExcel記入方法、OSにより揺れることがあるため、リンクする際は手動とする
-      - `sheet://`以降をそのままsheet名とするため、encode上whitespaceを許す
-      - typoが見つかった場合は、コマンドのエラーとして上げる see. エラー
-
-  6. Excelの仕様に振られないため、余計なマクロは極力上書きしない
+  - 1階層1sheetとして管理すること
+  - root itemを示すsheetは`root`をシート名とすること
+    - `-r sheet名`で指定、`-r`がない場合のみxlsxは`root`という名前のsheetを持たなければならない
+  - カラムはキーとして解釈されること
+    - 各カラムには、該当itemについてのjsonschemaを**コメントで**書き入れる
+    - xlsx初期化コマンドで、yamlからjsonschemaの設定内容が読み込まれ、上述コメントが埋め込まれたテンプレートファイルを生成する
+  - 1階層下にitemを持たせる場合は別sheetとし、item名カラムにsheetへのハイパーリンクを張ること
+    - 1階層下を配列にしたくない場合はカラム行とコンテンツ1行とする
+    - 1階層下が配列の場合は、コンテンツ行が2行以上存在させることで対応する
+  - cell内に文字列で`sheet://sheet名`とすることにより個別sheetを指すこと
+    - Excelからいちいちメニューを選んで別シートへのハイパーリンクを張るのが思いのほかめんどくさい
+    - 操作ライブラリでのhyperlink記述がExcel記入方法、OSにより揺れることがあるため、リンクする際は手動とする
+    - `sheet://`以降をそのままsheet名とするため、encode上whitespaceを許す
+    - typoが見つかった場合は、コマンドのエラーとして上げる see. エラー
+    - schemaで'type':'array'の場合はsheet内全てのitem配列、'object'の場合はsheet**最後のrow**をobjectとして追加される
+  - Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
 ## Sample Files
   - 用意するファイルと、`table_reconstructor.py -of csv -hr 2` 出力例
-    [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
+    - [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
   - local git環境に設定調整を強要しないxlsx git管理の模索
-    [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
+    - [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
   - xlsx初期化用template yamlファイル
-    [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
+    - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
 ## Appendix. エラー
