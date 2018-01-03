@@ -7,8 +7,6 @@ import argparse
 # global settings.
 VERSION = '0.1.0'
 output_formats = ['csv', 'tsv']
-init_command = ['initialize', 'init', 'i']
-generate_command = ['generate', 'gen', 'g']
 
 class TableReConstructor:
   """ 具象操作に流すための、utility的位置づけ"""
@@ -18,14 +16,21 @@ class TableReConstructor:
   output_delimiters = [',', '\t']
 
   def __init__(self):
-    if __name__ == '__main__':
-      self.ARGS = TableReConstructor.ArgParser()
-      pass
 
-  def regist_subcommands(self, command):
-    from sub_commands import SubCommands
-    assert issubclass(command, SubCommands)
-    sub_commands.update({command.command_name: command})
+    pass
+
+  def regist_subcommand(self, command):
+    """
+    sub_commandsの型に依存させないためのIF
+    型変更の必要がでたら、局所的に操作を書き換える
+    """
+    from sub_commands.sub_command import SubCommands
+    assert issubclass(command.__class__, SubCommands)
+    self.sub_commands.update({command.command_name: command})
+
+  @property
+  def sub_command_names(self):
+    return self.sub_commands.keys()
 
   def test(self):
     args = self.ARGS
@@ -62,7 +67,7 @@ class TableReConstructor:
       pass
     pass
 
-  def ArgParser(self):
+  def prepareArgParser(self):
     progname = os.path.basename(__file__)
     argParser = argparse.ArgumentParser(prog=__file__, description='',
                                         usage=f'{progname} sub-command [options]')
@@ -71,28 +76,11 @@ class TableReConstructor:
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
                         action='version', version=f'{progname} {VERSION}')
+
     # see. https://docs.python.org/3/library/argparse.html
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
-    init_parser = subParsers.add_parser(init_command[0], aliases=init_command[1:], help='init help')
-    gen_parser = subParsers.add_parser(generate_command[0], aliases=generate_command[1:], help='generate help')
-    # Memo: command形式の方が素直か？
-    init_parser.add_argument('-tx', '--template_xlsx',
-                            nargs='?', type=str, default='', metavar='path/to/outputfile(.xlsx)',
-                            help='This is an initialize helper option.\n\
-                            Generate template xlsx file based on same filename.yaml.\
-                            \n**And if you set this, other options are ignored.** will be subcommand.')
-
-    gen_parser.add_argument('-f', '--file',
-                            nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
-                            metavar='path/to/inputfile',
-                            help='Set path/to/input xlsx filename.')
-    gen_parser.add_argument('-hr', '--human_readable',
-                            type=int, default=0, metavar='tabsize',
-                            help='set indent size by numeric value, Output humanreadable json files.')
-    gen_parser.add_argument('-r', '--root_sheet',
-                            nargs='?', type=str, default='root', # Default root sheet name
-                            metavar='sheetname',
-                            help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
+    for name, command in self.sub_commands.items():
+      subparser = command.makeArgparse(subParsers)
     argParser.add_argument('-e', '--encode',
                             type=str, default='utf-8', metavar='"python codec sign"',
                             help='set default charactor code. When not set this, it treated with "utf-8"')
@@ -103,7 +91,7 @@ class TableReConstructor:
     argParser.add_argument('-o', '--output',
                             nargs='?', type=str, default='output', metavar='path/to/outputfile(.json)',
                             help='-o path/to/outputfile \nOutput interpreted json files.')
-    return argParser.parse_args()
+    self.ARGS = argParser.parse_args()
 
 def errorout(e, additonal=''):
   """ 強制的に止める sys.stderr へ出力 """
@@ -116,4 +104,11 @@ def errorout(e, additonal=''):
 
 if __name__ == '__main__':
   ins = TableReConstructor()
+  # ToDo: subcommand 設定 https://github.com/setminami/TableReconstructor/issues/31
+  from sub_commands.initialize import Initialize
+  from sub_commands.generate import Generate
+  # AdHoc: とりあえず仮実装
+  for x in [Initialize(), Generate()]:
+    ins.regist_subcommand(x)
+  ins.prepareArgParser()
   ins.test()
