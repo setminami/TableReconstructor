@@ -81,5 +81,5 @@ optional arguments:
                         sheet name.
 ```
 
-## Appendix 3.
-<iframe src="https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-9" frameborder="0" marginheight="0" marginwidth="0" style="border: 1px solid rgb(204, 204, 204); width: 600px; height: 300px;" onmousewheel=""></iframe>
+## Appendix 3. MindMap
+[mindnode]("https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-9")
