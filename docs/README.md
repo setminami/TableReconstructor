@@ -39,7 +39,7 @@
     - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
-## Appendix.1 エラー
+## Appendix.1 Errors
 sys.exit by each index.
 
 ```python
