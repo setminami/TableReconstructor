@@ -75,5 +75,4 @@ class SubCommands:
 
   def makeArgparse(self, subparser):
     """ 個別optionを登録したargparseをsubparseにして返す """
-    print(f'{self.command_name}, aliases={self.aliases}, help={self.help}')
     return subparser.add_parser(self.command_name, aliases=self.aliases, help=self.help)

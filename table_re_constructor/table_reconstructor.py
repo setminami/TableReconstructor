@@ -37,7 +37,6 @@ class TableReConstructor:
     argvs = sys.argv
     enc = args.encode
     from xlsx import XLSX
-    print(args)
     if args.subcmd_name in init_command:
       from settings import SettingProcessor
       # 初期化モード

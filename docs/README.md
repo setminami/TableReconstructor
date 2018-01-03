@@ -50,14 +50,21 @@ errors = ['OK', 'sheets link not found.', 'schema not found.',
 
 ## Appendix 2. Help
 ```
-./table_re_constructor/table_reconstructor.py -h
-usage: table_reconstructor.py [options]
+$ ./table_re_constructor/table_reconstructor.py -h
+usage: table_reconstructor.py sub-command [options]
+
+positional arguments:
+                        sub-commands
+    initialize (init, i)
+                        initialize help
+    generate (gen, g)   generate help
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
-  -f [path/to/inputfile], --file [path/to/inputfile]
-                        Set path/to/input xlsx filename.
+  -e "python codec sign", --encode "python codec sign"
+                        set default charactor code. When not set this, it
+                        treated with "utf-8"
   -of [csv | tsv], --output_format [csv | tsv]
                         -of [csv | tsv] Output with the format, If you set,
                         output formfiles to
@@ -65,17 +72,32 @@ optional arguments:
                         This IS DEBUG feature
   -o [path/to/outputfile(.json)], --output [path/to/outputfile(.json)]
                         -o path/to/outputfile Output interpreted json files.
-  -gx [path/to/outputfile(.xlsx)], --generate_template_xlsx [path/to/outputfile(.xlsx)]
+
+
+$ ./table_re_constructor/table_reconstructor.py init -h
+usage: table_reconstructor.py sub-command [options] initialize
+       [-h] [-tx [path/to/outputfile.xlsx]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -tx [path/to/outputfile(.xlsx)], --template_xlsx [path/to/outputfile(.xlsx)]
                         This is an initialize helper option. Generate template
                         xlsx file based on same filename.yaml. **And if you
                         set this, other options are ignored.** will be
                         subcommand.
+
+
+$ ./table_re_constructor/table_reconstructor.py gen -h
+usage: table_reconstructor.py sub-command [options] generate
+       [-h] [-f [path/to/inputfile]] [-hr tabsize] [-r [sheetname]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f [path/to/inputfile], --file [path/to/inputfile]
+                        Set path/to/input xlsx filename.
   -hr tabsize, --human_readable tabsize
                         set indent size by numeric value, Output humanreadable
                         json files.
-  -e "python codec sign", --encode "python codec sign"
-                        set default charactor code. When not set this, it
-                        treated with "utf-8"
   -r [sheetname], --root_sheet [sheetname]
                         set a sheetname in xlsx book have. construct json tree
                         from the sheet as root item. "root" is Default root
