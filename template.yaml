@@ -3,6 +3,7 @@
 attach: xlsx # correspond xlsx as Excel Only
 root: # root sheet named as special setting item because it must be only one.
   # if you want to comment out some item, you can turn top attiribute like 'columns:' to false.
+  sheet_name: 'root'
   - columns: True
     name: 'color'
     scheme: {"type" : ["string"], "required" : true} # comform to jsonschema Draft1.4 properties

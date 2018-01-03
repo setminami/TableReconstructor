@@ -12,7 +12,6 @@ class XLSX:
   sheet_link_sign = 'sheet://'
 
   def __init__(self, file, output_path, enc, forms=None):
-    print(f'Read from {file}')
     self.filepath = file
     self.filename = os.path.basename(file)
     self.output_path = output_path
@@ -27,6 +26,7 @@ class XLSX:
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
+    print(f'Read from {self.filepath}')
     dest_dir = self.output_path
     os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
@@ -157,6 +157,8 @@ class XLSX:
     assert instance is not None
     return instance
 
+  def generateTemplate(self):
+    pass
   def __print(self, str, flag=False):
     if flag:
       print(str)

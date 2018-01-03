@@ -1,4 +1,5 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
+
 # JSON_XLSX_Manager
 ## What I wanna do and Where advantage
   - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
@@ -38,10 +39,10 @@
     - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
-## Appendix.1 エラー
+## Appendix.1 Errors
 sys.exit by each index.
 
-```
+```python
 errors = ['OK', 'sheets link not found.', 'schema not found.',
               'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
               'Output json has failed.']
@@ -49,14 +50,21 @@ errors = ['OK', 'sheets link not found.', 'schema not found.',
 
 ## Appendix 2. Help
 ```
-./table_re_constructor/table_reconstructor.py -h
-usage: table_reconstructor.py [options]
+$ ./table_re_constructor/table_reconstructor.py -h
+usage: table_reconstructor.py sub-command [options]
+
+positional arguments:
+                        sub-commands
+    initialize (init, i)
+                        initialize help
+    generate (gen, g)   generate help
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
-  -f [path/to/inputfile], --file [path/to/inputfile]
-                        Set path/to/input xlsx filename.
+  -e "python codec sign", --encode "python codec sign"
+                        set default charactor code. When not set this, it
+                        treated with "utf-8"
   -of [csv | tsv], --output_format [csv | tsv]
                         -of [csv | tsv] Output with the format, If you set,
                         output formfiles to
@@ -64,19 +72,37 @@ optional arguments:
                         This IS DEBUG feature
   -o [path/to/outputfile(.json)], --output [path/to/outputfile(.json)]
                         -o path/to/outputfile Output interpreted json files.
-  -gx [path/to/outputfile(.xlsx)], --generate_template_xlsx [path/to/outputfile(.xlsx)]
+
+
+$ ./table_re_constructor/table_reconstructor.py init -h
+usage: table_reconstructor.py sub-command [options] initialize
+       [-h] [-tx [path/to/outputfile.xlsx]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -tx [path/to/outputfile(.xlsx)], --template_xlsx [path/to/outputfile(.xlsx)]
                         This is an initialize helper option. Generate template
                         xlsx file based on same filename.yaml. **And if you
                         set this, other options are ignored.** will be
                         subcommand.
+
+
+$ ./table_re_constructor/table_reconstructor.py gen -h
+usage: table_reconstructor.py sub-command [options] generate
+       [-h] [-f [path/to/inputfile]] [-hr tabsize] [-r [sheetname]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f [path/to/inputfile], --file [path/to/inputfile]
+                        Set path/to/input xlsx filename.
   -hr tabsize, --human_readable tabsize
                         set indent size by numeric value, Output humanreadable
                         json files.
-  -e "python codec sign", --encode "python codec sign"
-                        set default charactor code. When not set this, it
-                        treated with "utf-8"
   -r [sheetname], --root_sheet [sheetname]
                         set a sheetname in xlsx book have. construct json tree
                         from the sheet as root item. "root" is Default root
                         sheet name.
 ```
+
+## Appendix 3. MindMap
+[mindnode](https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-2)
