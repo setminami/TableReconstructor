@@ -1,4 +1,5 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
+
 # JSON_XLSX_Manager
 ## What I wanna do and Where advantage
   - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
@@ -41,7 +42,7 @@
 ## Appendix.1 エラー
 sys.exit by each index.
 
-```
+```python
 errors = ['OK', 'sheets link not found.', 'schema not found.',
               'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
               'Output json has failed.']
@@ -82,4 +83,4 @@ optional arguments:
 ```
 
 ## Appendix 3. MindMap
-[mindnode](https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-9)
+[mindnode](https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-2)
