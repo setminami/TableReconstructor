@@ -25,7 +25,7 @@ class Generate(SubCommands):
   @property
   def help(self): return self.__help
 
-  def run(self, **kwargs):
+  def __run__(self, **kwargs):
     args = kwargs['args']
     fileloc = os.path.abspath(os.path.expanduser(args.input))
     # Memo: @property 使う

@@ -78,7 +78,7 @@ class SubCommands:
     assert isinstance(exchanger, TableReconstructor)
     exchanger.regist_command(command)
 
-  def run(self, **kwargs): assert True
+  def __run__(self, **kwargs): assert True
 
   def makeArgparse(self, subparser):
     """ 個別optionを登録したargparseをsubparseにして返す """

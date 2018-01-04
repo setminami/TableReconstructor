@@ -19,7 +19,7 @@ class Initialize(SubCommands):
   @property
   def help(self): return self.__help
 
-  def run(self, **kwargs):
+  def __run__(self, **kwargs):
     pass
 
   def makeArgparse(self, subparser):

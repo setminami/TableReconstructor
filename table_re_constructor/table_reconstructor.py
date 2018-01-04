@@ -14,7 +14,7 @@ class TableReConstructor:
   """ 具象操作に流すための、utility的位置づけ"""
   DEBUG = True
   # DEBUG出力用 jsonは別扱い
-  # 簡単なので、仮実装　vs. 素直にargparse actionに直接run()を割り当てるか、その場合前処理をどうするか。
+  # 簡単なので、仮実装　vs. 素直にargparse actionに直接__run__()を割り当てるか、その場合前処理をどうするか。
   sub_commands = {}
 
   def __init__(self):
@@ -42,7 +42,7 @@ class TableReConstructor:
     args = self.ARGS
     enc = args.encoding
     subcommand = self.sub_commands[args.subcmd_name]
-    subcommand.run(args=args)
+    subcommand.__run__(args=args)
 #    if args.subcmd_name in init_command:
 #      from settings import SettingProcessor
 #      # 初期化モード
