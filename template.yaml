@@ -4,44 +4,46 @@ attach: xlsx # correspond xlsx as Excel Only
 root: # root sheet named as special setting item because it must be only one.
   # if you want to comment out some item, you can turn top attiribute like 'columns:' to false.
   sheet_name: 'root'
-  - columns: True
-    name: 'color'
-    scheme: {"type" : ["string"], "required" : true} # comform to jsonschema Draft1.4 properties
-    notes: '16進数 256表現 e.g., "ffffff"'
-  - columns: True
-    name: 'title'
-    scheme: {"type" : ["string"], "required" : true}
-    notes: 'Help 見出し e.g., "Anchors"'
-  - columns: True
-    name: 'desc-ja'
-    scheme: {"type" : ["string", "null"], "required" : false}
-    notes: '日本語解説'
-  - columns: True
-    name: 'desc-en'
-    scheme: {"type" : ["string", "null"], "required" : false}
-    notes: 'English description'
-  - columns: True
-    name: 'items'
-    scheme: {"type" : ["array"], "required" : true}
-    # arrayなので配列値がほしい
-    # ここはxlsxコピペ作業と記入ではなく、記述で設定してこのitem値はautofillにしたい
-    child_names: ['items-Anchors', 'items-Modifiers', 'items-bracketEx',
-                  'items-Case Modifiers', 'items-POSIX-CHAR', 'items-spchar',
-                  'items-CharClass', 'items-Quantifiers',
-                  'items-Groups', 'items-assertion']
-    notes: 'このカラムの内容を示す実記述sheetへのリンク'
-    relations: child_type1
+  columns: # up → down correspond to left → right columns because this item is array
+    - column: True
+      title: 'color'
+      schema: {"type" : ["string"], "required" : true} # comform to jsonschema Draft1.4 properties
+      notes: '16進数 256表現 e.g., "ffffff"'
+    - column: True
+      title: 'title'
+      schema: {"type" : ["string"], "required" : true}
+      notes: 'Help 見出し e.g., "Anchors"'
+    - column: True
+      title: 'desc-ja'
+      schema: {"type" : ["string", "null"], "required" : false}
+      notes: '日本語解説'
+    - column: True
+      title: 'desc-en'
+      schema: {"type" : ["string", "null"], "required" : false}
+      notes: 'English description'
+    - column: True
+      title: 'items'
+      schema: {"type" : "array", "required" : true}
+      # sheet names, 0 → MAX correspond to root → left → right sheet because this item is array
+      child_names: ['items-Anchors', 'items-Modifiers', 'items-bracketEx',
+                    'items-Case Modifiers', 'items-POSIX-CHAR', 'items-spchar',
+                    'items-CharClass', 'items-Quantifiers', 'items-Back References',
+                    'items-Groups', 'items-assertion']
+      notes: 'このカラムの内容を示す実記述sheetへのリンク'
+      relations: child_layer2
 
-child_type1:
-  - columns: True
-    name: 'sign'
-    scheme: {"type" : ["string"], "required" : true}
-    notes: 'regex sign'
-  - columns: True
-    name: 'desc-ja'
-    scheme: {"type" : ["string"], "required" : false}
-    notes: '日本語解説'
-  - columns: True
-    name: 'desc-en'
-    scheme: {"type" : ["string"], "required" : false}
-    notes: 'English description'
+child_layer2:
+  sheet_name: 'item layer2'
+  columns:
+    - column: True
+      title: 'sign'
+      schema: {"type" : ["string"], "required" : true}
+      notes: 'regex sign'
+    - column: True
+      title: 'desc-ja'
+      schema: {"type" : ["string"], "required" : false}
+      notes: '日本語解説'
+    - column: True
+      title: 'desc-en'
+      schema: {"type" : ["string"], "required" : false}
+      notes: 'English description'
