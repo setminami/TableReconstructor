@@ -7,13 +7,16 @@ import argparse
 # global settings.
 VERSION = '0.1.0'
 output_formats = ['csv', 'tsv']
+output_delimiters = [',', '\t']
+
+codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encodings'
 
 class TableReConstructor:
   """ 具象操作に流すための、utility的位置づけ"""
   DEBUG = True
   # DEBUG出力用 jsonは別扱い
+  # 簡単なので、仮実装　vs. 素直にargparse actionに直接run()を割り当てるか、その場合前処理をどうするか。
   sub_commands = {}
-  output_delimiters = [',', '\t']
 
   def __init__(self):
 
@@ -24,9 +27,14 @@ class TableReConstructor:
     sub_commandsの型に依存させないためのIF
     型変更の必要がでたら、局所的に操作を書き換える
     """
-    from sub_commands.sub_command import SubCommands
+    from sub_command_core.sub_command import SubCommands
     assert issubclass(command.__class__, SubCommands)
-    self.sub_commands.update({command.command_name: command})
+    # 衝突注意
+    for name in command.command_names:
+      assert not (name in self.sub_commands.keys()),\
+                f'"{name}" collision were detected in {self.sub_commands.keys()}'
+      # Memo: commandは参照であること。tupleへのrefactoring注意
+      self.sub_commands.update({name: command})
 
   @property
   def sub_command_names(self):
@@ -34,41 +42,28 @@ class TableReConstructor:
 
   def test(self):
     args = self.ARGS
-    argvs = sys.argv
-    enc = args.encode
-    from xlsx import XLSX
-    if args.subcmd_name in init_command:
-      from settings import SettingProcessor
-      # 初期化モード
-      tmp = './template.xlsx' if args.template_xlsx == None else args.template_xlsx
-      setting_file = fr'{os.path.splitext(os.path.expanduser(tmp))[0]}.yaml'
-      print(tmp)
-      settings = SettingProcessor(setting_file, enc)
-      settings.checkSettingFile()
-    elif args.subcmd_name in generate_command:
-      fileloc = os.path.abspath(os.path.expanduser(args.file))
-      # Memo: @property 使う
-      o = self.output_formats.index(args.output_format)
-      out = (self.output_formats[o], self.output_delimiters[o])
-      x = XLSX(fileloc, args.output, enc, out)
-      # sys.setrecursionlimit(1024 * 8)
-      j = x.generateJSON(sheet_name=args.root_sheet)
-      jsonfilename = fr'{os.path.splitext(fileloc)[0]}.json'
-      with open(jsonfilename, 'w', encoding=enc) as f:
-        try:
-          f.write(json.dumps(j, sort_keys=True, indent=args.human_readable) \
-                                        if args.human_readable > 0 else json.dumps(j))
-        except:
-          errorout(6, jsonfilename)
-        else:
-          print(f'Output json Success -> {jsonfilename}')
-    else:
-      pass
+    enc = args.encoding
+    subcommand = self.sub_commands[args.subcmd_name]
+    subcommand.run(args=args)
+#    if args.subcmd_name in init_command:
+#      from settings import SettingProcessor
+#      # 初期化モード
+#      tmp = './template.xlsx' if args.template_xlsx == None else args.template_xlsx
+#      setting_file = fr'{os.path.splitext(os.path.expanduser(tmp))[0]}.yaml'
+#      print(tmp)
+#      settings = SettingProcessor(setting_file, enc)
+#      settings.checkSettingFile()
+#    elif args.subcmd_name in generate_command:
+#      args.output_formats = self.output_formats
+#      args.output_delkimiters = self.output_delimiters
+#    else:
+#      pass
     pass
 
   def prepareArgParser(self):
     progname = os.path.basename(__file__)
     argParser = argparse.ArgumentParser(prog=__file__, description='',
+                                        formatter_class=argparse.RawDescriptionHelpFormatter,
                                         usage=f'{progname} sub-command [options]')
     # ToDo: 一般化
     outs = reduce(lambda l, r: f'{l} | {r}', output_formats)
@@ -80,17 +75,17 @@ class TableReConstructor:
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
     for name, command in self.sub_commands.items():
       subparser = command.makeArgparse(subParsers)
-    argParser.add_argument('-e', '--encode',
-                            type=str, default='utf-8', metavar='"python codec sign"',
-                            help='set default charactor code. When not set this, it treated with "utf-8"')
+    argParser.add_argument('-e', '--encoding',
+                            type=str, default='utf-8', metavar='{python built-in codec}',
+                            help=f'Set default charactor encode. When not set this, it is treated as "utf-8".\
+                            see also. {codec_help_url}')
     argParser.add_argument('-of', '--output_format',
                             nargs='?', type=str, default=output_formats[1],
                             metavar=f'{outs}',
-                            help=f'-of [{outs}] \nOutput with the format, If you set, output formfiles to /path/to/output/Excelfilename/sheetname[{outs}] \nThis IS DEBUG feature')
-    argParser.add_argument('-o', '--output',
-                            nargs='?', type=str, default='output', metavar='path/to/outputfile(.json)',
-                            help='-o path/to/outputfile \nOutput interpreted json files.')
+                            help=f'''Output with the format, If you set, output formfiles to path/to/output/Excelfilename/sheetname.[{outs}] \n(It\'ll be recommended, \
+                            if you want to have communication with non Tech team without any gitconfiging.)''')
     self.ARGS = argParser.parse_args()
+
 
 def errorout(e, additonal=''):
   """ 強制的に止める sys.stderr へ出力 """
@@ -104,9 +99,8 @@ def errorout(e, additonal=''):
 if __name__ == '__main__':
   ins = TableReConstructor()
   # ToDo: subcommand 設定 https://github.com/setminami/TableReconstructor/issues/31
-  from sub_commands.initialize import Initialize
-  from sub_commands.generate import Generate
-  # AdHoc: とりあえず仮実装
+  from sub_command_core import (Initialize, Generate)
+  # AdHoc: とりあえず仮実装 Plugin実装する際に再考
   for x in [Initialize(), Generate()]:
     ins.regist_subcommand(x)
   ins.prepareArgParser()

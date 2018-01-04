@@ -3,6 +3,7 @@
 ''' class snnipets
 # -*- coding: utf-8 -*-
 from sub_commands import SubCommands
+import argparse
 
 class Generate(SubCommands):
   """ generate command """
@@ -20,7 +21,7 @@ class Generate(SubCommands):
   @property
   def help(self): return self.__help
 
-  def run(self):
+  def run(self, **kwargs):
     # each process brabrabra
     pass
 
@@ -70,8 +71,7 @@ class SubCommands:
     assert isinstance(exchanger, TableReconstructor)
     exchanger.regist_command(command)
 
-  def run(self):
-    pass
+  def run(self, **kwargs): assert True
 
   def makeArgparse(self, subparser):
     """ 個別optionを登録したargparseをsubparseにして返す """
