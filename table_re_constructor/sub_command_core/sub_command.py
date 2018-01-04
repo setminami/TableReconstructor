@@ -5,6 +5,8 @@
 from sub_commands import SubCommands
 import argparse
 
+VERSION = '0.0.1'
+
 class Generate(SubCommands):
   """ generate command """
   __aliases = ['gen', 'g']
@@ -27,6 +29,9 @@ class Generate(SubCommands):
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)
+    # write each subcommand arg processor here
+    myparser.add_argument('-v', '--version',
+                        action='version', version=f'{self.command_name} {VERSION}')
     pass
 '''
 import os, argparse
@@ -44,13 +49,14 @@ class SubCommands:
   __help = 'AAA'
 
   # children classes must have ...
-  # 継承先で設定されているため、readonly
+  # 基底クラス管理
   @property
   def command_name(self):
     if self.__name == '':
       self.__name = self.__class__.__name__.lower()
     return self.__name
 
+  # 継承先で設定されているため、readonly
   @property
   def command_names(self): assert True
   @property

@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from table_reconstructor import output_formats, output_delimiters, errorout
+from table_reconstructor import errorout
 import os, json, argparse
+from functools import reduce
+
+output_formats = ['csv', 'tsv']
+output_delimiters = [',', '\t']
+
+VERSION = '0.1.0'
 
 class Generate(SubCommands):
   """ generate command """
   __aliases = ['gen', 'g']
-  __help = 'generate help'
+  __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'
 
   def __init__(self):
     super().__init__()
@@ -21,7 +27,7 @@ class Generate(SubCommands):
 
   def run(self, **kwargs):
     args = kwargs['args']
-    fileloc = os.path.abspath(os.path.expanduser(args.file))
+    fileloc = os.path.abspath(os.path.expanduser(args.input))
     # Memo: @property 使う
     o = output_formats.index(args.output_format)
     out = (output_formats[o], output_delimiters[o])
@@ -43,7 +49,10 @@ class Generate(SubCommands):
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)
-    myparser.add_argument('-f', '--file',
+    outs = reduce(lambda l, r: f'{l} | {r}', output_formats)
+    myparser.add_argument('-v', '--version',
+                        action='version', version=f'{self.command_name} {VERSION}')
+    myparser.add_argument('-i', '--input',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
                             metavar='path/to/inputfile',
                             help='Set path/to/input xlsx filename.')
@@ -55,15 +64,22 @@ class Generate(SubCommands):
                             metavar='sheetname',
                             help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
     myparser.add_argument('-o', '--output',
-                            nargs='?', type=str, default='output/', # action=AnalyzeJSONOutPath,
+                            nargs='?', type=str, default='./output/', # action=AnalyzeJSONOutPath,
                             metavar='path/to/outputfile(.json)',
-                            help='Output interpreted json files. If not set, output to ./output/[source_Exel_name].json')
+                            help='Output interpreted json and text formated sheet files. If not set, output to ./output/[source_Exel_name].json and ./output/[source_Excel_name].xlsx/[sheet_name.?sv]s')
+    myparser.add_argument('-of', '--output_format',
+                            nargs='?', type=str, default=output_formats[1],
+                            metavar=f'{outs}',
+                            help=f'''Output with the format, If you set, output formfiles to path/to/output/Excelfilename/sheetname.({outs}) \n(It\'ll be recommended, \
+                            if you want to have communication with non Tech team without any gitconfiging.)''')
     pass
 
   def __analyzeJSONOutPath(self, fileloc, path):
     """ 正当な出力json名を推測する """
-    if path.endswith('/'): # default含む
+    # ToDo: 文字列ケース
+    if path.endswith('/') or path == '.': # default含む
       print('*'*2)
+      if path == '.': path = './'
       p = os.path.expanduser(path)
       # Excelと同名
       fname = os.path.splitext(os.path.basename(fileloc))[0]

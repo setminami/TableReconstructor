@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os, sys, json, re
-from functools import reduce
 import argparse
+from functools import reduce
 
 # global settings.
 VERSION = '0.1.0'
-output_formats = ['csv', 'tsv']
-output_delimiters = [',', '\t']
 
 codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encodings'
 
@@ -19,7 +17,6 @@ class TableReConstructor:
   sub_commands = {}
 
   def __init__(self):
-
     pass
 
   def regist_subcommand(self, command):
@@ -53,20 +50,12 @@ class TableReConstructor:
 #      print(tmp)
 #      settings = SettingProcessor(setting_file, enc)
 #      settings.checkSettingFile()
-#    elif args.subcmd_name in generate_command:
-#      args.output_formats = self.output_formats
-#      args.output_delkimiters = self.output_delimiters
-#    else:
-#      pass
     pass
 
   def prepareArgParser(self):
     progname = os.path.basename(__file__)
-    argParser = argparse.ArgumentParser(prog=__file__, description='',
-                                        formatter_class=argparse.RawDescriptionHelpFormatter,
-                                        usage=f'{progname} sub-command [options]')
-    # ToDo: 一般化
-    outs = reduce(lambda l, r: f'{l} | {r}', output_formats)
+    argParser = argparse.ArgumentParser(prog=progname,
+                                        description='generate complex structed JSON with analyzing META descripted file.')
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
                         action='version', version=f'{progname} {VERSION}')
@@ -74,16 +63,12 @@ class TableReConstructor:
     # see. https://docs.python.org/3/library/argparse.html
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
     for name, command in self.sub_commands.items():
-      subparser = command.makeArgparse(subParsers)
+      if name == command.command_name:
+        subparser = command.makeArgparse(subParsers)
     argParser.add_argument('-e', '--encoding',
                             type=str, default='utf-8', metavar='{python built-in codec}',
                             help=f'Set default charactor encode. When not set this, it is treated as "utf-8".\
                             see also. {codec_help_url}')
-    argParser.add_argument('-of', '--output_format',
-                            nargs='?', type=str, default=output_formats[1],
-                            metavar=f'{outs}',
-                            help=f'''Output with the format, If you set, output formfiles to path/to/output/Excelfilename/sheetname.[{outs}] \n(It\'ll be recommended, \
-                            if you want to have communication with non Tech team without any gitconfiging.)''')
     self.ARGS = argParser.parse_args()
 
 

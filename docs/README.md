@@ -51,32 +51,28 @@ errors = ['OK', 'sheets link not found.', 'schema not found.',
 ## Appendix 2. Help
 ```
 $ ./table_re_constructor/table_reconstructor.py -h
-usage: table_reconstructor.py sub-command [options]
+usage: table_reconstructor.py [-h] [-v] [-e {python built-in codec}]  ...
+
+generate complex structed JSON with analyzing META descripted file.
 
 positional arguments:
                         sub-commands
     initialize (init, i)
-                        initialize help
-    generate (gen, g)   generate help
+                        create formated workbook template.
+    generate (gen, g)   generate analyzed files as TEXT from META descritor
+                        file. (e.g., Excel)
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
-  -e "python codec sign", --encode "python codec sign"
-                        set default charactor code. When not set this, it
-                        treated with "utf-8"
-  -of [csv | tsv], --output_format [csv | tsv]
-                        -of [csv | tsv] Output with the format, If you set,
-                        output formfiles to
-                        /path/to/output/Excelfilename/sheetname[csv | tsv]
-                        This IS DEBUG feature
-  -o [path/to/outputfile(.json)], --output [path/to/outputfile(.json)]
-                        -o path/to/outputfile Output interpreted json files.
+  -e {python built-in codec}, --encoding {python built-in codec}
+                        Set default charactor encode. When not set this, it is
+                        treated as "utf-8". see also. https://docs.python.org/
+                        3.6/library/codecs.html#standard-encodings
 
 
 $ ./table_re_constructor/table_reconstructor.py init -h
-usage: table_reconstructor.py sub-command [options] initialize
-       [-h] [-tx [path/to/outputfile.xlsx]]
+usage: table_reconstructor.py initialize [-h] [-tx [path/to/outputfile.xlsx]]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -88,12 +84,14 @@ optional arguments:
 
 
 $ ./table_re_constructor/table_reconstructor.py gen -h
-usage: table_reconstructor.py sub-command [options] generate
-       [-h] [-f [path/to/inputfile]] [-hr tabsize] [-r [sheetname]]
-
+usage: table_reconstructor.py generate [-h] [-v] [-i [path/to/inputfile]]
+                                       [-hr tabsize] [-r [sheetname]]
+                                       [-o [path/to/outputfile.json]]
+                                       [-of [csv | tsv]]
 optional arguments:
   -h, --help            show this help message and exit
-  -f [path/to/inputfile], --file [path/to/inputfile]
+  -v, --version         show program's version number and exit
+  -i [path/to/inputfile], --input [path/to/inputfile]
                         Set path/to/input xlsx filename.
   -hr tabsize, --human_readable tabsize
                         set indent size by numeric value, Output humanreadable
@@ -102,6 +100,17 @@ optional arguments:
                         set a sheetname in xlsx book have. construct json tree
                         from the sheet as root item. "root" is Default root
                         sheet name.
+  -o [path/to/outputfile(.json)], --output [path/to/outputfile(.json)]
+                        Output interpreted json and text formated sheet files.
+                        If not set, output to ./output/[source_Exel_name].json
+                        and
+                        ./output/[source_Excel_name].xlsx/[sheet_name.?sv]s
+  -of [csv | tsv], --output_format [csv | tsv]
+                        Output with the format, If you set, output formfiles
+                        to path/to/output/Excelfilename/sheetname.(csv | tsv)
+                        (It'll be recommended, if you want to have
+                        communication with non Tech team without any
+                        gitconfiging.)
 ```
 
 ## Appendix 3. MindMap
