@@ -76,8 +76,8 @@ def errorout(e, additonal=''):
   """ 強制的に止める sys.stderr へ出力 """
   errors = ['OK',
             'sheets link not found.', 'schema not found.',
-            'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
-            'Output json has failed.', 'Unsupported filetype found.']
+            'root sheet not found.', 'Unrecognized item type were found.', 'Unknown accumulator!',
+            'Output json has failed.', 'Unsupported table filetype found.']
   assert e < len(errors) and e >= 0
   print(f'{errors[e]} : {additonal}', file=sys.stderr)
   sys.exit(e)
