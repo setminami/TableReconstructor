@@ -5,10 +5,10 @@
 from sub_commands import SubCommands
 import argparse
 
-VERSION = '0.0.1'
-
 class Generate(SubCommands):
   """ generate command """
+  VERSION = '0.0.1'
+
   __aliases = ['gen', 'g']
   __help = 'generate help'
 
@@ -35,6 +35,7 @@ class Generate(SubCommands):
     pass
 '''
 import os, argparse
+from table_reconstructor import PROGNAME
 
 class SubCommands:
   """
@@ -46,7 +47,7 @@ class SubCommands:
   # 各継承先で実装
   __name = ''
   __aliases = []
-  __help = 'AAA'
+  __help = '---'
 
   # children classes must have ...
   # 基底クラス管理
@@ -81,4 +82,7 @@ class SubCommands:
 
   def makeArgparse(self, subparser):
     """ 個別optionを登録したargparseをsubparseにして返す """
-    return subparser.add_parser(self.command_name, aliases=self.aliases, help=self.help)
+    parser = subparser.add_parser(self.command_name, aliases=self.aliases, help=self.help)
+    parser.add_argument('-v', '--version',
+                        action='version', version=f'{PROGNAME} {self.command_name} v{self.VERSION}')
+    return parser

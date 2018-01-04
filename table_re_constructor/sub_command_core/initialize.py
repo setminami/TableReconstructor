@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
 
-VERSION = '0.0.1'
-
 class Initialize(SubCommands):
   """ initialize command """
+  VERSION = '0.0.1'
+
   __aliases = ['init', 'i']
   __help = 'create formated workbook template.'
 

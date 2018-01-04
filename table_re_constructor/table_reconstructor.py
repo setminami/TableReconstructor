@@ -6,6 +6,7 @@ from functools import reduce
 
 # global settings.
 VERSION = '0.1.0'
+PROGNAME = os.path.basename(__file__)
 
 codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encodings'
 
@@ -53,12 +54,11 @@ class TableReConstructor:
     pass
 
   def prepareArgParser(self):
-    progname = os.path.basename(__file__)
-    argParser = argparse.ArgumentParser(prog=progname,
+    argParser = argparse.ArgumentParser(prog=PROGNAME,
                                         description='generate complex structed JSON with analyzing META descripted file.')
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
-                        action='version', version=f'{progname} {VERSION}')
+                        action='version', version=f'{PROGNAME} {VERSION}')
 
     # see. https://docs.python.org/3/library/argparse.html
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
@@ -74,9 +74,10 @@ class TableReConstructor:
 
 def errorout(e, additonal=''):
   """ 強制的に止める sys.stderr へ出力 """
-  errors = ['OK', 'sheets link not found.', 'schema not found.',
-              'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
-              'Output json has failed.']
+  errors = ['OK',
+            'sheets link not found.', 'schema not found.',
+            'root sheet not found.', 'Unrecognized type were found.', 'Unknown accumulator!',
+            'Output json has failed.', 'Unsupported filetype found.']
   assert e < len(errors) and e >= 0
   print(f'{errors[e]} : {additonal}', file=sys.stderr)
   sys.exit(e)
