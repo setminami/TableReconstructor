@@ -2,7 +2,7 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor, errorout
+from table_reconstructor import TableReConstructor, errorout, PROGNAME
 from schema_helper import Schema, TypeSign, Validator
 from sub_command_core.generate import output_formats, output_delimiters
 from util import Util
@@ -20,7 +20,10 @@ class XLSX:
       self.format = forms[0]
       self.format_delimiter = forms[1]
     self.char_encode = enc
-    self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
+    if forms:
+      self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
+    else:
+      self.book = openpyxl.Workbook()
     pass
 
   def generateJSON(self, sheet_name, acc=[]):
@@ -157,8 +160,12 @@ class XLSX:
     assert instance is not None
     return instance
 
-  def generateTemplate(self):
-    pass
+  def generateSheet(self, name):
+    return self.book.create_sheet(name)
+
+  def putCommentToCell(self, cell, text, author=PROGNAME):
+    from openpyxl.comments import Comment
+    cell.comment = Comment(text, author)
 
   def __print(self, str, flag=False):
     if flag:

@@ -43,14 +43,6 @@ class TableReConstructor:
     enc = args.encoding
     subcommand = self.sub_commands[args.subcmd_name]
     subcommand.__run__(args=args)
-#    if args.subcmd_name in init_command:
-#      from settings import SettingProcessor
-#      # 初期化モード
-#      tmp = './template.xlsx' if args.template_xlsx == None else args.template_xlsx
-#      setting_file = fr'{os.path.splitext(os.path.expanduser(tmp))[0]}.yaml'
-#      print(tmp)
-#      settings = SettingProcessor(setting_file, enc)
-#      settings.checkSettingFile()
     pass
 
   def prepareArgParser(self):
@@ -75,9 +67,10 @@ class TableReConstructor:
 def errorout(e, additonal=''):
   """ 強制的に止める sys.stderr へ出力 """
   errors = ['OK',
-            'sheets link not found.', 'schema not found.',
-            'root sheet not found.', 'Unrecognized item type were found.', 'Unknown accumulator!',
-            'Output json has failed.', 'Unsupported table filetype found.']
+            'sheets link not found.', 'schema not found.', # 1, 2
+            'root sheet not found.', 'Unrecognized item type were found.', # 3, 4
+            'Unknown accumulator!', 'Output json has failed.', # 5, 6
+            'Unsupported table filetype found.', 'setting yaml file not found']
   assert e < len(errors) and e >= 0
   print(f'{errors[e]} : {additonal}', file=sys.stderr)
   sys.exit(e)

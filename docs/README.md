@@ -44,9 +44,10 @@ sys.exit by each index.
 
 ```python
 errors = ['OK',
-          'sheets link not found.', 'schema not found.',
-          'root sheet not found.', 'Unrecognized item type were found.', 'Unknown accumulator!',
-          'Output json has failed.', 'Unsupported table filetype found.']
+            'sheets link not found.', 'schema not found.', # 1, 2
+            'root sheet not found.', 'Unrecognized item type were found.', # 3, 4
+            'Unknown accumulator!', 'Output json has failed.', # 5, 6
+            'Unsupported table filetype found.', 'setting yaml file not found']
 ```
 
 ## Appendix 2. Help

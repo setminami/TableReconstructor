@@ -3,6 +3,7 @@
 ''' class snnipets
 # -*- coding: utf-8 -*-
 from sub_commands import SubCommands
+from table_reconstructor import errorout
 import argparse
 
 class Generate(SubCommands):
