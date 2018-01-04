@@ -2,8 +2,9 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor, output_formats, output_delimiters, errorout
+from table_reconstructor import TableReConstructor, errorout
 from schema_helper import Schema, TypeSign, Validator
+from sub_command_core.generate import output_formats, output_delimiters
 from util import Util
 
 class XLSX:
@@ -42,7 +43,7 @@ class XLSX:
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
-        self.__outputCSV(dest_dir, root_sheet)
+        self.__outputCSV(dest_dir, root_sheet, self.char_encode)
         pass
       for j, cell in enumerate(row):
         v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
@@ -99,7 +100,7 @@ class XLSX:
       errorout(5)
     return accumulator
 
-  def __outputCSV(self, base_path, sheet, enc='utf-8'):
+  def __outputCSV(self, base_path, sheet, enc):
     """
     CSV, TSV出力
     """
