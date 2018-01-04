@@ -2,7 +2,7 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor, errorout
+from table_reconstructor import TableReConstructor, output_formats, output_delimiters, errorout
 from schema_helper import Schema, TypeSign, Validator
 from util import Util
 
@@ -26,7 +26,6 @@ class XLSX:
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
-    print(f'Read from {self.filepath}')
     dest_dir = self.output_path
     os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
@@ -105,7 +104,7 @@ class XLSX:
     CSV, TSV出力
     """
     if not self.format: return
-    assert self.format in TableReConstructor.output_formats
+    assert self.format in output_formats
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, f'{sheet.title}.{self.format}')
@@ -159,6 +158,7 @@ class XLSX:
 
   def generateTemplate(self):
     pass
+
   def __print(self, str, flag=False):
     if flag:
       print(str)

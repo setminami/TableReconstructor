@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
 
+VERSION = '0.0.1'
+
 class Initialize(SubCommands):
   """ initialize command """
   __aliases = ['init', 'i']
-  __help = 'initialize help'
+  __help = 'create formated workbook template.'
 
   def __init__(self):
     super().__init__()
@@ -17,7 +19,7 @@ class Initialize(SubCommands):
   @property
   def help(self): return self.__help
 
-  def run(self):
+  def run(self, **kwargs):
     pass
 
   def makeArgparse(self, subparser):
