@@ -11,8 +11,8 @@ errors = ['OK',
 
 ## Appendix 2. Help
 ```
-$ table_reconstructor.py -h
-usage: table_reconstructor.py [-h] [-v] [-e {python built-in codec}]  ...
+$ jsonica.py -h
+usage: jsonica.py [-h] [-v] [-e {python built-in codec}]  ...
 
 generate complex structure JSON with analyzing META descripted file.
 
@@ -31,8 +31,8 @@ optional arguments:
                         treated as "utf-8". see also. https://docs.python.org/3.6/library/codecs.html#standard-encodings
 
 # initialize subcommand help
-$ ./table_re_constructor/table_reconstructor.py init -h
-usage: table_reconstructor.py initialize [-h] [-tx [path/to/outputfile.xlsx]]
+$ jsonica.py init -h
+usage: jsonica.py initialize [-h] [-tx [path/to/outputfile.xlsx]]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -43,8 +43,8 @@ optional arguments:
                         subcommand.
 
 # generate subcommand help
-$ table_reconstructor.py gen -h
-usage: table_reconstructor.py generate [-h] [-v] [-i [path/to/inputfile]]
+$ jsonica.py gen -h
+usage: jsonica.py generate [-h] [-v] [-i [path/to/inputfile]]
                                        [-hr tabsize] [-r [sheetname]]
                                        [-o [path/to/outputfile.json]]
                                        [-of [(csv | tsv):path/to/outputdir]]

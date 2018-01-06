@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from table_reconstructor import errorout
+from jsonica import errorout
 import os
 
 class Initialize(SubCommands):
   """ initialize command """
-  VERSION = '0.9.0'
+  VERSION = '0.0.9'
 
   __aliases = ['init', 'i']
   __help = 'create formated workbook template.'

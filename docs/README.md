@@ -1,9 +1,14 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
-# JSON_XLSX_Manager
+# Jsonica
 [ja](./README_ja.md)
 
-## What I wanna do and Where advantage
+# What's this?
+
+# Setup'n Usage
+[Usage Sample](./Usage_Samples.md)
+
+# What I wanna do and Where advantage
   - I only want to be interested in huge data and want to manage them easily.
     - I wanna eliminate the noise that I want to do and concentrate on meeting the necessary conditions.
   - I wanna automatically generate concrete representation like JSON, Yaml, md ...etc, from abstract representation such as Excel (I call them 'META descriptor' in the docs.).
@@ -17,7 +22,7 @@
 
 see also. [Appendix. mindmap](./Appendixies.md)
 
-## building Excel file and edit
+# building Excel file and edit
   - To manage it as 1 sheet → a layer
   - A sheet indicating the root item must have `root` as the sheet name
     - When there is `-r sheetname`, `sheetname` is recognized as root sheet, but no `-r`, xlsx must have a sheet named `root`.
@@ -35,14 +40,13 @@ see also. [Appendix. mindmap](./Appendixies.md)
     - If typo is found, immediately raise it as a command error. see. Appendix. Errors
   - Since it is not affected by the specification of Excel, do not overwrite unnecessary macros as much as possible
 
-## Sample Files
-  - META descriptor and `table_reconstructor.py gen -of csv -hr 2` output sample
-    - [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
+# Sample Files
+  - META descriptor and `jsonica.py gen -of csv -hr 2` output sample
+    - [xlsx & genarated json](https://github.com/setminami/Jsonica/tree/master/Samples)
   - Search for xlsx git management style, that neednot adjust configuration on each local git environment of non Tech members.
-    - [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
+    - [xlsx git management (trial)](https://github.com/setminami/Jsonica/tree/master/output/cheatsheet.xlsx)
   - Yaml file, for initial xlsx template.
-    - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
+    - [template.yaml](https://github.com/setminami/Jsonica/blob/master/template.yaml)
   - jsonschema based on xlsx directly and seamless. (TBD)
 
-## [Usage Sample](./Usage_Samples.md)
 ## [Appendix.](./Appendixies.md)

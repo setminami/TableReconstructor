@@ -2,7 +2,7 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from table_reconstructor import TableReConstructor, errorout, PROGNAME
+from jsonica import Jsonica, errorout, PROGNAME
 from schema_helper import Schema, TypeSign, Validator
 from sub_command_core.generate import output_formats, output_delimiters
 from util import Util

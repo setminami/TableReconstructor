@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from table_reconstructor import errorout
+from jsonica import errorout
 import os, sys, json, argparse, contextlib
 from functools import reduce
 
@@ -11,7 +11,7 @@ SP_FILE = '-'
 
 class Generate(SubCommands):
   """ generate command """
-  VERSION = '0.9.0'
+  VERSION = '0.0.9'
 
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'

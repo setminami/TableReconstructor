@@ -5,12 +5,12 @@ import argparse
 from functools import reduce
 
 # global settings.
-VERSION = '0.9.0'
+VERSION = '0.0.9'
 PROGNAME = os.path.basename(__file__)
 
 codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encodings'
 
-class TableReConstructor:
+class Jsonica:
   """ 具象操作に流すための、utility的位置づけ"""
   DEBUG = True
   # DEBUG出力用 jsonは別扱い
@@ -76,8 +76,8 @@ def errorout(e, additonal=''):
   sys.exit(e)
 
 if __name__ == '__main__':
-  ins = TableReConstructor()
-  # ToDo: subcommand 設定 https://github.com/setminami/TableReconstructor/issues/31
+  ins = Jsonica()
+  # ToDo: subcommand 設定 https://github.com/setminami/Jsonica/issues/31
   from sub_command_core import (Initialize, Generate)
   # AdHoc: とりあえず仮実装 Plugin実装する際に再考
   for x in [Initialize(), Generate()]:

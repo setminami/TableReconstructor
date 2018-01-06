@@ -1,18 +1,23 @@
-## Usage Sample
+# How to Install
+```
+pip install jsongen
+```
+
+# Usage Sample
 ```
 # generate
-$ table_reconstructor.py gen -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output
+$ jsonica.py gen -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output
 Analyzing... /Users/set/Desktop/Github/JSON_XLSX_Manager/Samples/cheatsheet.xlsx
 Output json Success ➡️ ./output/cheatsheet.json
 
-$ table_reconstructor.py gen -i ./Samples/cheatsheet.xlsx -o ./output/test.json -of tsv:./output
+$ jsonica.py gen -i ./Samples/cheatsheet.xlsx -o ./output/test.json -of tsv:./output
 Analyzing... /Users/set/Desktop/Github/JSON_XLSX_Manager/Samples/cheatsheet.xlsx
 Output json Success ➡️ ./output/test.json
 
-$ table_reconstructor.py g -o - -of tsv:./output
+$ jsonica.py g -o - -of tsv:./output
 [{"color": "fff000", "title": "Anchors", "items": [{"sign": "^", "desc-en": "Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default."}, {"sign": "$", "desc-en": "Matches at the end of string or end of line if multi-line mode is  enabled. Many regex implementations have multi-line mode enabl....
 
-$ table_reconstructor.py g -i ./Samples/cheatsheet.xlsx -hr 2 -o - -of tsv:./output
+$ jsonica.py g -i ./Samples/cheatsheet.xlsx -hr 2 -o - -of tsv:./output
 [
   {
     "color": "fff000",
@@ -30,5 +35,5 @@ items-CharClass.tsv		items-Quantifiers.tsv		root.tsv
 items-Groups.tsv		items-assertion.tsv
 
 # ☝️ can see on github.io like...
-# https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx
+# https://github.com/setminami/Jsonica/tree/master/output/cheatsheet.xlsx
 ```

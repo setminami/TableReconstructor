@@ -3,7 +3,7 @@
 ''' class snnipets
 # -*- coding: utf-8 -*-
 from sub_commands import SubCommands
-from table_reconstructor import errorout
+from jsonica import errorout
 import argparse
 
 class Generate(SubCommands):
@@ -36,11 +36,11 @@ class Generate(SubCommands):
     pass
 '''
 import os, argparse
-from table_reconstructor import PROGNAME
+from jsonica import PROGNAME
 
 class SubCommands:
   """
-  table_reconstructor subcommands abstract class
+  jsonica subcommands abstract class
   concretes class rules:
   - class名を全小文字化したものがsubcommand名になる
   - git commandのように、entryをまるごと渡すことはしない、少なくともwrapperはpythonで書く
@@ -75,8 +75,8 @@ class SubCommands:
     dont call from exchanger.__init__()
     """
     command = cls.__init__()
-    from table_reconstructor import TableReconstructor
-    assert isinstance(exchanger, TableReconstructor)
+    from jsonica import Jsonica
+    assert isinstance(exchanger, Jsonica)
     exchanger.regist_command(command)
 
   def __run__(self, **kwargs): assert True

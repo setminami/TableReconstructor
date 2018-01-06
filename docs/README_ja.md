@@ -1,9 +1,14 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
-# JSON_XLSX_Manager
+# Jsonica
 [en](./README.md)
 
-## What I wanna do and Where advantage
+# なにができるか？
+
+# 利用とセットアップ
+[Usage Sample](./Usage_Samples.md)
+
+## やりたいこととなにがうれしいか
   - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
     - 雑音を排除し、必要条件を満たすことに集中できる
   - Excelなど抽象表現からJSON, Yaml, md...etcの具象表現を振り分け自動生成したい
@@ -36,12 +41,12 @@ see also. [Appendix. mindmap](./Appendixies.md)
   - Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
 ## Sample Files
-  - 用意するファイルと `table_reconstructor.py gen -of csv -hr 2` 出力例
-    - [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
+  - 用意するファイルと `jsonica.py gen -of csv -hr 2` 出力例
+    - [xlsx & genarated json](https://github.com/setminami/Jsonica/tree/master/Samples)
   - local git環境に設定調整を強要しないxlsx git管理の模索
-    - [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
+    - [xlsx git management (trial)](https://github.com/setminami/Jsonica/tree/master/output/cheatsheet.xlsx)
   - xlsx初期化用template yamlファイル
-    - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
+    - [template.yaml](https://github.com/setminami/Jsonica/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
 ## [Usage Sample](./Usage_Samples.md)
