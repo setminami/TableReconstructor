@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
 from table_reconstructor import errorout
-import os, json, argparse
+import os, sys, json, argparse, contextlib
 from functools import reduce
 
 output_formats = ['csv', 'tsv']
 output_delimiters = [',', '\t']
 
+SP_FILE = '-'
+
 class Generate(SubCommands):
   """ generate command """
-  VERSION = '0.1.0'
+  VERSION = '0.9.0'
 
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'
@@ -27,25 +29,22 @@ class Generate(SubCommands):
 
   def __run__(self, **kwargs):
     args = kwargs['args']
+    self.args = args
     fileloc = os.path.abspath(os.path.expanduser(args.input))
-    # Memo: @property 使う
-    o = output_formats.index(args.output_format)
-    out = (output_formats[o], output_delimiters[o])
     workpath = self.__treatFileTypes(fileloc)
     from xlsx import XLSX
-    print(f'Analyzing... {fileloc}')
-    x = XLSX(workpath, args.output, args.encoding, out)
+    self.__print(f'Analyzing... {fileloc}')
+    x = XLSX(workpath, args.encoding, args.output_format)
     # sys.setrecursionlimit(1024 * 8)
     j = x.generateJSON(sheet_name=args.root_sheet)
-    jsonfilename = self.__analyzeJSONOutPath(fileloc, args.output)
-    with open(jsonfilename, 'w', encoding=args.encoding) as f:
+    with wild_open(args.output, encoding=args.encoding) as f:
       try:
-        f.write(json.dumps(j, sort_keys=True, indent=args.human_readable) \
-                                      if args.human_readable > 0 else json.dumps(j))
+        print(json.dumps(j, sort_keys=True, indent=args.human_readable) \
+                    if args.human_readable > 0 else json.dumps(j), file=f)
       except:
-        errorout(6, jsonfilename)
+        errorout(6, args.output)
       else:
-        print(f'Output json Success -> {jsonfilename}')
+        self.__print(f'Output json Success ➡️  {args.output}')
     pass
 
   def makeArgparse(self, subparser):
@@ -63,32 +62,16 @@ class Generate(SubCommands):
                             metavar='sheetname',
                             help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
     myparser.add_argument('-o', '--output',
-                            nargs='?', type=str, default='./output/', # action=AnalyzeJSONOutPath,
+                            nargs='?', type=str, action=AnalyzeJSONOutPath,
                             metavar='path/to/outputfile(.json)',
-                            help='Output interpreted json and text formated sheet files. If not set, output to ./output/[source_METAFile_name].json and ./output/[source_METAFile_name].xlsx/[sheet_name.?sv]s')
+                            help=f'Output interpreted json. If this set which endswith ".json" as set full filename, output jsonfile treated as the name. But when not set ".json", adopt original xlsx filename, like path/to/outputfile/[source_METAFile_name].json\
+                            (-o has special filename "{SP_FILE}" as STDOUT, and when set like "-o {SP_FILE}", all other stdout messages were masked.)')
     myparser.add_argument('-of', '--output_format',
-                            nargs='?', type=str, default=output_formats[1],
-                            metavar=f'{outs}',
-                            help=f'''Output with the format, If you set, output formfiles to path/to/output/METAFile/sheetname.({outs}) \n(It\'ll be recommended, \
-                            if you want to have communication with non Tech team without any gitconfiging.)''')
+                            nargs='?', type=str, action=AnalyzeXSeparatedOutPath, # (xsv, path)になるので注意
+                            metavar=f'({outs}):path/to/outputdir',
+                            help=f'''Output with the format, If you set this, output formfiles to path/to/[source_METAFile_name].xlsx/[sheetname.?sv]s It\'ll be recommended,
+                            if you want to have communication with non Tech team without any gitconfiging.''')
     pass
-
-  def __analyzeJSONOutPath(self, fileloc, path):
-    """ 正当な出力json名を推測する """
-    # ToDo: 文字列ケース
-    if path.endswith('/') or path == '.': # default含む
-      if path == '.': path = './'
-      p = os.path.expanduser(path)
-      # Excelと同名
-      fname = os.path.splitext(os.path.basename(fileloc))[0]
-      jsonfilename = fr'{p}{fname}.json'
-    elif path.endswith('.json'):
-      # 指定されたファイル名まま
-      jsonfilename = os.path.expanduser(path)
-    else: # '/'で終わらず、json拡張子無し文字列で終わっている
-      p = os.path.expanduser(path)
-      jsonfilename = fr'{p}.json'
-    return jsonfilename
 
   def __treatFileTypes(self, file):
     if file.endswith('.xlsx'):
@@ -96,12 +79,49 @@ class Generate(SubCommands):
     else:
       errorout(7, f'{file} format is not supported yet.')
 
+  def __print(self, msg):
+    if not (self.args.output == SP_FILE):
+      print(msg)
+
 # argparse actions
-# -o を指定しないとcallされないため、pending
-# class AnalyzeJSONOutPath(argparse.Action):
-#  """ 正当な出力json名を推測する """
-#  def __call__(self, parser, namespace, values, option_string=None):
-#    print(parser)
-#    print(namespace)
-#    print(values)
-#    print(option_string)
+class AnalyzeJSONOutPath(argparse.Action):
+  """ 正当な出力json名を推測する """
+  def __call__(self, parser, namespace, values, option_string=None):
+    path, fileloc = values, namespace.input
+    if path.endswith('.json'):
+      # 指定されたファイル名まま
+      jsonfilename = os.path.expanduser(path)
+    elif path == SP_FILE:
+      jsonfilename = path
+    else:
+      p = os.path.expanduser(path)
+      if not os.path.isdir(p):
+        os.path.makedirs(p, exist_ok=True)
+      # Excelと同名
+      fname = os.path.splitext(os.path.basename(fileloc))[0]
+      jsonfilename = os.path.join(p, fr'{fname}.json')
+    namespace.output = jsonfilename
+
+class AnalyzeXSeparatedOutPath(argparse.Action):
+  """ sv出力先と形式を解析する """
+  def __call__(self, parser, namespace, values, option_string=None):
+    args = values.split(':')
+    if len(args) != 2:
+      raise argparse.ArgumentTypeError(f'''{option_string} {values} have to separate ?sv and outputpath with ":"
+                                            e.g., tsv:path/to/output''')
+    elif not (args[0] in output_formats):
+      raise argparse.ArgumentTypeError(f'{option_string} {args[0]} have to be picked from {output_formats}')
+    o = output_formats.index(args[0])
+    namespace.output_format = (args[0], output_delimiters[o], args[1])
+
+@contextlib.contextmanager
+def wild_open(filename=None, encoding='utf-8'):
+  if filename and filename != SP_FILE:
+    fh = open(filename, 'w', encoding=encoding)
+  else:
+    fh = sys.stdout
+  try:
+    yield fh
+  finally:
+    if fh is not sys.stdout:
+      fh.close()

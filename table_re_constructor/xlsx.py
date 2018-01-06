@@ -12,17 +12,17 @@ class XLSX:
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
 
-  def __init__(self, file, output_path, enc, forms=None):
+  def __init__(self, file, enc, forms=None):
     self.filepath = file
     self.filename = os.path.basename(file)
-    self.output_path = output_path
     if forms:
       self.format = forms[0]
       self.format_delimiter = forms[1]
+      self.format_output = forms[2]
     self.char_encode = enc
-    if forms:
+    if forms: # generate
       self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
-    else:
+    else: # init
       self.book = openpyxl.Workbook()
     pass
 
@@ -30,8 +30,6 @@ class XLSX:
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
-    dest_dir = self.output_path
-    os.makedirs(dest_dir, exist_ok=True)
     sheets = self.__nameToSheets()
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
@@ -46,7 +44,7 @@ class XLSX:
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
-        self.__outputCSV(dest_dir, root_sheet, self.char_encode)
+        self.__outputCSV(self.format_output, root_sheet, self.char_encode)
         pass
       for j, cell in enumerate(row):
         v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
@@ -167,6 +165,7 @@ class XLSX:
     from openpyxl.comments import Comment
     cell.comment = Comment(text, author)
 
+  # SP_FILE 注意
   def __print(self, str, flag=False):
     if flag:
       print(str)

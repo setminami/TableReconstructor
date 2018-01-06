@@ -39,6 +39,41 @@
     - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
+## Usage Sample
+```
+# generate
+$ table_reconstructor.py gen -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output
+Analyzing... /Users/set/Desktop/Github/JSON_XLSX_Manager/Samples/cheatsheet.xlsx
+Output json Success ➡️ ./output/cheatsheet.json
+
+$ table_reconstructor.py gen -i ./Samples/cheatsheet.xlsx -o ./output/test.json -of tsv:./output
+Analyzing... /Users/set/Desktop/Github/JSON_XLSX_Manager/Samples/cheatsheet.xlsx
+Output json Success ➡️ ./output/test.json
+
+$ table_reconstructor.py g -o - -of tsv:./output
+[{"color": "fff000", "title": "Anchors", "items": [{"sign": "^", "desc-en": "Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default."}, {"sign": "$", "desc-en": "Matches at the end of string or end of line if multi-line mode is  enabled. Many regex implementations have multi-line mode enabl....
+
+$ table_reconstructor.py g -i ./Samples/cheatsheet.xlsx -hr 2 -o - -of tsv:./output
+[
+  {
+    "color": "fff000",
+    "items": [
+....
+
+# check silent outputs
+$ ls ./output
+cheatsheet.json	cheatsheet.xlsx
+
+$ ls ./output/cheatsheet.xlsx/
+items-Anchors.tsv		items-Modifiers.tsv		items-bracketEx.tsv
+items-Case Modifiers.tsv	items-POSIX-CHAR.tsv		items-spchar.tsv
+items-CharClass.tsv		items-Quantifiers.tsv		root.tsv
+items-Groups.tsv		items-assertion.tsv
+
+# ☝️ can see on github.io like...
+# https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx
+```
+
 ## Appendix.1 Errors
 sys.exit by each index.
 
@@ -52,10 +87,10 @@ errors = ['OK',
 
 ## Appendix 2. Help
 ```
-$ ./table_re_constructor/table_reconstructor.py -h
+$ table_reconstructor.py -h
 usage: table_reconstructor.py [-h] [-v] [-e {python built-in codec}]  ...
 
-generate complex structed JSON with analyzing META descripted file.
+generate complex structure JSON with analyzing META descripted file.
 
 positional arguments:
                         sub-commands
@@ -69,10 +104,9 @@ optional arguments:
   -v, --version         show program's version number and exit
   -e {python built-in codec}, --encoding {python built-in codec}
                         Set default charactor encode. When not set this, it is
-                        treated as "utf-8". see also. https://docs.python.org/
-                        3.6/library/codecs.html#standard-encodings
+                        treated as "utf-8". see also. https://docs.python.org/3.6/library/codecs.html#standard-encodings
 
-
+# initialize subcommand help
 $ ./table_re_constructor/table_reconstructor.py init -h
 usage: table_reconstructor.py initialize [-h] [-tx [path/to/outputfile.xlsx]]
 
@@ -84,12 +118,13 @@ optional arguments:
                         set this, other options are ignored.** will be
                         subcommand.
 
-
-$ ./table_re_constructor/table_reconstructor.py gen -h
+# generate subcommand help
+$ table_reconstructor.py gen -h
 usage: table_reconstructor.py generate [-h] [-v] [-i [path/to/inputfile]]
                                        [-hr tabsize] [-r [sheetname]]
                                        [-o [path/to/outputfile.json]]
-                                       [-of [csv | tsv]]
+                                       [-of [(csv | tsv):path/to/outputdir]]
+
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
@@ -103,16 +138,20 @@ optional arguments:
                         from the sheet as root item. "root" is Default root
                         sheet name.
   -o [path/to/outputfile(.json)], --output [path/to/outputfile(.json)]
-                        Output interpreted json and text formated sheet files.
-                        If not set, output to ./output/[source_Exel_name].json
-                        and
-                        ./output/[source_Excel_name].xlsx/[sheet_name.?sv]s
-  -of [csv | tsv], --output_format [csv | tsv]
-                        Output with the format, If you set, output formfiles
-                        to path/to/output/Excelfilename/sheetname.(csv | tsv)
-                        (It'll be recommended, if you want to have
+                        Output interpreted json. If this set which endswith
+                        ".json" as set full filename, output jsonfile treated
+                        as the name. But when not set ".json", adopt original
+                        xlsx filename, like
+                        path/to/outputfile/[source_METAFile_name].json (-o has
+                        special filename "-" as STDOUT, and when set like "-o
+                        -", all other stdout messages were masked.)
+  -of [(csv | tsv):path/to/outputdir], --output_format [(csv | tsv):path/to/outputdir]
+                        Output with the format, If you set this, output
+                        formfiles to
+                        path/to/[source_METAFile_name].xlsx/[sheetname.?sv]s
+                        It'll be recommended, if you want to have
                         communication with non Tech team without any
-                        gitconfiging.)
+                        gitconfiging.
 ```
 
 ## Appendix 3. MindMap
