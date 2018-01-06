@@ -14,6 +14,7 @@
   - Distribution and collection as a small grain file to a large number of people to concentrate work and parallelize.
     - For example, it is ideal to output sheets with huge JSON files when you initialize each sheet by distributing them from the excel and finalize them when collecting.
     - For detailed specifications, only a part of team member(s) who know well about it may hold, and accurately describe, each one wishes to manage distributed knowledge that only needs to know the part in each charge.
+
 see also. [Appendix. mindmap](./Appendixies.md)
 
 ## building Excel file and edit
