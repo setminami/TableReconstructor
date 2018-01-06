@@ -23,7 +23,6 @@ class Initialize(SubCommands):
 
   def __run__(self, **kwargs):
     args = kwargs['args']
-    print(args.template_xlsx)
     from settings import SettingProcessor, SettingsError
     # 初期化モード
     setting_file = fr'{os.path.splitext(os.path.expanduser(args.template_xlsx))[0]}.yaml'
@@ -39,6 +38,7 @@ class Initialize(SubCommands):
       print(se)
     else:
       settings.save()
+      print(f'Construct xlsx file Success ➡️  {args.template_xlsx}')
     pass
 
   def makeArgparse(self, subparser):

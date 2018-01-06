@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import yaml
 import os
 from xlsx import XLSX
@@ -29,7 +28,7 @@ class SettingProcessor:
     with open(self.settings, 'r') as f:
       self.setting_data = yaml.load(f)
     if self.setting_data[ATTACH[0]] == ATTACH[1][0]:
-      self.processor = XLSX(self.settings, self.out, self.enc)
+      self.processor = XLSX(self.settings, self.enc)
     assert self.processor
 
   def createSheets(self, item=ROOT, name=None):

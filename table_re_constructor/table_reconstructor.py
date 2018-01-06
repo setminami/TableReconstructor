@@ -5,7 +5,7 @@ import argparse
 from functools import reduce
 
 # global settings.
-VERSION = '0.1.0'
+VERSION = '0.9.0'
 PROGNAME = os.path.basename(__file__)
 
 codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encodings'
@@ -47,7 +47,7 @@ class TableReConstructor:
 
   def prepareArgParser(self):
     argParser = argparse.ArgumentParser(prog=PROGNAME,
-                                        description='generate complex structed JSON with analyzing META descripted file.')
+                                        description='generate complex JSON structure with analyzing META descripted file like xlsx.')
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
                         action='version', version=f'{PROGNAME} {VERSION}')
