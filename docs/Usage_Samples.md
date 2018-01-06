@@ -1,6 +1,6 @@
 # How to Install
 ```
-pip install jsongen
+pip install jsonica
 ```
 
 # Usage Sample
