@@ -1,4 +1,9 @@
-## Usage Sample
+# How to Install
+```
+pip install jsongen
+```
+
+# Usage Sample
 ```
 # generate
 $ table_reconstructor.py gen -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output

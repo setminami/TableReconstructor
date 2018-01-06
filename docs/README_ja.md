@@ -1,9 +1,14 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
 
-# JSON_XLSX_Manager
+# JsonGen
 [en](./README.md)
 
-## What I wanna do and Where advantage
+# なにができるか？
+
+# 利用とセットアップ
+[Usage Sample](./Usage_Samples.md)
+
+## やりたいこととなにがうれしいか
   - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
     - 雑音を排除し、必要条件を満たすことに集中できる
   - Excelなど抽象表現からJSON, Yaml, md...etcの具象表現を振り分け自動生成したい

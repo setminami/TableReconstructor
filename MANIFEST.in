@@ -1,7 +1,7 @@
 include MANIFEST.in
 include *.txt
 # Top-level
-include setup.py README.md LICENCSE
+include setup.py docs/README.md LICENCSE
 # All-source file
 recursive-include modulename *
 # All documentation
