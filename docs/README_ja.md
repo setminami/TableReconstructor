@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [en](./README.md)
@@ -41,12 +41,12 @@ see also. [Appendix. mindmap](./Appendixies.md)
   - Excelの仕様に振られないため、余計なマクロは極力上書きしない
 
 ## Sample Files
-  - 用意するファイルと `table_reconstructor.py gen -of csv -hr 2` 出力例
-    - [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
+  - 用意するファイルと `jsonica.py gen -of csv -hr 2` 出力例
+    - [xlsx & genarated json](https://github.com/setminami/Jsonica/tree/master/Samples)
   - local git環境に設定調整を強要しないxlsx git管理の模索
-    - [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
+    - [xlsx git management (trial)](https://github.com/setminami/Jsonica/tree/master/output/cheatsheet.xlsx)
   - xlsx初期化用template yamlファイル
-    - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
+    - [template.yaml](https://github.com/setminami/Jsonica/blob/master/template.yaml)
   - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
 ## [Usage Sample](./Usage_Samples.md)

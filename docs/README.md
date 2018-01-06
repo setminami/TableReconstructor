@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [ja](./README_ja.md)
@@ -41,12 +41,12 @@ see also. [Appendix. mindmap](./Appendixies.md)
   - Since it is not affected by the specification of Excel, do not overwrite unnecessary macros as much as possible
 
 # Sample Files
-  - META descriptor and `table_reconstructor.py gen -of csv -hr 2` output sample
-    - [xlsx & genarated json](https://github.com/setminami/TableReconstructor/tree/master/Samples)
+  - META descriptor and `jsonica.py gen -of csv -hr 2` output sample
+    - [xlsx & genarated json](https://github.com/setminami/Jsonica/tree/master/Samples)
   - Search for xlsx git management style, that neednot adjust configuration on each local git environment of non Tech members.
-    - [xlsx git management (trial)](https://github.com/setminami/TableReconstructor/tree/master/output/cheatsheet.xlsx)
+    - [xlsx git management (trial)](https://github.com/setminami/Jsonica/tree/master/output/cheatsheet.xlsx)
   - Yaml file, for initial xlsx template.
-    - [template.yaml](https://github.com/setminami/TableReconstructor/blob/master/template.yaml)
+    - [template.yaml](https://github.com/setminami/Jsonica/blob/master/template.yaml)
   - jsonschema based on xlsx directly and seamless. (TBD)
 
 ## [Appendix.](./Appendixies.md)
