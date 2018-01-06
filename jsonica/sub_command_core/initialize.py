@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from table_reconstructor import errorout
+from jsonica import errorout
 import os
 
 class Initialize(SubCommands):

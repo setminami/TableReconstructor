@@ -3,9 +3,9 @@
 
 from setuptools import setup
 
-setup(name='table_re_constructor',
+setup(name='jsonica',
       version='0.1.0',
-      description='manage huge json as xlsx with git.',
+      description='manage huge json as xlsx statistically.',
       author='setminami',
       author_email='set.minami@gmail.com',
       url='https://setminami.github.io/TableReconstructor/',

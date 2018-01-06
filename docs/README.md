@@ -1,6 +1,6 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/TableReconstructor.png?columns=all)](https://waffle.io/setminami/TableReconstructor?utm_source=badge)
 
-# JsonGen
+# Jsonica
 [ja](./README_ja.md)
 
 # What's this?
