@@ -62,7 +62,7 @@ $ table_reconstructor.py g -i ./Samples/cheatsheet.xlsx -hr 2 -o - -of tsv:./out
 
 # check silent outputs
 $ ls ./output
-cheatsheet.json	cheatsheet.xlsx
+cheatsheet.json	cheatsheet.xlsx	test.json
 
 $ ls ./output/cheatsheet.xlsx/
 items-Anchors.tsv		items-Modifiers.tsv		items-bracketEx.tsv
