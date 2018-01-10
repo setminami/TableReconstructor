@@ -179,14 +179,14 @@ RIGHT_DATA=$RIGHT_DATA_DIR/i-tx.txt
 ./jsonica/jsonica.py i -tx ./template.xlsx > $TEST
 diff $RIGHT_DATA $TEST
 if [ $? -eq 1 ]; then
-  echo 'test has fail! "initialize -h"'
+  echo 'test has fail! "initialize -tx ./template.xlsx"'
   exit 1
 else
   echo 'pass!'
 fi
 
 # final Debug無し コミット後にテストが前提
-git diff --exit-code
+git diff --exclude *.xlsx --exit-code
 if [ $? -eq 1 ]; then
   echo 'Found difference'
   exit 1
