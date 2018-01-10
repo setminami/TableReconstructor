@@ -109,7 +109,7 @@ class AnalyzeJSONOutPath(argparse.Action):
 
 class AnalyzeXSeparatedOutPath(argparse.Action):
   """ sv出力先と形式を解析する """
-  DEBUG = True
+  DEBUG = False
   def __call__(self, parser, namespace, values, option_string=None):
     if self.DEBUG:
         print(f'{self.__class__.__name__} called: {values}')

@@ -1,0 +1,18 @@
+usage: jsonica.py [-h] [-v] [-e {python built-in codec}]  ...
+
+generate complex JSON structure with analyzing META descripted file like xlsx.
+
+positional arguments:
+                        sub-commands
+    initialize (init, i)
+                        create formated workbook template.
+    generate (gen, g)   generate analyzed files as TEXT from META descritor
+                        file. (e.g., Excel)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -e {python built-in codec}, --encoding {python built-in codec}
+                        Set default charactor encode. When not set this, it is
+                        treated as "utf-8". see also. https://docs.python.org/
+                        3.6/library/codecs.html#standard-encodings
