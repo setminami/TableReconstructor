@@ -124,4 +124,7 @@ venv.bak/
 # macOS
 .DS_Store
 
+# individual tests
+tests/tmp/
+
 # End of https://www.gitignore.io/api/python,microsoftoffice
