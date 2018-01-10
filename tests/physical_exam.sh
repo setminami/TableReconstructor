@@ -174,7 +174,18 @@ else
   echo 'pass!'
 fi
 
-# final
+TEST=$TEST_TMPDIR/i-tx$TESTINGOUTS_EXT
+RIGHT_DATA=$RIGHT_DATA_DIR/i-tx.txt
+./jsonica/jsonica.py i -tx ./template.xlsx > $TEST
+diff $RIGHT_DATA $TEST
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "initialize -h"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+# final Debug無し コミット後にテストが前提
 git diff --exit-code
 if [ $? -eq 1 ]; then
   echo 'Found difference'
