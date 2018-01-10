@@ -7,11 +7,24 @@ fi
 
 RIGHT_DATA_DIR=./tests/right_data
 
-# generate test
 TESTINGOUTS_EXT=.test.txt
+
 # ----------------------------------------------------------
 TEST=$TEST_TMPDIR/h$TESTINGOUTS_EXT
 RIGHT_DATA=$RIGHT_DATA_DIR/h.txt
+./jsonica/jsonica.py -h > $TEST
+diff $RIGHT_DATA $TEST
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "-h"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+# generate test
+# ----------------------------------------------------------
+TEST=$TEST_TMPDIR/g-h$TESTINGOUTS_EXT
+RIGHT_DATA=$RIGHT_DATA_DIR/g-h.txt
 
 ./jsonica/jsonica.py g -h > $TEST
 diff $RIGHT_DATA $TEST
@@ -81,16 +94,87 @@ fi
 
 TEST=$TEST_TMPDIR/g-i-o-of$TESTINGOUTS_EXT
 RIGHT_DATA=$RIGHT_DATA_DIR/g-i-o-of.txt
-./jsonica/jsonica.py gen -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output > $TEST
+./jsonica/jsonica.py g -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output > $TEST
 diff $RIGHT_DATA $TEST
 
 if [ $? -eq 1 ]; then
-  echo 'test has fail! "gen -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output"'
+  echo 'test has fail! "g -i ./Samples/cheatsheet.xlsx -o ./output -of tsv:./output"'
   exit 1
 else
   echo 'pass!'
 fi
 
+TEST=$TEST_TMPDIR/g-o--of$TESTINGOUTS_EXT
+RIGHT_DATA=$RIGHT_DATA_DIR/g-o--of.txt
+
+./jsonica/jsonica.py g -o - -of tsv:./output > $TEST
+diff $RIGHT_DATA $TEST
+
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "g -o - -of tsv:./output"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+TEST=$TEST_TMPDIR/g-o--of-hr_2$TESTINGOUTS_EXT
+RIGHT_DATA=$RIGHT_DATA_DIR/g-o--of-hr_2.txt
+
+./jsonica/jsonica.py g -o - -of tsv:./output -hr 2 > $TEST
+diff $RIGHT_DATA $TEST
+
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "g -o - -of tsv:./output -hr 2"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+TEST=$TEST_TMPDIR/g-o--of-hr_4$TESTINGOUTS_EXT
+RIGHT_DATA=$RIGHT_DATA_DIR/g-o--of-hr_4.txt
+
+./jsonica/jsonica.py g -o - -of tsv:./output -hr 4 > $TEST
+diff $RIGHT_DATA $TEST
+
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "g -o - -of tsv:./output -hr 4"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+# initialize tests
+TEST=$TEST_TMPDIR/i-h$TESTINGOUTS_EXT
+RIGHT_DATA=$RIGHT_DATA_DIR/i-h.txt
+
+./jsonica/jsonica.py i -h > $TEST
+diff $RIGHT_DATA $TEST
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "i -h"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+./jsonica/jsonica.py init -h > $TEST
+diff $RIGHT_DATA $TEST
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "init -h"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+./jsonica/jsonica.py initialize -h > $TEST
+diff $RIGHT_DATA $TEST
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "initialize -h"'
+  exit 1
+else
+  echo 'pass!'
+fi
+
+# final
 git diff --exit-code
 if [ $? -eq 1 ]; then
   echo 'Found difference'
