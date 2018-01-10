@@ -34,7 +34,7 @@ class XLSX:
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
     self.__print(f'in process {sheet_name}')
-    assert sheet_name in sheet_names
+    assert sheet_name in sheet_names, f'"{sheet_name}" not found in {sheet_names}'
     root_sheet = sheets[sheet_name]
     self.checkCharEncode(root_sheet)
     columns = []

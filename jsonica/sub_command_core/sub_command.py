@@ -45,8 +45,8 @@ class SubCommands:
   - class名を全小文字化したものがsubcommand名になる
   - git commandのように、entryをまるごと渡すことはしない、少なくともwrapperはpythonで書く
   """
-  # 各継承先で実装
   __name = ''
+  # 各継承先で実装
   __aliases = []
   __help = '---'
 
@@ -55,6 +55,7 @@ class SubCommands:
   @property
   def command_name(self):
     if self.__name == '':
+      # subcommand名はクラス名小文字
       self.__name = self.__class__.__name__.lower()
     return self.__name
 
@@ -72,7 +73,8 @@ class SubCommands:
   @classmethod
   def regist_command(cls, exchanger):
     """
-    dont call from exchanger.__init__()
+    subcommand 登録
+    **dont call from exchanger.__init__()**
     """
     command = cls.__init__()
     from jsonica import Jsonica
