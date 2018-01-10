@@ -179,23 +179,34 @@ RIGHT_DATA=$RIGHT_DATA_DIR/i-tx.txt
 ./jsonica/jsonica.py i -tx ./template.xlsx > $TEST
 diff $RIGHT_DATA $TEST
 if [ $? -eq 1 ]; then
-  echo 'test has fail! "initialize -tx ./template.xlsx" phase1/2'
+  echo 'test has fail! "initialize -tx ./template.xlsx" phase1/3'
   exit 1
 else
   echo 'pass!'
 fi
 TEST=$TEST_TMPDIR/template$TESTINGOUTS_EXT
-SVTEST = $TEST_TMPDIR/_sv
-./jsonica/jsonica.py g -i ./template.xlsx -o - -of tsv:SVTEST -hr 2 > $TEST
+RIGHT_DATA=$RIGHT_DATA_DIR/template.txt
+SVTEST=$TEST_TMPDIR/_sv
+./jsonica/jsonica.py g -i ./template.xlsx -o - -of tsv:$SVTEST -hr 2 > $TEST
 diff $RIGHT_DATA $TEST
 if [ $? -eq 1 ]; then
-  echo 'test has fail! "initialize -tx ./template.xlsx" phase2/2'
+  echo 'test has fail! "initialize -tx ./template.xlsx" phase2/3'
   exit 1
 else
   # openpyxlによる再作成の問題 binary書き換わるため
   # おそらく新規に作成し直している
   # ToDo: ここだけのためにgo導入のおしつけはあり得ないのでAdHoc対応のまま保留
   rm ./template.xlsx
+  echo 'pass!'
+fi
+TEST=$SVTEST/template.xlsx
+RIGHT_DATA=$RIGHT_DATA_DIR/_sv/template.xlsx
+diff $RIGHT_DATA $TEST
+if [ $? -eq 1 ]; then
+  echo 'test has fail! "initialize -tx ./template.xlsx" phase3/3'
+  exit 1
+else
+  # Memo: 空なので意味があるとはいえない
   echo 'pass!'
 fi
 
