@@ -75,6 +75,8 @@ def errorout(e, additonal=''):
   print(f'{errors[e]} : {additonal}', file=sys.stderr)
   sys.exit(e)
 
+def refactorCheck(validation): assert validation, 'Have you made refactor??'
+
 if __name__ == '__main__':
   ins = Jsonica()
   # ToDo: subcommand 設定 https://github.com/setminami/Jsonica/issues/31

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from jsonica import errorout
+from jsonica import errorout, refactorCheck
 import os, sys, json, argparse, contextlib
 from functools import reduce
 
@@ -29,6 +29,11 @@ class Generate(SubCommands):
 
   def __run__(self, **kwargs):
     args = kwargs['args']
+    # default option 対策 seelaso AnalyzeXSeparatedOutPath
+    # https://github.com/setminami/Jsonica/issues/47
+    refactorCheck(args.__class__.__name__ == 'Namespace')
+    if not args.output_format:
+      args.output_format = ('tsv', output_delimiters[1], './output/')
     self.args = args
     fileloc = os.path.abspath(os.path.expanduser(args.input))
     workpath = self.__treatFileTypes(fileloc)
@@ -104,7 +109,10 @@ class AnalyzeJSONOutPath(argparse.Action):
 
 class AnalyzeXSeparatedOutPath(argparse.Action):
   """ sv出力先と形式を解析する """
+  DEBUG = True
   def __call__(self, parser, namespace, values, option_string=None):
+    if self.DEBUG:
+        print(f'{self.__class__.__name__} called: {values}')
     args = values.split(':')
     if len(args) != 2:
       raise argparse.ArgumentTypeError(f'''{option_string} {values} have to separate ?sv and outputpath with ":"

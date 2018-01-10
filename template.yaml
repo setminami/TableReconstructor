@@ -10,6 +10,10 @@ root: # root sheet named as special setting item because it must be only one.
       schema: {"type" : ["string"], "required" : true} # comform to jsonschema Draft1.4 properties
       notes: '16進数 256表現 e.g., "ffffff"'
     - column: True
+      title: 'capacity'
+      schema: {"type" : ["number"], "required" : true} # comform to jsonschema Draft1.4 properties
+      notes: '統計量'
+    - column: True
       title: 'title'
       schema: {"type" : ["string"], "required" : true}
       notes: 'Help 見出し e.g., "Anchors"'
