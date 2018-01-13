@@ -31,6 +31,7 @@ class Schema:
     pass
 
     def _makeSchema(self, type_desc):
+      """ 部分的に成立したschemaを構築する """
       schema = {'type':'object'}
       if 'required' in type_desc[1].keys():
         schema['required'] = [type_desc[0]]

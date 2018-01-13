@@ -151,6 +151,7 @@ class XLSX:
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
     if not hasattr(self, '__schema'):
+      print(f'new!! {type_desc}')
       self.__schema = Schema(validator)
     raw = Util.convEscapedKV(self.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)

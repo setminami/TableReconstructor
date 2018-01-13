@@ -80,3 +80,6 @@ optional arguments:
 
 ## Appendix 3. MindMap
 [mindnode(ja only)](https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-2)
+
+## Appendix 4. about inverse conversion of jsonschema
+[examples](./inv_generate_schema.md)
