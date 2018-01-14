@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
+[![Documentation Status](https://readthedocs.org/projects/jsonica/badge/?version=latest)](http://jsonica.readthedocs.io/en/latest/?badge=latest) [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [en](./README.md)
