@@ -45,7 +45,7 @@ master_doc = 'index'
 # General information about the project.
 project = 'jsonica'
 author = 'setminami'
-copyright = f'2018, {author}'
+copyright = '2018, %s'%author
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -187,7 +187,6 @@ epub_exclude_files = ['search.html']
 import os, sys, subprocess
 ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 SRC_HOME = os.path.join(ROOT, 'src')
-print(f'*** {SRC_HOME} ***')
 # workaround index see.
 # https://github.com/rtfd/readthedocs.org/issues/1139
 def run_apidoc(_):
