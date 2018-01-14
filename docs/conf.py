@@ -17,7 +17,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os, sys
+import os, sys, subprocess
 SRC_HOME = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'jsonica')
 sys.path.insert(0, SRC_HOME)
 sys.path.insert(0, os.path.join(SRC_HOME, 'sub_command_core'))
@@ -189,22 +189,21 @@ epub_copyright = copyright
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
-# additional module index see.
-
+# workaround index see.
 # https://github.com/rtfd/readthedocs.org/issues/1139
-# def run_apidoc(_):
-#   src_base = '../jsonica'
-#   modules = ['.',
-#              'sub_command_core']
-#   for module in modules:
-#     cur_dir = os.path.abspath(os.path.dirname(__file__))
-#     output_path = os.path.join(cur_dir, module, 'module_doc')
-#     input_path = os.path.join(src_base, module)
-#     cmd_path = 'sphinx-apidoc'
-#     if hasattr(sys, 'real_prefix'):  # Check to see if we are in a virtualenv
-#       # If we are, assemble the path manually
-#       cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
-#     subprocess.check_call([cmd_path, '-e', '-o', output_path, input_path, '--force'])
-#
-# def setup(app):
-#   app.connect('builder-inited', run_apidoc)
+def run_apidoc(_):
+  src_base = SRC_HOME
+  modules = ['.',
+            'sub_command_core']
+  for module in modules:
+    cur_dir = os.path.abspath(os.path.dirname(__file__))
+    output_path = os.path.join(cur_dir, module, 'mod_doc')
+    input_path = os.path.join(src_base, module)
+    cmd_path = 'sphinx-apidoc'
+    if hasattr(sys, 'real_prefix'):  # Check to see if we are in a virtualenv
+      # If we are, assemble the path manually
+      cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
+    subprocess.check_call([cmd_path, '-e', '-o', output_path, input_path, '--force'])
+
+def setup(app):
+  app.connect('builder-inited', run_apidoc)
