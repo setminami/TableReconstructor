@@ -190,19 +190,19 @@ epub_exclude_files = ['search.html']
 # additional module index see.
 
 # https://github.com/rtfd/readthedocs.org/issues/1139
-def run_apidoc(_):
-  src_base = '../jsonica'
-  modules = ['.',
-             'sub_command_core']
-  for module in modules:
-    cur_dir = os.path.abspath(os.path.dirname(__file__))
-    output_path = os.path.join(cur_dir, module, 'module_doc')
-    input_path = os.path.join(src_base, module)
-    cmd_path = 'sphinx-apidoc'
-    if hasattr(sys, 'real_prefix'):  # Check to see if we are in a virtualenv
-      # If we are, assemble the path manually
-      cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
-    subprocess.check_call([cmd_path, '-e', '-o', output_path, input_path, '--force'])
-
-def setup(app):
-  app.connect('builder-inited', run_apidoc)
+# def run_apidoc(_):
+#   src_base = '../jsonica'
+#   modules = ['.',
+#              'sub_command_core']
+#   for module in modules:
+#     cur_dir = os.path.abspath(os.path.dirname(__file__))
+#     output_path = os.path.join(cur_dir, module, 'module_doc')
+#     input_path = os.path.join(src_base, module)
+#     cmd_path = 'sphinx-apidoc'
+#     if hasattr(sys, 'real_prefix'):  # Check to see if we are in a virtualenv
+#       # If we are, assemble the path manually
+#       cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
+#     subprocess.check_call([cmd_path, '-e', '-o', output_path, input_path, '--force'])
+# 
+# def setup(app):
+#   app.connect('builder-inited', run_apidoc)
