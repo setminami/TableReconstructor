@@ -18,7 +18,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os, sys
-SRC_HOME = os.path.join(os.path.dirname(os.path.dirname(__FILE__)), 'jsonica')
+SRC_HOME = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'jsonica')
 sys.path.insert(0, SRC_HOME)
 sys.path.insert(0, os.path.join(SRC_HOME, 'sub_command_core'))
 
@@ -205,6 +205,6 @@ epub_exclude_files = ['search.html']
 #       # If we are, assemble the path manually
 #       cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
 #     subprocess.check_call([cmd_path, '-e', '-o', output_path, input_path, '--force'])
-# 
+#
 # def setup(app):
 #   app.connect('builder-inited', run_apidoc)
