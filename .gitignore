@@ -128,7 +128,7 @@ venv.bak/
 tests/tmp/
 
 # readthedocs
-docs/module_doc/
-docs/sub_command_core/
+# docs/module_doc/
+# docs/sub_command_core/
 
 # End of https://www.gitignore.io/api/python,microsoftoffice
