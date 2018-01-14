@@ -17,8 +17,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os, sys, subprocess
-# sys.path.insert(0, '../jsonica')
+import os, sys
+SRC_HOME = os.path.join(os.path.dirname(os.path.dirname(__FILE__)), 'jsonica')
+sys.path.insert(0, SRC_HOME)
+sys.path.insert(0, os.path.join(SRC_HOME, 'sub_command_core'))
 
 
 # -- General configuration ------------------------------------------------
