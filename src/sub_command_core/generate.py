@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from jsonica import errorout, refactorCheck
 import os, sys, json, argparse, contextlib
 from functools import reduce
 
@@ -124,6 +123,10 @@ class AnalyzeXSeparatedOutPath(argparse.Action):
 
 @contextlib.contextmanager
 def wild_open(filename=None, encoding='utf-8'):
+  """
+  - 出力先が '-' ならば標準出力へ出力先を向ける
+  - with as が使える
+  """
   if filename and filename != SP_FILE:
     fh = open(filename, 'w', encoding=encoding)
   else:

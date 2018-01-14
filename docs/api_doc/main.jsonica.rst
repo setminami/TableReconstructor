@@ -1,7 +1,7 @@
-jsonica\.util module
+main\.jsonica module
 ====================
 
-.. automodule:: jsonica.util
+.. automodule:: main.jsonica
     :members:
     :undoc-members:
     :show-inheritance:

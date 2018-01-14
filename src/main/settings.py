@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import yaml
 import os
-from xlsx import XLSX
+# from xlsx import XLSX
 
 # Yaml 設定値
 ATTACH = ('attach', ['xlsx'])
