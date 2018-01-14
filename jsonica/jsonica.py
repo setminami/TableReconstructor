@@ -36,6 +36,7 @@ class Jsonica:
 
   @property
   def sub_command_names(self):
+    """ subcommand名一覧 """
     return self.sub_commands.keys()
 
   def test(self):
@@ -46,6 +47,7 @@ class Jsonica:
     pass
 
   def prepareArgParser(self):
+    """ subparse 込みの引数処理 """
     argParser = argparse.ArgumentParser(prog=PROGNAME,
                                         description='generate complex JSON structure with analyzing META descripted file like xlsx.')
     # Version desctiprtion
@@ -75,7 +77,9 @@ def errorout(e, additonal=''):
   print(f'{errors[e]} : {additonal}', file=sys.stderr)
   sys.exit(e)
 
-def refactorCheck(validation): assert validation, 'Have you made refactor??'
+def refactorCheck(validation):
+  """ 型変更など、リファクタ時忘れやすい前提を他のassertと区別して記述するため """
+  assert validation, 'Have you made refactoring ??'
 
 if __name__ == '__main__':
   ins = Jsonica()

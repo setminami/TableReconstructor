@@ -22,7 +22,7 @@ class TypeSign(str, enum.Enum):
   JSON_NULL = 'null'
 
 class Schema:
-  """ abstract """
+  """ schema操作 abstract """
   DEBUG = False
   class JsonSchema:
     """ concrete 1 as jsonschema style """

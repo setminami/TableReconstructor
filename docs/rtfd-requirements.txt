@@ -1,3 +1,0 @@
-.. automodule:: jsonica
-   :members:
-   :private-members:

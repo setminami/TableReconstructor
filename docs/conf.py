@@ -17,9 +17,8 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-sys.path.insert(0, '../src')
+import os, sys, subprocess
+sys.path.insert(0, '../jsonica')
 
 
 # -- General configuration ------------------------------------------------
@@ -41,8 +40,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'
@@ -188,3 +186,21 @@ epub_copyright = copyright
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
+
+# https://github.com/rtfd/readthedocs.org/issues/1139
+def run_apidoc(_):
+  src_base = '../jsonica'
+  modules = ['.',
+             'sub_command_core']
+  for module in modules:
+    cur_dir = os.path.abspath(os.path.dirname(__file__))
+    output_path = os.path.join(cur_dir, module, 'module_doc')
+    input_path = os.path.join(src_base, module)
+    cmd_path = 'sphinx-apidoc'
+    if hasattr(sys, 'real_prefix'):  # Check to see if we are in a virtualenv
+      # If we are, assemble the path manually
+      cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', 'sphinx-apidoc'))
+    subprocess.check_call([cmd_path, '-e', '-o', output_path, input_path, '--force'])
+
+def setup(app):
+  app.connect('builder-inited', run_apidoc)
