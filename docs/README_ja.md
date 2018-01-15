@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
+[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=master)](https://travis-ci.org/setminami/Jsonica) [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [en](./README.md)
@@ -10,6 +10,9 @@
 
 # 利用とセットアップ
 [Usage Sample](./Usage_Samples.md)
+
+# the APIs
+[sphinx?](./apidoc/)
 
 ## やりたいこととなにがうれしいか
 - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい

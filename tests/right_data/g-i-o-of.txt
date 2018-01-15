@@ -1,2 +1,2 @@
-Analyzing... /Users/set/Desktop/Github/JSON_XLSX_Manager/Samples/cheatsheet.xlsx
+Analyzing... /home/travis/build/setminami/Jsonica/Samples/cheatsheet.xlsx
 Output json Success ➡️  ./output/cheatsheet.json

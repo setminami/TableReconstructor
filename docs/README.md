@@ -1,4 +1,4 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
+[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=master)](https://travis-ci.org/setminami/Jsonica) [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [ja](./README_ja.md)
@@ -10,6 +10,9 @@
 
 # Setup'n Usage
 [Usage Sample](./Usage_Samples.md)
+
+# the APIs
+[sphinx?](./apidoc/)
 
 # What I wanna do and Where advantage
 - I only want to be interested in huge data and want to manage them easily.
