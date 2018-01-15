@@ -12,7 +12,7 @@
 [Usage Sample](./Usage_Samples.md)
 
 # the APIs
-[sphinx?](./sphinx/)
+[sphinx?](./apidoc/)
 
 # What I wanna do and Where advantage
 - I only want to be interested in huge data and want to manage them easily.
