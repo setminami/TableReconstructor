@@ -184,31 +184,60 @@ epub_copyright = copyright
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
-import os, sys, subprocess
-ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-SRC_HOME = os.path.join(ROOT, project)
+import sys, subprocess
+from os.path import join, isdir, dirname, abspath
+from shutil import move, rmtree
+
+ROOT = abspath(dirname(dirname(__file__)))
+SRC_HOME = join(ROOT, project)
+cur_dir = abspath(dirname(__file__))
+
+# statics
+i_gens = 'api_doc'
+tmpfile = (join(cur_dir, '.tmp.rst'), join(cur_dir, 'index.rst'))
+
 # workaround index see.
 # https://github.com/rtfd/readthedocs.org/issues/1139
-def run_apidoc(_):
-  src_base = SRC_HOME
+def __pre_doc():
+  # ToDo: 必要であればyield
   sys.path.insert(0, SRC_HOME)
-  cur_dir = os.path.abspath(os.path.dirname(__file__))
+  # apidoc生成に必要なファイル、index.rstを残すとgithubpagesに影響を与える？
+  move(tmpfile[0], tmpfile[1])
+
+def __post_doc(app, exception):
+  print('^'*50)
+  # ToDo: 例外時は環境を元に戻す
+  html_dir = join(join(cur_dir, '_build'), 'html')
+  assert isdir(html_dir)
+  sphinx_site = 'apidoc'
+  if isdir(sphinx_site):
+    rmtree(sphinx_site)
+  rmtree(i_gens)
+  # ToDo: ここへのリンクをREADME.md, README_ja.mdに記述
+  move(html_dir, sphinx_site)
+  move(tmpfile[1], tmpfile[0])
+  from pathlib import Path
+  Path(join(cur_dir, '.nojekyll')).touch()
+  print('^'*50)
+
+def run_apidoc(_):
+  print('X'*60)
+  src_base = SRC_HOME
+  __pre_doc()
   for module in ['sub_command_core', '.']:
-    output_path = os.path.join(cur_dir, 'api_doc')
-    input_path = os.path.join(src_base, module)
+    output_path = join(cur_dir, i_gens)
+    input_path = join(src_base, module)
     cmd_path = 'sphinx-apidoc'
     if hasattr(sys, 'real_prefix'):  # Check to see if we are in a virtualenv
       # If we are, assemble the path manually
-      cmd_path = os.path.abspath(os.path.join(sys.prefix, 'bin', cmd_path))
+      cmd_path = abspath(join(sys.prefix, 'bin', cmd_path))
     cmd = [cmd_path, '-efP', '-d', '0', '-o', output_path, input_path]
     subprocess.check_call(cmd)
-  from os.path import join, isdir
-  html_dir = join(join(cur_dir, '_build'), 'html')
-  assert isdir(html_dir)
-  import shutil
-  if isdir('apidoc'):
-    shutil.rmtree('apidoc')
-  shutil.move(html_dir, 'apidoc')
+  print('X'*60)
 
+# http://www.sphinx-doc.org/en/stable/extdev/appapi.html#sphinx-core-events
 def setup(app):
+  print('*'*60)
   app.connect('builder-inited', run_apidoc)
+  app.connect('build-finished', __post_doc)
+  print('*'*60)
