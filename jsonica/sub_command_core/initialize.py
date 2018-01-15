@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
+from jsonica import errorout
 import os
 
 class Initialize(SubCommands):

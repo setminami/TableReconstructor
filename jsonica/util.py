@@ -2,7 +2,6 @@
 import re, ast
 
 class Util:
-  """ """
   comment_sign = ['#', '/{2}']
 
   @classmethod

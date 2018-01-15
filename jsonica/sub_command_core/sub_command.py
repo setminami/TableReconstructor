@@ -1,44 +1,42 @@
 # -*- coding: utf-8 -*-
 
-# new class snnipets
-# # -*- coding: utf-8 -*-
-# from sub_commands import SubCommands
-# from jsonica import errorout
-# import argparse
-#
-# class Generate(SubCommands):
-#   ''' generate command '''
-#   VERSION = '0.0.1'
-#
-#   __aliases = ['gen', 'g']
-#   __help = 'generate help'
-#
-#   def __init__(self):
-#     super().__init__()
-#     pass
-#
-#   @property
-#   def command_names(self):
-#     return [self.command_name] + self.aliases
-#   @property
-#   def aliases(self):
-#     return self.__aliases
-#   @property
-#   def help(self):
-#     return self.__help
-#   def run(self, **kwargs):
-#     # each process brabrabra
-#     pass
-#
-#   def makeArgparse(self, subparser):
-#     myparser = super().makeArgparse(subparser)
-#     # write each subcommand arg processor here
-#     myparser.add_argument('-v', '--version',
-#                         action='version', version=f'{self.command_name} {VERSION}')
-#     pass
+''' class snnipets
+# -*- coding: utf-8 -*-
+from sub_commands import SubCommands
+from jsonica import errorout
+import argparse
 
+class Generate(SubCommands):
+  """ generate command """
+  VERSION = '0.0.1'
 
+  __aliases = ['gen', 'g']
+  __help = 'generate help'
+
+  def __init__(self):
+    super().__init__()
+    pass
+
+  @property
+  def command_names(self): return [self.command_name] + self.aliases
+  @property
+  def aliases(self): return self.__aliases
+  @property
+  def help(self): return self.__help
+
+  def run(self, **kwargs):
+    # each process brabrabra
+    pass
+
+  def makeArgparse(self, subparser):
+    myparser = super().makeArgparse(subparser)
+    # write each subcommand arg processor here
+    myparser.add_argument('-v', '--version',
+                        action='version', version=f'{self.command_name} {VERSION}')
+    pass
+'''
 import os, argparse
+from jsonica import PROGNAME
 
 class SubCommands:
   """

@@ -2,10 +2,10 @@
 # this made for python3
 import os, sys
 import csv, openpyxl
-from .jsonica import Jsonica, errorout, PROGNAME
-from .schema_helper import Schema, TypeSign, Validator
-
-# from .util import Util
+from jsonica import Jsonica, errorout, PROGNAME
+from schema_helper import Schema, TypeSign, Validator
+from sub_command_core.generate import output_formats, output_delimiters
+from util import Util
 
 class XLSX:
   """ xlsx 具象操作クラス """
@@ -151,7 +151,6 @@ class XLSX:
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
     if not hasattr(self, '__schema'):
-      print(f'new!! {type_desc}')
       self.__schema = Schema(validator)
     raw = Util.convEscapedKV(self.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
