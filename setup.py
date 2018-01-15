@@ -2,7 +2,7 @@
 # coding:utf-8
 
 from setuptools import setup, find_packages
-
+# for PyPI
 setup(name='jsonica',
       version='0.0.9',
       description='manage huge json as xlsx statistically.',
