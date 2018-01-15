@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=check_readthedocs)](https://travis-ci.org/setminami/Jsonica) [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
+[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=master)](https://travis-ci.org/setminami/Jsonica) [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [en](./README.md)
