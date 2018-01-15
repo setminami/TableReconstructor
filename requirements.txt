@@ -2,3 +2,5 @@ tox
 openpyxl
 pyyaml
 jsonschema
+
+sphinx
