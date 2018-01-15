@@ -217,7 +217,7 @@ def __post_doc(app, exception):
   move(html_dir, sphinx_site)
   move(tmpfile[1], tmpfile[0])
   from pathlib import Path
-  Path(join(cur_dir, '.nojekyll')).touch()
+  Path(join(cur_dir, join(sphinx_site, '.nojekyll'))).touch()
   print('^'*50)
 
 def run_apidoc(_):
