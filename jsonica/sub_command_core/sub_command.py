@@ -87,5 +87,5 @@ class SubCommands:
     """ 個別optionを登録したargparseをsubparseにして返す """
     parser = subparser.add_parser(self.command_name, aliases=self.aliases, help=self.help)
     parser.add_argument('-v', '--version',
-                        action='version', version='%s %s v%s'.%(PROGNAME, self.command_name, self.VERSION))
+                        action='version', version='%s %s v%s'%(PROGNAME, self.command_name, self.VERSION))
     return parser
