@@ -215,7 +215,7 @@ def __post_doc(app, exception):
     rmtree(i_gens)
     # ToDo: ここへのリンクをREADME.md, README_ja.mdに記述
     move(html_dir, sphinx_site)
-    move(tmpfile[1], tmpfile[0])
+  move(tmpfile[1], tmpfile[0])
     # from pathlib import Path
     # Path(join(cur_dir, '.nojekyll')).touch()
   print('^'*50)
