@@ -59,7 +59,7 @@ class SettingProcessor:
   def save(self):
     assert self.out.endswith('.xlsx')
     output = self.out
-    print(fr'generate template to {output}')
+    print(r'generate template to {}'.format(output))
     self.processor.book.save(output)
 
   def __print(self, str, flag=False):
