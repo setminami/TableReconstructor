@@ -38,7 +38,7 @@ class Initialize(SubCommands):
       print(se)
     else:
       settings.save()
-      print('Construct xlsx file Success ➡️  %s'args.template_xlsx)
+      print('Construct xlsx file Success ➡️  %s'%args.template_xlsx)
     pass
 
   def makeArgparse(self, subparser):
