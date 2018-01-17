@@ -53,7 +53,7 @@ class Schema:
 
   def __init__(self, validator):
     self.schema_name = validator
-    # ToDo: type switch
+    # TEMP: type switch
     if validator == Validator.jsonschema:
       self.schema = Schema.JsonSchema()
     pass
@@ -61,7 +61,7 @@ class Schema:
   def makeSchema(self, desc):
     """ 一項目ずつの定義であることに留意 """
     assert isinstance(desc[0], str) and isinstance(desc[1], dict)
-    # 課題: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
+    # HACK: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
     return self.schema._makeSchema(desc)
 
   def validate(self, evl, desc):

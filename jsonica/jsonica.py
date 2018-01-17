@@ -31,7 +31,7 @@ class Jsonica:
     for name in command.command_names:
       assert not (name in self.sub_commands.keys()),\
                 '"{}" collision were detected in {}'.format(name, self.sub_commands.keys())
-      # Memo: commandは参照であること。tupleへのrefactoring注意
+      # NOTE: commandは参照であること。tupleへのrefactoring注意
       self.sub_commands.update({name: command})
 
   @property
@@ -79,9 +79,9 @@ def refactorCheck(validation): assert validation, 'Have you made refactor??'
 
 if __name__ == '__main__':
   ins = Jsonica()
-  # ToDo: subcommand 設定 https://github.com/setminami/Jsonica/issues/31
+  # NOTE: subcommand 設定 https://github.com/setminami/Jsonica/issues/31
   from sub_command_core import (Initialize, Generate)
-  # AdHoc: とりあえず仮実装 Plugin実装する際に再考
+  # FIXME: とりあえず仮実装 Plugin実装する際に再考
   for x in [Initialize(), Generate()]:
     ins.regist_subcommand(x)
   ins.prepareArgParser()

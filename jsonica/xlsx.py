@@ -39,7 +39,7 @@ class XLSX:
     self.checkCharEncode(root_sheet)
     columns = []
     self.__print('I\'ll update {}'.format(acc))
-    # Memo: 処理速度に問題が出るようであれば分散処理検討
+    # COMBAK: 処理速度に問題が出るようであれば分散処理検討
     # A1, B1...で場所を特定するか、indexで回すか
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
@@ -57,9 +57,9 @@ class XLSX:
           else:
             self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
-          # ToDo: 関数へ置き換え type = array, objectのケース をカバー
+          # TODO: 関数へ置き換え type = array, objectのケース をカバー
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
-            # Memo: sheetであることがarray, objectの必要条件になってしまっている
+            # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
             # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
@@ -121,7 +121,7 @@ class XLSX:
     sheetを{sheet名:sheet}形式にして返す
     instance 生成後、実行中のExcel更新は考えない
     """
-    # ToDo: get_sheet_names(), get_sheet_by_by_name()で代用できるか検討
+    # TODO: pyxl.get_sheet_names(), get_sheet_by_name()で代用できるか検討
     if not hasattr(self, '__sheets_cache'):
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
     return self.__sheets_cache
@@ -133,7 +133,7 @@ class XLSX:
     enc = valid_enc if bool(valid_enc) else self.char_encode
     self.__print(enc)
     if not (item.encoding == enc):
-      # ToDo: sheet, cellごとにエラーを上げる場合の処理
+      # TODO: sheet, cellごとにエラーを上げる場合の処理
       if isinstance(item, openpyxl.workbook.workbook.Workbook):
         add = 'sheet_names = %s'%item.sheet_names
       elif isinstance(item, openpyxl.worksheet.Worksheet):
@@ -143,7 +143,7 @@ class XLSX:
       print('*'*50)
       print(add)
       print('*'*50)
-      # ToDo: excel rw
+      # TODO: excel rw 状態チェック
       item.encoding = enc
       pass
     pass
