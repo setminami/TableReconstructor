@@ -69,8 +69,8 @@ class Generate(SubCommands):
     myparser.add_argument('-o', '--output',
                             nargs='?', type=str, action=AnalyzeJSONOutPath,
                             metavar='path/to/outputfile(.json)',
-                            help=f'Output interpreted json. If this set which endswith ".json" as set full filename, output jsonfile treated as the name. But when not set ".json", adopt original xlsx filename, like path/to/outputfile/[source_METAFile_name].json\
-                            (-o has special filename "{SP_FILE}" as STDOUT, and when set like "-o {SP_FILE}", all other stdout messages were masked.)')
+                            help='Output interpreted json. If this set which endswith ".json" as set full filename, output jsonfile treated as the name. But when not set ".json", adopt original xlsx filename, like path/to/outputfile/[source_METAFile_name].json\
+                            (-o has special filename "{0}" as STDOUT, and when set like "-o {0}", all other stdout messages were masked.)'.format(SP_FILE))
     myparser.add_argument('-of', '--output_format',
                             nargs='?', type=str, action=AnalyzeXSeparatedOutPath, # (xsv, path)になるので注意
                             metavar='(%s):path/to/outputdir'%outs,
