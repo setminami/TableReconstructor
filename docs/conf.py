@@ -215,9 +215,10 @@ def __post_doc(app, exception):
     rmtree(i_gens)
     # ToDo: ここへのリンクをREADME.md, README_ja.mdに記述
     move(html_dir, sphinx_site)
-  move(tmpfile[1], tmpfile[0])
     # from pathlib import Path
     # Path(join(cur_dir, '.nojekyll')).touch()
+  # readthedocsでは、buildが何度も回るため元の状態に戻す
+  move(tmpfile[1], tmpfile[0])
   print('^'*50)
 
 def run_apidoc(_):
