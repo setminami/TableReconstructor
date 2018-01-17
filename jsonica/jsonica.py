@@ -30,7 +30,7 @@ class Jsonica:
     # 衝突注意
     for name in command.command_names:
       assert not (name in self.sub_commands.keys()),\
-                f'"{name}" collision were detected in {self.sub_commands.keys()}'
+                '"{}" collision were detected in {}'.format(name, self.sub_commands.keys())
       # Memo: commandは参照であること。tupleへのrefactoring注意
       self.sub_commands.update({name: command})
 
@@ -50,7 +50,7 @@ class Jsonica:
                                         description='generate complex JSON structure with analyzing META descripted file like xlsx.')
     # Version desctiprtion
     argParser.add_argument('-v', '--version',
-                        action='version', version=f'{PROGNAME} {VERSION}')
+                        action='version', version='%s %s'%(PROGNAME, VERSION))
 
     # see. https://docs.python.org/3/library/argparse.html
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
@@ -59,8 +59,8 @@ class Jsonica:
         subparser = command.makeArgparse(subParsers)
     argParser.add_argument('-e', '--encoding',
                             type=str, default='utf-8', metavar='{python built-in codec}',
-                            help=f'Set default charactor encode. When not set this, it is treated as "utf-8".\
-                            see also. {codec_help_url}')
+                            help='Set default charactor encode. When not set this, it is treated as "utf-8".\
+                            see also. %s'%codec_help_url)
     self.ARGS = argParser.parse_args()
 
 
@@ -72,7 +72,7 @@ def errorout(e, additonal=''):
             'Unknown accumulator!', 'Output json has failed.', # 5, 6
             'Unsupported table filetype found.', 'setting yaml file not found']
   assert e < len(errors) and e >= 0
-  print(f'{errors[e]} : {additonal}', file=sys.stderr)
+  print('%s : %s'%(errors[e], additonal), file=sys.stderr)
   sys.exit(e)
 
 def refactorCheck(validation): assert validation, 'Have you made refactor??'
