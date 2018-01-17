@@ -224,7 +224,7 @@ def __post_doc(app, exception):
 def run_apidoc(_):
   print('X'*60)
   src_base = SRC_HOME
-  __pre_doc()
+  sys.path.insert(0, SRC_HOME)
   for module in ['sub_command_core', '.']:
     output_path = join(cur_dir, i_gens)
     input_path = join(src_base, module)
@@ -234,7 +234,6 @@ def run_apidoc(_):
       cmd_path = abspath(join(sys.prefix, 'bin', cmd_path))
     cmd = [cmd_path, '-efP', '-d', '0', '-o', output_path, input_path]
     subprocess.check_call(cmd)
-  move(tmpfile[1], tmpfile[0])
   print('X'*60)
 
 # http://www.sphinx-doc.org/en/stable/extdev/appapi.html#sphinx-core-events
