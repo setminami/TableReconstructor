@@ -16,7 +16,7 @@ class Util:
     local = cls.stripComments(raw_value)
     local = cls.__convPyBoolean(local)
     # print('>>> %s'%local)
-    # ToDo: 真面目な構文チェック
+    # TEMP: 真面目な構文チェック
     if not (local.startswith('{') and local.endswith('}')):
       asDic = '{%s}'%local
     else:

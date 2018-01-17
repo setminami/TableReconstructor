@@ -199,26 +199,26 @@ tmpfile = (join(cur_dir, '.tmp.rst'), join(cur_dir, 'index.rst'))
 # workaround index see.
 # https://github.com/rtfd/readthedocs.org/issues/1139
 def __pre_doc():
-  # ToDo: 必要であればyield
+  # OPTIMIZE: 必要であればyield
   sys.path.insert(0, SRC_HOME)
   # apidoc生成に必要なファイル、index.rstを残すとgithubpagesに影響を与える？
   move(tmpfile[0], tmpfile[1])
 
 def __post_doc(app, exception):
   print('^'*50)
-  # ToDo: 例外時は環境を元に戻す
-  html_dir = join(join(cur_dir, '_build'), 'html')
-  if isdir(html_dir): # for githubpages
-    sphinx_site = 'apidoc'
-    if isdir(sphinx_site):
-      rmtree(sphinx_site)
-    rmtree(i_gens)
-    # ToDo: ここへのリンクをREADME.md, README_ja.mdに記述
-    move(html_dir, sphinx_site)
-    # from pathlib import Path
-    # Path(join(cur_dir, '.nojekyll')).touch()
-  # readthedocsでは、buildが何度も回るため元の状態に戻す
-  move(tmpfile[1], tmpfile[0])
+  # NOTE: 例外時は環境を元に戻す
+  try:
+    html_dir = join(join(cur_dir, '_build'), 'html')
+    if isdir(html_dir): # for githubpages
+      sphinx_site = 'apidoc'
+      if isdir(sphinx_site):
+        rmtree(sphinx_site)
+      rmtree(i_gens)
+      # TODO: ここへのリンクをREADME.md, README_ja.mdに記述
+      move(html_dir, sphinx_site)
+  finally:
+    # NOTE: readthedocsでは、buildが何度も回るため元の状態に戻す
+    move(tmpfile[1], tmpfile[0])
   print('^'*50)
 
 def run_apidoc(_):
