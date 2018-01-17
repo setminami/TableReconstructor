@@ -105,6 +105,12 @@ html_sidebars = {
     ]
 }
 
+html_context = {
+# NOTE: Add 'Edit on Github' link instead of 'View page source'
+"display_github": False,
+"last_updated": True,
+"commit": False,
+}
 
 # -- Options for HTMLHelp output ------------------------------------------
 
