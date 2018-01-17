@@ -239,5 +239,5 @@ def run_apidoc(_):
 def setup(app):
   print('*'*60)
   app.connect('builder-inited', run_apidoc)
-  app.connect('build-finished', __post_doc)
+  # app.connect('build-finished', __post_doc)
   print('*'*60)
