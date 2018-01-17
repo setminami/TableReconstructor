@@ -234,11 +234,12 @@ def run_apidoc(_):
       cmd_path = abspath(join(sys.prefix, 'bin', cmd_path))
     cmd = [cmd_path, '-efP', '-d', '0', '-o', output_path, input_path]
     subprocess.check_call(cmd)
+  move(tmpfile[1], tmpfile[0])
   print('X'*60)
 
 # http://www.sphinx-doc.org/en/stable/extdev/appapi.html#sphinx-core-events
 def setup(app):
   print('*'*60)
   app.connect('builder-inited', run_apidoc)
-  app.connect('build-finished', __post_doc)
+  # app.connect('build-finished', __post_doc)
   print('*'*60)
