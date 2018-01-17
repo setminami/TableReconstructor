@@ -25,11 +25,11 @@ class Initialize(SubCommands):
     args = kwargs['args']
     from settings import SettingProcessor, SettingsError
     # 初期化モード
-    setting_file = fr'{os.path.splitext(os.path.expanduser(args.template_xlsx))[0]}.yaml'
+    setting_file = r'%s.yaml'%os.path.splitext(os.path.expanduser(args.template_xlsx))[0]
     if os.path.exists(setting_file):
-      print(fr'Setting file found on {setting_file}')
+      print(r'Setting file found on %s'%setting_file)
     else:
-      errorout(8, fr'Please make sure [{setting_file}] location?')
+      errorout(8, r'Please make sure [%s] location?'%setting_file)
     settings = SettingProcessor(setting_file, args.template_xlsx, args.encoding)
     settings.checkSettingFile()
     try:
@@ -38,7 +38,7 @@ class Initialize(SubCommands):
       print(se)
     else:
       settings.save()
-      print(f'Construct xlsx file Success ➡️  {args.template_xlsx}')
+      print('Construct xlsx file Success ➡️  %s'args.template_xlsx)
     pass
 
   def makeArgparse(self, subparser):
