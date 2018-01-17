@@ -12,7 +12,7 @@
 [Usage Sample](./Usage_Samples.md)
 
 # the APIs
-[sphinx?](./apidoc/)
+[sphinx?](https://jsonica.readthedocs.io/ja/latest/)
 
 ## やりたいこととなにがうれしいか
 - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい

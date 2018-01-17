@@ -41,7 +41,7 @@ class Util:
     key = key.encode('unicode-escape').decode(enc)
     value = value.encode('unicode-escape').decode(enc)
     value = '{!s}'.format('"%s"'%value if TypeSign.STRING in type else value)
-    local = f'"{key}": {value}'
+    local = '"{}": {}'.format(key, value)
     return local
 
   @classmethod

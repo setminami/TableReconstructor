@@ -208,22 +208,23 @@ def __post_doc(app, exception):
   print('^'*50)
   # ToDo: 例外時は環境を元に戻す
   html_dir = join(join(cur_dir, '_build'), 'html')
-  assert isdir(html_dir)
-  sphinx_site = 'apidoc'
-  if isdir(sphinx_site):
-    rmtree(sphinx_site)
-  rmtree(i_gens)
-  # ToDo: ここへのリンクをREADME.md, README_ja.mdに記述
-  move(html_dir, sphinx_site)
+  if isdir(html_dir): # for githubpages
+    sphinx_site = 'apidoc'
+    if isdir(sphinx_site):
+      rmtree(sphinx_site)
+    rmtree(i_gens)
+    # ToDo: ここへのリンクをREADME.md, README_ja.mdに記述
+    move(html_dir, sphinx_site)
+    # from pathlib import Path
+    # Path(join(cur_dir, '.nojekyll')).touch()
+  # readthedocsでは、buildが何度も回るため元の状態に戻す
   move(tmpfile[1], tmpfile[0])
-  from pathlib import Path
-  Path(join(cur_dir, '.nojekyll')).touch()
   print('^'*50)
 
 def run_apidoc(_):
   print('X'*60)
   src_base = SRC_HOME
-  __pre_doc()
+  sys.path.insert(0, SRC_HOME)
   for module in ['sub_command_core', '.']:
     output_path = join(cur_dir, i_gens)
     input_path = join(src_base, module)
@@ -239,5 +240,5 @@ def run_apidoc(_):
 def setup(app):
   print('*'*60)
   app.connect('builder-inited', run_apidoc)
-  app.connect('build-finished', __post_doc)
+  # app.connect('build-finished', __post_doc)
   print('*'*60)
