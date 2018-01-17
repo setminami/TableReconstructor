@@ -45,14 +45,14 @@ class SettingProcessor:
           if not c[COLUMN_FLAG]: continue
           # care off-by-one
           cell = sheet.cell(row=1, column=i + 1, value=c[COL_NAME])
-          schema = f'{c[SCHEMA]}'.lower()
-          self.processor.putCommentToCell(cell, f'# {c[NOTES]}\n{schema}')
+          schema = '{}'.format(c[SCHEMA]).lower()
+          self.processor.putCommentToCell(cell, '# {}\n{}'.format(c[NOTES], schema))
           if c[SCHEMA][SCHEMA_TYPE] == 'array':
             for csheet in c[CHILD_SHEET]:
               self.createSheets(c[REL_ITEM], csheet)
       else:
         # 設定によってエラーとはいえないケースあり
-        print(f'{sheet_name} : the item no columns.')
+        print('%s : the item no columns.'%sheet_name)
     else:
       raise SettingsError('root item not set', self.setting_data)
 
