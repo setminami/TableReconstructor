@@ -1,0 +1,365 @@
+[
+  {
+    "color": "fff000",
+    "items": [
+      {
+        "desc-en": "Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default.",
+        "sign": "^"
+      },
+      {
+        "desc-en": "Matches at the end of string or end of line if multi-line mode is  enabled. Many regex implementations have multi-line mode enabled by default.",
+        "sign": "$"
+      },
+      {
+        "desc-en": "Matches at the start of the search string.",
+        "sign": "\\A"
+      },
+      {
+        "desc-en": "Matches at the end of the search string, or before a newline at the end of the string.",
+        "sign": "\\Z"
+      },
+      {
+        "desc-en": "Matches at the end of the search string.",
+        "sign": "\\z"
+      },
+      {
+        "desc-en": "Matches at word boundaries.",
+        "sign": "\\b"
+      },
+      {
+        "desc-en": "Matches anywhere but word boundaries.",
+        "sign": "\\B"
+      }
+    ],
+    "title": "Anchors"
+  },
+  {
+    "color": "f00000",
+    "desc-en": "Character classes can be used in ranges.",
+    "items": [
+      {
+        "desc-en": "Matches any character except newline (matches newline in single-line)",
+        "sign": "."
+      },
+      {
+        "desc-en": "Matches white space characters.",
+        "sign": "\\s"
+      },
+      {
+        "desc-en": "Matches anything but white space characters.",
+        "sign": "\\S"
+      },
+      {
+        "desc-en": "Matches digits. Equivalent to [0-9].",
+        "sign": "\\d"
+      },
+      {
+        "desc-en": "Matches anything but digits. Equivalent to [^0-9].",
+        "sign": "\\D"
+      },
+      {
+        "desc-en": "Matches letters, digits and underscores. Equivalent to [A-Za-z0-9_].",
+        "sign": "\\w"
+      },
+      {
+        "desc-en": "Matches anything but letters, digits and underscores.",
+        "sign": "\\W"
+      },
+      {
+        "desc-en": "Matches ASCII hexadecimal character ff.",
+        "sign": "\\xff"
+      },
+      {
+        "desc-en": "Matches UTF-8 hexadecimal character ffff.",
+        "sign": "\\x{ffff}"
+      },
+      {
+        "desc-en": "Matches ASCII control character ^A (case insensitive).",
+        "sign": "\\A"
+      },
+      {
+        "desc-en": "Matches ASCII octal character 132.",
+        "sign": "\\132"
+      }
+    ],
+    "title": "Character Classes"
+  },
+  {
+    "color": "0000FF",
+    "desc-en": "POSIX Character Classes must be used in bracket expressions, e.g. [a-z[:upper:]].",
+    "items": [
+      {
+        "desc-en": "Matches uppercase letters. Equivalent to A-Z.",
+        "sign": "[:upper:]"
+      },
+      {
+        "desc-en": "Matches lowercase letters. Equivalent to a-z.",
+        "sign": "[:lower:]"
+      },
+      {
+        "desc-en": "Matches letters. Equivalent to A-Za-z.",
+        "sign": "[:alpha:]"
+      },
+      {
+        "desc-en": "Matches letters and digits. Equivalent to A-Za-z0-9.",
+        "sign": "[:alnum:]"
+      },
+      {
+        "desc-en": "Matches ASCII characters. Equivalent to \\\\x00-\\\\x7f.",
+        "sign": "[:ascii:]"
+      },
+      {
+        "desc-en": "Matches letters, digits and underscores. Equivalent to \\\\w.",
+        "sign": "[:word:]"
+      },
+      {
+        "desc-en": "Matches digits. Equivalent to 0-9.",
+        "sign": "[:digit:]"
+      },
+      {
+        "desc-en": "Matches characters that can be used in hexadecimal codes.",
+        "sign": "[:xdigit:]"
+      },
+      {
+        "desc-en": "Matches punctuation.",
+        "sign": "[:punct:]"
+      },
+      {
+        "desc-en": "Matches space and tab. Equivalent to [ \\\\t].",
+        "sign": "[:blank:]"
+      },
+      {
+        "desc-en": "Matches space, tab and newline. Equivalent to \\\\s.",
+        "sign": "[:space:]"
+      },
+      {
+        "desc-en": "Matches control characters. Equivalent to [\\\\x00-\\\\x1F\\\\x7F].",
+        "sign": "[:cntrl:]"
+      },
+      {
+        "desc-en": "Matches printed characters. Equivalent to [\\\\x21-\\\\x7E].",
+        "sign": "[:graph:]"
+      },
+      {
+        "desc-en": "Matches printed characters and spaces. Equivalent to [\\\\x21-\\\\x7E].",
+        "sign": "[:print:]"
+      }
+    ],
+    "title": "POSIX Character Classes"
+  },
+  {
+    "color": "0f000f",
+    "items": [
+      {
+        "desc-en": "Matches pattern foo or bar.",
+        "sign": "(foo|bar)"
+      },
+      {
+        "desc-en": "Define a group (or subpattern) consisting of pattern foo. Matches within the group can be referenced in a replacement using a backreference.",
+        "sign": "(foo)"
+      },
+      {
+        "desc-en": "Define a named group named {foo} consisting of pattern bar. Matches within the group can be referenced in a replacement using the backreference foo.",
+        "sign": "(?<foo>bar)"
+      },
+      {
+        "desc-en": "Define a passive group consisting of pattern foo. Passive groups cannot be referenced in a replacement using a backreference.",
+        "sign": "(?:foo)"
+      },
+      {
+        "desc-en": "Define an atomic group consisting of pattern foo+. Once foo+ has been matched, the regex engine will not try to find other variable length matches of foo+ in order to find a match followed by a ma\u00dftch of bar. Atomic groups may be used for perforamce reasons.",
+        "sign": "(?>foo+)bar"
+      }
+    ],
+    "title": "Groups"
+  },
+  {
+    "color": "000f0f",
+    "items": [
+      {
+        "desc-en": "Matches characters a or d or f.",
+        "sign": "[adf]"
+      },
+      {
+        "desc-en": "Matches anything but characters a, d and f.",
+        "sign": "[^adf]"
+      },
+      {
+        "desc-en": "Match any lowercase letter between a and f inclusive.",
+        "sign": "[a-f]"
+      },
+      {
+        "desc-en": "Match any uppercase letter between A and F inclusive.",
+        "sign": "[A-F]"
+      },
+      {
+        "desc-en": "Match any digit between 0 and 9 inclusive.",
+        "sign": "[0-9]"
+      }
+    ],
+    "title": "Bracket Expressions"
+  },
+  {
+    "color": "0f0f0f",
+    "items": [
+      {
+        "desc-en": "Zero or more, lazy. Matches will be as small as possible.",
+        "sign": "*?"
+      },
+      {
+        "desc-en": "One or more. Matches will be as large as possible.",
+        "sign": "+"
+      },
+      {
+        "desc-en": "One or more, lazy. Matches will be as small as possible.",
+        "sign": "+?"
+      },
+      {
+        "desc-en": "Zero or one. Matches will be as large as possible.",
+        "sign": "?"
+      },
+      {
+        "desc-en": "Zero or one, lazy. Matches will be as small as possible.",
+        "sign": "??"
+      },
+      {
+        "desc-en": "Two exactly.",
+        "sign": "{2}"
+      },
+      {
+        "desc-en": "Two or more. Matches will be as large as possible.",
+        "sign": "{2,}"
+      },
+      {
+        "desc-en": "Two or more, lazy. Matches will be as small as possible.",
+        "sign": "{2,}?"
+      },
+      {
+        "desc-en": "Two, three or four. Matches will be as large as possible.",
+        "sign": "{2,4}"
+      },
+      {
+        "desc-en": "Two, three or four, lazy. Matches will be as small as possible.",
+        "sign": "{2,4}?"
+      }
+    ],
+    "title": "Quantifiers"
+  },
+  {
+    "color": "0f00ff",
+    "items": [
+      {
+        "desc-en": "Escape character.",
+        "sign": "\\"
+      },
+      {
+        "desc-en": "Matches newline.",
+        "sign": "\\n"
+      },
+      {
+        "desc-en": "Matches tab.",
+        "sign": "\\t"
+      },
+      {
+        "desc-en": "Matches carriage return.",
+        "sign": "\\r"
+      },
+      {
+        "desc-en": "Matches form feed/page break.",
+        "sign": "\\v"
+      }
+    ],
+    "title": "Special Characters"
+  },
+  {
+    "color": "00ff0f",
+    "items": [
+      {
+        "desc-en": "Lookahead assertion. The pattern foo will only match if followed by a match of pattern bar.",
+        "sign": "foo(?=bar)"
+      },
+      {
+        "desc-en": "Negative lookahead assertion. The pattern foo will only match if not followed by a match of pattern bar.",
+        "sign": "foo(?!bar)"
+      },
+      {
+        "desc-en": "Lookbehind assertion. The pattern bar will only match if preceded by a match of pattern foo.",
+        "sign": "(?<=foo)bar"
+      },
+      {
+        "desc-en": "Negative lookbehind assertion. The pattern bar will only match if not preceded by a match of pattern foo.",
+        "sign": "(?<!foo)bar"
+      }
+    ],
+    "title": "Assertions"
+  },
+  {
+    "color": "000000",
+    "desc-en": "Back references are used in replacements.",
+    "items": [
+      {
+        "desc-en": "Lookahead assertion. The pattern foo will only match if followed by a match of pattern bar.",
+        "sign": "foo(?=bar)"
+      },
+      {
+        "desc-en": "Negative lookahead assertion. The pattern foo will only match if not followed by a match of pattern bar.",
+        "sign": "foo(?!bar)"
+      },
+      {
+        "desc-en": "Lookbehind assertion. The pattern bar will only match if preceded by a match of pattern foo.",
+        "sign": "(?<=foo)bar"
+      },
+      {
+        "desc-en": "Negative lookbehind assertion. The pattern bar will only match if not preceded by a match of pattern foo.",
+        "sign": "(?<!foo)bar"
+      }
+    ],
+    "title": "Back References"
+  },
+  {
+    "color": "000000",
+    "desc-en": "Case modifiers are used in replacements.",
+    "items": [
+      {
+        "desc-en": "Make the next character in the replacement uppercase.",
+        "sign": "\\\\\\u"
+      },
+      {
+        "desc-en": "Make the next character in the replacement lowercase.",
+        "sign": "\\\\\\l"
+      },
+      {
+        "desc-en": "Make the remaining characters in the replacement uppercase.",
+        "sign": "\\\\\\U"
+      },
+      {
+        "desc-en": "Make the remaining characters in the replacement lowercase.",
+        "sign": "\\\\\\L"
+      }
+    ],
+    "title": "Case Modifiers"
+  },
+  {
+    "color": "000000",
+    "desc-en": "Modifiers can be grouped together, e.g. (?ixm).",
+    "items": [
+      {
+        "desc-en": "Case insensitive mode. Make the remainder of the pattern or subpattern case insensitive.",
+        "sign": "(?i)"
+      },
+      {
+        "desc-en": "Multi-line mode. Make $ and ^ in the remainder of the pattern or subpattern match before/after newline.",
+        "sign": "(?m)"
+      },
+      {
+        "desc-en": "Single-line mode. Make the . (dot) in the remainder of the pattern or subpattern match newline.",
+        "sign": "(?s)"
+      },
+      {
+        "desc-en": "Free spacing mode. Ignore white space in the remainder of the pattern or subpattern.",
+        "sign": "(?x)"
+      }
+    ],
+    "title": "Modifiers"
+  }
+]

@@ -199,7 +199,7 @@ SRC_HOME = join(ROOT, project)
 cur_dir = abspath(dirname(__file__))
 
 # statics
-i_gens = 'api_doc'
+i_gens = '.'
 tmpfile = (join(cur_dir, '.tmp.rst'), join(cur_dir, 'index.rst'))
 
 # workaround index see.

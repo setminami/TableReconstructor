@@ -1,0 +1,10 @@
+usage: jsonica.py initialize [-h] [-v] [-tx [path/to/outputfile.xlsx]]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -tx [path/to/outputfile(.xlsx)], --template_xlsx [path/to/outputfile(.xlsx)]
+                        This is an initialize helper option. Generate template
+                        xlsx file based on same filename.yaml. **And if you
+                        set this, other options are ignored.** will be
+                        subcommand.
