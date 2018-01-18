@@ -1,0 +1,2 @@
+Analyzing... /Users/set/Desktop/Github/Jsonica/Samples/cheatsheet.xlsx
+Output json Success ➡️  ./output/cheatsheet.json
