@@ -12,8 +12,8 @@
 # 利用とセットアップ
 [Usage Sample](./Usage_Samples.md)
 
-# the APIs
-[sphinx?](https://jsonica.readthedocs.io/ja/latest/)
+# Documentation
+[readthedocs](https://jsonica.readthedocs.io/en/latest/)
 
 ## やりたいこととなにがうれしいか
 - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
@@ -56,5 +56,4 @@ see also. [Appendix. mindmap](./Appendixies.md)
   - [template.yaml](https://github.com/setminami/Jsonica/blob/master/template.yaml)
 - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
-## [Usage Sample](./Usage_Samples.md)
 ## [Appendix.](./Appendixies.md)
