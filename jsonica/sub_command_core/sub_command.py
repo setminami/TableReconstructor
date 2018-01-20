@@ -35,7 +35,7 @@ class Generate(SubCommands):
                         action='version', version='{} {}'.format(self.command_name, VERSION))
     pass
 '''
-import os, argparse
+import argparse
 from jsonica import PROGNAME
 from util import Hoare
 

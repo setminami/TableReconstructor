@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os, sys, json, re
+import os, sys, re
 import argparse
 from util import Hoare
 
@@ -40,10 +40,8 @@ class Jsonica:
 
   def test(self):
     args = self.ARGS
-    enc = args.encoding
     subcommand = self.sub_commands[args.subcmd_name]
     subcommand.__run__(args=args)
-    pass
 
   def prepareArgParser(self):
     argParser = argparse.ArgumentParser(prog=PROGNAME,
@@ -56,13 +54,12 @@ class Jsonica:
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
     for name, command in self.sub_commands.items():
       if name == command.command_name:
-        subparser = command.makeArgparse(subParsers)
+        command.makeArgparse(subParsers)
     argParser.add_argument('-e', '--encoding',
                             type=str, default='utf-8', metavar='{python built-in codec}',
                             help='Set default charactor encode. When not set this, it is treated as "utf-8".\
                             see also. %s'%codec_help_url)
     self.ARGS = argParser.parse_args()
-
 
 def errorout(e, additonal=''):
   """ 強制的に止める sys.stderr へ出力 """

@@ -28,7 +28,6 @@ class Schema:
     """ concrete 1 as jsonschema style """
     def __init__(self):
       self.__schemas = []
-    pass
 
     def _makeSchema(self, type_desc):
       schema = {'type':'object'}

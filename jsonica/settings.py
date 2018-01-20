@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import yaml
-import os
 from xlsx import XLSX
 from util import Hoare
 
@@ -23,11 +22,10 @@ class SettingProcessor:
     self.settings = fileloc
     self.out = out
     self.enc = enc
-    pass
 
   def checkSettingFile(self):
     with open(self.settings, 'r') as f:
-      self.setting_data = yaml.load(f)
+      self.setting_data = yaml.safe_load(f)
     if self.setting_data[ATTACH[0]] == ATTACH[1][0]:
       self.processor = XLSX(self.settings, self.enc)
     Hoare.P(self.processor)
@@ -63,9 +61,9 @@ class SettingProcessor:
     print(r'generate template to {}'.format(output))
     self.processor.book.save(output)
 
-  def __print(self, str, flag=False):
+  def __print(self, _str, flag=False):
     if flag:
-      print(str)
+      print(_str)
     pass
 
 class SettingsError(Exception):

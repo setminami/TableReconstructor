@@ -12,7 +12,6 @@ class Initialize(SubCommands):
 
   def __init__(self):
     super().__init__()
-    pass
 
   @property
   def command_names(self): return [self.command_name] + self.aliases
