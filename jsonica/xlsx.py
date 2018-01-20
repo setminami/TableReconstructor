@@ -64,7 +64,7 @@ class XLSX:
               col_name = columns[j][0]
               self.__print('process %s -> %s'%(col_name, link))
               self.__print('current acc = %s'%acc)
-              new_acc = self.__brandnewAccForType(columns[j][1])
+              new_acc = XLSX.__brandnewAccForType(columns[j][1])
               XLSX.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
               self.errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
@@ -80,7 +80,8 @@ class XLSX:
     Hoare.P('type' in schema.keys())
     return schema['type']
 
-  def __brandnewAccForType(self, schema):
+  @classmethod
+  def __brandnewAccForType(cls, schema):
     Hoare.P(isinstance(schema, dict))
     _type = XLSX.__getType(schema)
     if _type == TypeSign.ARRAY:
