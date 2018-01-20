@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os, sys, json, re
 import argparse
-from functools import reduce
+from util import Hoare
 
 # global settings.
 VERSION = '0.0.9'
@@ -26,11 +26,11 @@ class Jsonica:
     型変更の必要がでたら、局所的に操作を書き換える
     """
     from sub_command_core.sub_command import SubCommands
-    assert issubclass(command.__class__, SubCommands)
+    Hoare.P(issubclass(command.__class__, SubCommands))
     # 衝突注意
     for name in command.command_names:
-      assert not (name in self.sub_commands.keys()),\
-                '"{}" collision were detected in {}'.format(name, self.sub_commands.keys())
+      Hoare.P(not (name in self.sub_commands.keys()),\
+        '"{}" collision were detected in {}'.format(name, self.sub_commands.keys()))
       # NOTE: commandは参照であること。tupleへのrefactoring注意
       self.sub_commands.update({name: command})
 
@@ -71,11 +71,11 @@ def errorout(e, additonal=''):
             'root sheet not found.', 'Unrecognized item type were found.', # 3, 4
             'Unknown accumulator!', 'Output json has failed.', # 5, 6
             'Unsupported table filetype found.', 'setting yaml file not found']
-  assert e < len(errors) and e >= 0
+  Hoare.P(e < len(errors) and e >= 0)
   print('%s : %s'%(errors[e], additonal), file=sys.stderr)
   sys.exit(e)
 
-def refactorCheck(validation): assert validation, 'Have you made refactor??'
+def refactorCheck(validation): Hoare.P(validation, 'Have you made refactor??')
 
 if __name__ == '__main__':
   ins = Jsonica()

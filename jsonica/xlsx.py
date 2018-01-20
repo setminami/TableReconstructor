@@ -5,7 +5,7 @@ import csv, openpyxl
 from jsonica import Jsonica, errorout, PROGNAME
 from schema_helper import Schema, TypeSign, Validator
 from sub_command_core.generate import output_formats, output_delimiters
-from util import Util
+from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
@@ -34,7 +34,7 @@ class XLSX:
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
     self.__print('in process %s'%sheet_name)
-    assert sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names)
+    Hoare.P(sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names))
     root_sheet = sheets[sheet_name]
     self.checkCharEncode(root_sheet)
     columns = []
@@ -79,11 +79,11 @@ class XLSX:
     return acc
 
   def __getType(self, schema):
-    assert 'type' in schema.keys()
+    Hoare.P('type' in schema.keys())
     return schema['type']
 
   def __brandnewAccForType(self, schema):
-    assert isinstance(schema, dict)
+    Hoare.P(isinstance(schema, dict))
     _type = self.__getType(schema)
     if _type == TypeSign.ARRAY:
       return []
@@ -106,7 +106,7 @@ class XLSX:
     CSV, TSV出力
     """
     if not self.format: return
-    assert self.format in output_formats
+    Hoare.P(self.format in output_formats)
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, '%s.%s'%(sheet.title ,self.format))
@@ -127,9 +127,9 @@ class XLSX:
     return self.__sheets_cache
 
   def checkCharEncode(self, item, valid_enc=None):
-    assert isinstance(item, openpyxl.workbook.workbook.Workbook) or \
+    Hoare.P(isinstance(item, openpyxl.workbook.workbook.Workbook) or \
             isinstance(item, openpyxl.worksheet.Worksheet) or \
-            isinstance(item, openpyxl.cell.Cell)
+            isinstance(item, openpyxl.cell.Cell))
     enc = valid_enc if bool(valid_enc) else self.char_encode
     self.__print(enc)
     if not (item.encoding == enc):
@@ -155,7 +155,7 @@ class XLSX:
     raw = Util.convEscapedKV(self.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
     self.__schema.validate(instance, type_desc)
-    assert instance is not None
+    Hoare.P(instance is not None)
     return instance
 
   def generateSheet(self, name):

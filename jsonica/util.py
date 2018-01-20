@@ -6,7 +6,7 @@ class Util:
 
   @classmethod
   def stripComments(cls, rawStr):
-    assert isinstance(rawStr, str)
+    Hoare.P(isinstance(rawStr, str))
     # ‘/\*/?([^/]|[^*]/)*\*/’ Ctype
     return re.sub(r'\n*[%s].*\n'%''.join(cls.comment_sign), '', rawStr.strip())
 
@@ -50,3 +50,16 @@ class Util:
     itemが空(list, dict, '', None...)なら何もしない、空でなければprocを実行
     """
     if bool(item): proc(item)
+
+# Why Pythonista hates 'assert' a great function?
+# Meybe it is NOT a primary func. or want to use tests forcely.
+class Hoare:
+  @classmethod
+  def P(cls, *formula):
+    if __debug__:
+      assert formula
+    else:
+      if not formula[0]:
+        comment = formula[1] if len(formula) > 1 else ''
+        print('Not correct condition has found. [%s]'%comment)
+      pass

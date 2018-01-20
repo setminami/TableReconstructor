@@ -2,6 +2,7 @@
 import yaml
 import os
 from xlsx import XLSX
+from util import Hoare
 
 # Yaml 設定値
 ATTACH = ('attach', ['xlsx'])
@@ -29,7 +30,7 @@ class SettingProcessor:
       self.setting_data = yaml.load(f)
     if self.setting_data[ATTACH[0]] == ATTACH[1][0]:
       self.processor = XLSX(self.settings, self.enc)
-    assert self.processor
+    Hoare.P(self.processor)
 
   def createSheets(self, item=ROOT, name=None):
     root_item = self.setting_data[item]
@@ -57,7 +58,7 @@ class SettingProcessor:
       raise SettingsError('root item not set', self.setting_data)
 
   def save(self):
-    assert self.out.endswith('.xlsx')
+    Hoare.P(self.out.endswith('.xlsx'))
     output = self.out
     print(r'generate template to {}'.format(output))
     self.processor.book.save(output)

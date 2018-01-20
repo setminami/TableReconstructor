@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys, enum
-
+from util import Hoare
 
 class Validator(str, enum.Enum):
   """ 対応validator """
@@ -60,13 +60,13 @@ class Schema:
 
   def makeSchema(self, desc):
     """ 一項目ずつの定義であることに留意 """
-    assert isinstance(desc[0], str) and isinstance(desc[1], dict)
+    Hoare.P(isinstance(desc[0], str) and isinstance(desc[1], dict))
     # HACK: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
     return self.schema._makeSchema(desc)
 
   def validate(self, evl, desc):
     sc = self.makeSchema(desc)
-    assert isinstance(evl, list) or isinstance(evl, dict)
+    Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, sc)
     pass
 

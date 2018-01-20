@@ -37,6 +37,7 @@ class Generate(SubCommands):
 '''
 import os, argparse
 from jsonica import PROGNAME
+from util import Hoare
 
 class SubCommands:
   """
@@ -61,11 +62,11 @@ class SubCommands:
 
   # 継承先で設定されているため、readonly
   @property
-  def command_names(self): assert True
+  def command_names(self): Hoare.P(False)
   @property
-  def aliases(self): assert True
+  def aliases(self): Hoare.P(False)
   @property
-  def help(self): assert True
+  def help(self): Hoare.P(False)
 
   def __init__(self):
     pass
@@ -78,10 +79,10 @@ class SubCommands:
     """
     command = cls.__init__()
     from jsonica import Jsonica
-    assert isinstance(exchanger, Jsonica)
+    Hoare.P(isinstance(exchanger, Jsonica))
     exchanger.regist_command(command)
 
-  def __run__(self, **kwargs): assert True
+  def __run__(self, **kwargs): Hoare.P(False)
 
   def makeArgparse(self, subparser):
     """ 個別optionを登録したargparseをsubparseにして返す """
