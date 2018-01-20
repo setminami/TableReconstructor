@@ -16,7 +16,7 @@ class Util:
     local = cls.stripComments(raw_value)
     local = cls.__convPyBoolean(local)
     # print('>>> %s'%local)
-    # ToDo: 真面目な構文チェック
+    # TEMP: 真面目な構文チェック
     if not (local.startswith('{') and local.endswith('}')):
       asDic = '{%s}'%local
     else:
@@ -41,7 +41,7 @@ class Util:
     key = key.encode('unicode-escape').decode(enc)
     value = value.encode('unicode-escape').decode(enc)
     value = '{!s}'.format('"%s"'%value if TypeSign.STRING in type else value)
-    local = f'"{key}": {value}'
+    local = '"{}": {}'.format(key, value)
     return local
 
   @classmethod

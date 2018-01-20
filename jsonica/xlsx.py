@@ -33,13 +33,13 @@ class XLSX:
     sheets = self.__nameToSheets()
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
-    self.__print(f'in process {sheet_name}')
-    assert sheet_name in sheet_names, f'"{sheet_name}" not found in {sheet_names}'
+    self.__print('in process %s'%sheet_name)
+    assert sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names)
     root_sheet = sheets[sheet_name]
     self.checkCharEncode(root_sheet)
     columns = []
-    self.__print(f'I\'ll update {acc}')
-    # Memo: 処理速度に問題が出るようであれば分散処理検討
+    self.__print('I\'ll update {}'.format(acc))
+    # COMBAK: 処理速度に問題が出るようであれば分散処理検討
     # A1, B1...で場所を特定するか、indexで回すか
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
@@ -55,21 +55,21 @@ class XLSX:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
             columns.append((v, Util.runtimeDictionary(cell.comment.text)))
           else:
-            self.errorout(2, f'sheet = {sheet_name}, col = {j}, row = {i}')
+            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
-          # ToDo: 関数へ置き換え type = array, objectのケース をカバー
+          # TODO: 関数へ置き換え type = array, objectのケース をカバー
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
-            # Memo: sheetであることがarray, objectの必要条件になってしまっている
+            # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
             # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
               col_name = columns[j][0]
-              self.__print(f'process {col_name} -> {link}')
-              self.__print(f'current acc = {acc}')
+              self.__print('process %s -> %s'%(col_name, link))
+              self.__print('current acc = %s'%acc)
               new_acc = self.__brandnewAccForType(columns[j][1])
               self.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
-              self.errorout(1, f'sheet = from {sheet_name} to {link}, col = {j}, row = {i}')
+              self.errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
               pass
           else:
             self.__store(self.typeValidator(v, columns[j]), accumulator=subacc)
@@ -109,8 +109,8 @@ class XLSX:
     assert self.format in output_formats
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
-    xdest_path = os.path.join(xdest, f'{sheet.title}.{self.format}')
-    self.__print(f' > {xdest_path}')
+    xdest_path = os.path.join(xdest, '%s.%s'%(sheet.title ,self.format))
+    self.__print(' > %s'%xdest_path)
     with open(xdest_path, 'w', encoding=enc) as f:
       writer = csv.writer(f, delimiter=self.format_delimiter)
       for cols in sheet.rows:
@@ -121,7 +121,7 @@ class XLSX:
     sheetを{sheet名:sheet}形式にして返す
     instance 生成後、実行中のExcel更新は考えない
     """
-    # ToDo: get_sheet_names(), get_sheet_by_by_name()で代用できるか検討
+    # TODO: pyxl.get_sheet_names(), get_sheet_by_name()で代用できるか検討
     if not hasattr(self, '__sheets_cache'):
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
     return self.__sheets_cache
@@ -133,17 +133,17 @@ class XLSX:
     enc = valid_enc if bool(valid_enc) else self.char_encode
     self.__print(enc)
     if not (item.encoding == enc):
-      # ToDo: sheet, cellごとにエラーを上げる場合の処理
+      # TODO: sheet, cellごとにエラーを上げる場合の処理
       if isinstance(item, openpyxl.workbook.workbook.Workbook):
-        add = f'sheet_names = {item.sheet_names}'
+        add = 'sheet_names = %s'%item.sheet_names
       elif isinstance(item, openpyxl.worksheet.Worksheet):
-        add = f'sheet_name = {item.title}'
+        add = 'sheet_name = %s'%item.title
       else: # Cell
-        add = f'parent = {item.parent} index = {item.cordinate}'
+        add = 'parent = {} index = {}'.format(item.parent ,item.cordinate)
       print('*'*50)
       print(add)
       print('*'*50)
-      # ToDo: excel rw
+      # TODO: excel rw 状態チェック
       item.encoding = enc
       pass
     pass

@@ -32,7 +32,7 @@ class Generate(SubCommands):
     myparser = super().makeArgparse(subparser)
     # write each subcommand arg processor here
     myparser.add_argument('-v', '--version',
-                        action='version', version=f'{self.command_name} {VERSION}')
+                        action='version', version='{} {}'.format(self.command_name, VERSION))
     pass
 '''
 import os, argparse
@@ -87,5 +87,5 @@ class SubCommands:
     """ 個別optionを登録したargparseをsubparseにして返す """
     parser = subparser.add_parser(self.command_name, aliases=self.aliases, help=self.help)
     parser.add_argument('-v', '--version',
-                        action='version', version=f'{PROGNAME} {self.command_name} v{self.VERSION}')
+                        action='version', version='%s %s v%s'%(PROGNAME, self.command_name, self.VERSION))
     return parser

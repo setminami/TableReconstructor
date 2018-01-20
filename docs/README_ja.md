@@ -1,4 +1,5 @@
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
+[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=master)](https://travis-ci.org/setminami/Jsonica) [![Documentation Status](https://readthedocs.org/projects/jsonica/badge/?version=latest)](http://jsonica.readthedocs.io/en/latest/?badge=latest)
+ [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica
 [en](./README.md)
@@ -10,6 +11,9 @@
 
 # 利用とセットアップ
 [Usage Sample](./Usage_Samples.md)
+
+# Documentation
+[readthedocs](https://jsonica.readthedocs.io/en/latest/)
 
 ## やりたいこととなにがうれしいか
 - テストや設定データの中で興味があるところのみにこだわり、平易に管理したい
@@ -52,5 +56,4 @@ see also. [Appendix. mindmap](./Appendixies.md)
   - [template.yaml](https://github.com/setminami/Jsonica/blob/master/template.yaml)
 - xlsxに基づいて出力される生成json についてのjsonschema (TBD)
 
-## [Usage Sample](./Usage_Samples.md)
 ## [Appendix.](./Appendixies.md)

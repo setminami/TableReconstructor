@@ -38,7 +38,7 @@ class Generate(SubCommands):
     fileloc = os.path.abspath(os.path.expanduser(args.input))
     workpath = self.__treatFileTypes(fileloc)
     from xlsx import XLSX
-    self.__print(f'Analyzing... {fileloc}')
+    self.__print('Analyzing... %s'%fileloc)
     x = XLSX(workpath, args.encoding, args.output_format)
     # sys.setrecursionlimit(1024 * 8)
     j = x.generateJSON(sheet_name=args.root_sheet)
@@ -49,12 +49,12 @@ class Generate(SubCommands):
       except:
         errorout(6, args.output)
       else:
-        self.__print(f'Output json Success ➡️  {args.output}')
+        self.__print('Output json Success ➡️  %s'%args.output)
     pass
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)
-    outs = reduce(lambda l, r: f'{l} | {r}', output_formats)
+    outs = reduce(lambda l, r: '{} | {}'.format(l, r), output_formats)
     myparser.add_argument('-i', '--input',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
                             metavar='path/to/inputfile',
@@ -69,12 +69,12 @@ class Generate(SubCommands):
     myparser.add_argument('-o', '--output',
                             nargs='?', type=str, action=AnalyzeJSONOutPath,
                             metavar='path/to/outputfile(.json)',
-                            help=f'Output interpreted json. If this set which endswith ".json" as set full filename, output jsonfile treated as the name. But when not set ".json", adopt original xlsx filename, like path/to/outputfile/[source_METAFile_name].json\
-                            (-o has special filename "{SP_FILE}" as STDOUT, and when set like "-o {SP_FILE}", all other stdout messages were masked.)')
+                            help='Output interpreted json. If this set which endswith ".json" as set full filename, output jsonfile treated as the name. But when not set ".json", adopt original xlsx filename, like path/to/outputfile/[source_METAFile_name].json\
+                            (-o has special filename "{0}" as STDOUT, and when set like "-o {0}", all other stdout messages were masked.)'.format(SP_FILE))
     myparser.add_argument('-of', '--output_format',
                             nargs='?', type=str, action=AnalyzeXSeparatedOutPath, # (xsv, path)になるので注意
-                            metavar=f'({outs}):path/to/outputdir',
-                            help=f'''Output with the format, If you set this, output formfiles to path/to/[source_METAFile_name].xlsx/[sheetname.?sv]s It\'ll be recommended,
+                            metavar='(%s):path/to/outputdir'%outs,
+                            help='''Output with the format, If you set this, output formfiles to path/to/[source_METAFile_name].xlsx/[sheetname.?sv]s It\'ll be recommended,
                             if you want to have communication with non Tech team without any gitconfiging.''')
     pass
 
@@ -82,7 +82,7 @@ class Generate(SubCommands):
     if file.endswith('.xlsx'):
       return file
     else:
-      errorout(7, f'{file} format is not supported yet.')
+      errorout(7, '%s format is not supported yet.'%file)
 
   def __print(self, msg):
     if not (self.args.output == SP_FILE):
@@ -104,21 +104,21 @@ class AnalyzeJSONOutPath(argparse.Action):
         os.path.makedirs(p, exist_ok=True)
       # Excelと同名
       fname = os.path.splitext(os.path.basename(fileloc))[0]
-      jsonfilename = os.path.join(p, fr'{fname}.json')
+      jsonfilename = os.path.join(p, r'%s.json'%fname)
     namespace.output = jsonfilename
 
 class AnalyzeXSeparatedOutPath(argparse.Action):
   """ sv出力先と形式を解析する """
-  DEBUG = True
+  DEBUG = False
   def __call__(self, parser, namespace, values, option_string=None):
     if self.DEBUG:
-        print(f'{self.__class__.__name__} called: {values}')
+        print('{} called: {}'.format(self.__class__.__name__, values))
     args = values.split(':')
     if len(args) != 2:
-      raise argparse.ArgumentTypeError(f'''{option_string} {values} have to separate ?sv and outputpath with ":"
-                                            e.g., tsv:path/to/output''')
+      raise argparse.ArgumentTypeError('''{} {} have to separate ?sv and outputpath with ":"
+                                            e.g., tsv:path/to/output'''.format(option_string ,values))
     elif not (args[0] in output_formats):
-      raise argparse.ArgumentTypeError(f'{option_string} {args[0]} have to be picked from {output_formats}')
+      raise argparse.ArgumentTypeError('%s %s have to be picked from %s'%(option_string, args[0], output_formats))
     o = output_formats.index(args[0])
     namespace.output_format = (args[0], output_delimiters[o], args[1])
 

@@ -1,0 +1,2 @@
+Analyzing... /home/travis/build/setminami/Jsonica/Samples/cheatsheet.xlsx
+Output json Success ➡️  ./output/cheatsheet.json
