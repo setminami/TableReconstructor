@@ -49,7 +49,6 @@ class Generate(SubCommands):
         errorout(6, args.output)
       else:
         self.__print('Output json Success ➡️  %s'%args.output)
-    pass
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)

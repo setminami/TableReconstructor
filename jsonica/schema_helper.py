@@ -48,14 +48,12 @@ class Schema:
       except SchemaError as se:
         self.__print('Schema Error has found.\n%s'%se)
         sys.exit(-2)
-      pass
 
   def __init__(self, validator):
     self.schema_name = validator
     # TEMP: type switch
     if validator == Validator.jsonschema:
       self.schema = Schema.JsonSchema()
-    pass
 
   def makeSchema(self, desc):
     """ 一項目ずつの定義であることに留意 """
@@ -69,7 +67,6 @@ class Schema:
     self.schema._validate(evl, sc)
     pass
 
-    def __print(self, str, flag=False):
+    def __print(self, _str, flag=False):
       if flag:
-        print(str)
-      pass
+        print(_str)

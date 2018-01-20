@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=master)](https://travis-ci.org/setminami/Jsonica) [![Documentation Status](https://readthedocs.org/projects/jsonica/badge/?version=latest)](http://jsonica.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/setminami/Jsonica.svg?branch=master)](https://travis-ci.org/setminami/Jsonica) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/bb3bb834de1d4c7ca48ba9161e729ff7)](https://www.codacy.com/app/setminami/Jsonica?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=setminami/Jsonica&amp;utm_campaign=Badge_Grade) [![Documentation Status](https://readthedocs.org/projects/jsonica/badge/?version=latest)](http://jsonica.readthedocs.io/en/latest/?badge=latest)
  [![Waffle.io - Columns and their card count](https://badge.waffle.io/setminami/Jsonica.png?columns=all)](https://waffle.io/setminami/Jsonica?utm_source=badge)
 
 # Jsonica

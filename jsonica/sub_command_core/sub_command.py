@@ -15,7 +15,6 @@ class Generate(SubCommands):
 
   def __init__(self):
     super().__init__()
-    pass
 
   @property
   def command_names(self): return [self.command_name] + self.aliases
@@ -33,7 +32,6 @@ class Generate(SubCommands):
     # write each subcommand arg processor here
     myparser.add_argument('-v', '--version',
                         action='version', version='{} {}'.format(self.command_name, VERSION))
-    pass
 '''
 from jsonica import PROGNAME
 from util import Hoare

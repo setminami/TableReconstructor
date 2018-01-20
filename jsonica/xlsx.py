@@ -24,7 +24,6 @@ class XLSX:
       self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
     else: # init
       self.book = openpyxl.Workbook()
-    pass
 
   def generateJSON(self, sheet_name, acc=[]):
     """
@@ -70,7 +69,6 @@ class XLSX:
               self.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
               self.errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
-              pass
           else:
             self.__store(self.typeValidator(v, columns[j]), accumulator=subacc)
         pass # pass columns
@@ -145,8 +143,6 @@ class XLSX:
       print('*'*50)
       # TODO: excel rw 状態チェック
       item.encoding = enc
-      pass
-    pass
 
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
