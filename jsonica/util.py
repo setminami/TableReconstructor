@@ -36,11 +36,11 @@ class Util:
     return re.sub(fr, 'False', local)
 
   @classmethod
-  def convEscapedKV(cls, type, key, value, enc='utf-8'):
+  def convEscapedKV(cls, _type, key, value, enc='utf-8'):
     from schema_helper import TypeSign
     key = key.encode('unicode-escape').decode(enc)
     value = value.encode('unicode-escape').decode(enc)
-    value = '{!s}'.format('"%s"'%value if TypeSign.STRING in type else value)
+    value = '{!s}'.format('"%s"'%value if TypeSign.STRING in _type else value)
     local = '"{}": {}'.format(key, value)
     return local
 
@@ -56,10 +56,11 @@ class Util:
 class Hoare:
   @classmethod
   def P(cls, *formula):
+    comment = lambda x: x[1] if len(x) > 1 else ''
     if __debug__:
-      assert formula
+        if not formula[0]:
+          print('%s'%comment(formula))
+          raise AssertionError()
     else:
       if not formula[0]:
-        comment = formula[1] if len(formula) > 1 else ''
-        print('Not correct condition has found. [%s]'%comment)
-      pass
+        print('Not correct condition has found. [%s]'%comment(formula))
