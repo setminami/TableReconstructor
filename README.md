@@ -1,0 +1,2 @@
+# Jsonica
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/eec0989e295f4f7e8a8ece07c42dc3b6)](https://www.codacy.com/app/setminami/Jsonica?utm_source=github.com&utm_medium=referral&utm_content=setminami/Jsonica&utm_campaign=badger)
