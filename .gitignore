@@ -127,4 +127,9 @@ venv.bak/
 # individual tests
 tests/tmp/
 
-# End of https://www.gitignore.io/api/python,microsoftoffice
+### Jekyll ###
+_site/
+.sass-cache/
+.jekyll-metadata
+
+# End of https://www.gitignore.io/api/python,jekyll, microsoftoffice

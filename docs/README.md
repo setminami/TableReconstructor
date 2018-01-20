@@ -12,8 +12,8 @@
 # Setup'n Usage
 [Usage Sample](./Usage_Samples.md)
 
-# the APIs
-[sphinx?](https://jsonica.readthedocs.io/en/latest/)
+# Documentation
+[readthedocs](https://jsonica.readthedocs.io/en/latest/)
 
 # What I wanna do and Where advantage
 - I only want to be interested in huge data and want to manage them easily.
