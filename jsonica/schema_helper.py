@@ -65,7 +65,6 @@ class Schema:
     sc = self.makeSchema(desc)
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, sc)
-    pass
 
     def __print(self, _str, flag=False):
       if flag:

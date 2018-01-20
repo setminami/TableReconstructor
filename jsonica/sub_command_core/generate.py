@@ -35,7 +35,7 @@ class Generate(SubCommands):
       args.output_format = ('tsv', output_delimiters[1], './output/')
     self.args = args
     fileloc = os.path.abspath(os.path.expanduser(args.input))
-    workpath = self.__treatFileTypes(fileloc)
+    workpath = Generate.__treatFileTypes(fileloc)
     from xlsx import XLSX
     self.__print('Analyzing... %s'%fileloc)
     x = XLSX(workpath, args.encoding, args.output_format)
@@ -74,9 +74,9 @@ class Generate(SubCommands):
                             metavar='(%s):path/to/outputdir'%outs,
                             help='''Output with the format, If you set this, output formfiles to path/to/[source_METAFile_name].xlsx/[sheetname.?sv]s It\'ll be recommended,
                             if you want to have communication with non Tech team without any gitconfiging.''')
-    pass
 
-  def __treatFileTypes(self, file):
+  @classmethod
+  def __treatFileTypes(cls, file):
     if file.endswith('.xlsx'):
       return file
     else:

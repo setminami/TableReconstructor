@@ -46,4 +46,3 @@ class Initialize(SubCommands):
                             help='This is an initialize helper option.\n\
                             Generate template xlsx file based on same filename.yaml.\
                             \n**And if you set this, other options are ignored.** will be subcommand.')
-    pass
