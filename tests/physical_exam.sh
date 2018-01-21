@@ -9,11 +9,11 @@ fi
 
 if $TRAVIS; then
   echo 'TRAVIS BUILD RUNNING...'
-  RIGHT_DATA_DIR=./tests/travis_right_data
+  RIGHT_DATA_DIR=./tests/data/travis_right_data
   LOCAL_BUILD=false
 else
   echo 'LOCAL BUILD RUNNING...'
-  RIGHT_DATA_DIR=.tests/local_right_data
+  RIGHT_DATA_DIR=./tests/data/local_right_data
   LOCAL_BUILD=true
 fi
 
@@ -218,8 +218,4 @@ if [ $? -eq 1 ]; then
   echo '🔸 Found difference'
 else
   echo '✅  all green'
-fi
-
-if $LOCAL_BUILD; then
-  cd ../docs; make html
 fi
