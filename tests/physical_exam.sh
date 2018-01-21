@@ -10,11 +10,9 @@ fi
 if $TRAVIS; then
   echo 'TRAVIS BUILD RUNNING...'
   RIGHT_DATA_DIR=./tests/data/travis_right_data
-  LOCAL_BUILD=false
 else
   echo 'LOCAL BUILD RUNNING...'
   RIGHT_DATA_DIR=./tests/data/local_right_data
-  LOCAL_BUILD=true
 fi
 
 TESTINGOUTS_EXT=.test.txt
