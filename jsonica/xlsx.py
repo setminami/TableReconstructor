@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 # this made for python3
-import os, sys
-import csv, openpyxl
-from jsonica import Jsonica, errorout, PROGNAME
+import os, csv, openpyxl
+from jsonica import errorout, PROGNAME
 from schema_helper import Schema, TypeSign, Validator
-from sub_command_core.generate import output_formats, output_delimiters
-from util import Util
+from sub_command_core.generate import output_formats
+from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
@@ -24,9 +23,8 @@ class XLSX:
       self.book = openpyxl.load_workbook(self.filepath, keep_vba=True, data_only=False)
     else: # init
       self.book = openpyxl.Workbook()
-    pass
 
-  def generateJSON(self, sheet_name, acc=[]):
+  def generateJSON(self, sheet_name, acc=None):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
@@ -34,10 +32,11 @@ class XLSX:
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
     self.__print('in process %s'%sheet_name)
-    assert sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names)
+    Hoare.P(sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names))
     root_sheet = sheets[sheet_name]
     self.checkCharEncode(root_sheet)
     columns = []
+    acc = [] if not acc else acc
     self.__print('I\'ll update {}'.format(acc))
     # COMBAK: 処理速度に問題が出るようであれば分散処理検討
     # A1, B1...で場所を特定するか、indexで回すか
@@ -45,7 +44,6 @@ class XLSX:
       subacc = {}
       if self.format:
         self.__outputCSV(self.format_output, root_sheet, self.char_encode)
-        pass
       for j, cell in enumerate(row):
         v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
         if v is None: continue # cell check
@@ -66,47 +64,23 @@ class XLSX:
               col_name = columns[j][0]
               self.__print('process %s -> %s'%(col_name, link))
               self.__print('current acc = %s'%acc)
-              new_acc = self.__brandnewAccForType(columns[j][1])
-              self.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
+              new_acc = XLSX.__brandnewAccForType(columns[j][1])
+              XLSX.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
               self.errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
-              pass
           else:
-            self.__store(self.typeValidator(v, columns[j]), accumulator=subacc)
-        pass # pass columns
-      Util.checkEmptyOr(lambda x: self.__store(x, acc), subacc)
-      pass # pass a row
+            XLSX.__store(self.typeValidator(v, columns[j]), accumulator=subacc)
+        # pass columns
+      Util.checkEmptyOr(lambda x: XLSX.__store(x, acc), subacc)
+      # pass a row
     return acc
-
-  def __getType(self, schema):
-    assert 'type' in schema.keys()
-    return schema['type']
-
-  def __brandnewAccForType(self, schema):
-    assert isinstance(schema, dict)
-    _type = self.__getType(schema)
-    if _type == TypeSign.ARRAY:
-      return []
-    elif _type == TypeSign.OBJ:
-      return {}
-    else:
-      errorout(4, _type)
-
-  def __store(self, item, accumulator):
-    if isinstance(accumulator, dict):
-      accumulator.update(item)
-    elif isinstance(accumulator, list):
-      accumulator.append(item)
-    else:
-      errorout(5)
-    return accumulator
 
   def __outputCSV(self, base_path, sheet, enc):
     """
     CSV, TSV出力
     """
     if not self.format: return
-    assert self.format in output_formats
+    Hoare.P(self.format in output_formats)
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, '%s.%s'%(sheet.title ,self.format))
@@ -127,9 +101,9 @@ class XLSX:
     return self.__sheets_cache
 
   def checkCharEncode(self, item, valid_enc=None):
-    assert isinstance(item, openpyxl.workbook.workbook.Workbook) or \
+    Hoare.P(isinstance(item, openpyxl.workbook.workbook.Workbook) or \
             isinstance(item, openpyxl.worksheet.Worksheet) or \
-            isinstance(item, openpyxl.cell.Cell)
+            isinstance(item, openpyxl.cell.Cell))
     enc = valid_enc if bool(valid_enc) else self.char_encode
     self.__print(enc)
     if not (item.encoding == enc):
@@ -145,17 +119,15 @@ class XLSX:
       print('*'*50)
       # TODO: excel rw 状態チェック
       item.encoding = enc
-      pass
-    pass
 
   def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
     if not hasattr(self, '__schema'):
       self.__schema = Schema(validator)
-    raw = Util.convEscapedKV(self.__getType(type_desc[1]), type_desc[0], value)
+    raw = Util.convEscapedKV(XLSX.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
     self.__schema.validate(instance, type_desc)
-    assert instance is not None
+    Hoare.P(instance is not None)
     return instance
 
   def generateSheet(self, name):
@@ -165,8 +137,30 @@ class XLSX:
     from openpyxl.comments import Comment
     cell.comment = Comment(text, author)
 
+  @classmethod
+  def __getType(cls, schema):
+    Hoare.P('type' in schema.keys())
+    return schema['type']
+  @classmethod
+  def __brandnewAccForType(cls, schema):
+    Hoare.P(isinstance(schema, dict))
+    _type = XLSX.__getType(schema)
+    if _type == TypeSign.ARRAY:
+      return []
+    elif _type == TypeSign.OBJ:
+      return {}
+    else:
+      errorout(4, _type)
+  @classmethod
+  def __store(cls, item, accumulator):
+    if isinstance(accumulator, dict):
+      accumulator.update(item)
+    elif isinstance(accumulator, list):
+      accumulator.append(item)
+    else:
+      errorout(5)
+    return accumulator
+
   # SP_FILE 注意
-  def __print(self, str, flag=False):
-    if flag:
-      print(str)
-    pass
+  def __print(self, _str, flag=False):
+    if flag: print(_str)

@@ -11,3 +11,5 @@ script:
 branches:
   only:
     - master
+    # test checkはdevelopへのmerge
+    - develop
