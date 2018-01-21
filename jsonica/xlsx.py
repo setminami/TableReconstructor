@@ -75,32 +75,6 @@ class XLSX:
       # pass a row
     return acc
 
-  @classmethod
-  def __getType(cls, schema):
-    Hoare.P('type' in schema.keys())
-    return schema['type']
-
-  @classmethod
-  def __brandnewAccForType(cls, schema):
-    Hoare.P(isinstance(schema, dict))
-    _type = XLSX.__getType(schema)
-    if _type == TypeSign.ARRAY:
-      return []
-    elif _type == TypeSign.OBJ:
-      return {}
-    else:
-      errorout(4, _type)
-
-  @classmethod
-  def __store(cls, item, accumulator):
-    if isinstance(accumulator, dict):
-      accumulator.update(item)
-    elif isinstance(accumulator, list):
-      accumulator.append(item)
-    else:
-      errorout(5)
-    return accumulator
-
   def __outputCSV(self, base_path, sheet, enc):
     """
     CSV, TSV出力
@@ -163,7 +137,30 @@ class XLSX:
     from openpyxl.comments import Comment
     cell.comment = Comment(text, author)
 
+  @classmethod
+  def __getType(cls, schema):
+    Hoare.P('type' in schema.keys())
+    return schema['type']
+  @classmethod
+  def __brandnewAccForType(cls, schema):
+    Hoare.P(isinstance(schema, dict))
+    _type = XLSX.__getType(schema)
+    if _type == TypeSign.ARRAY:
+      return []
+    elif _type == TypeSign.OBJ:
+      return {}
+    else:
+      errorout(4, _type)
+  @classmethod
+  def __store(cls, item, accumulator):
+    if isinstance(accumulator, dict):
+      accumulator.update(item)
+    elif isinstance(accumulator, list):
+      accumulator.append(item)
+    else:
+      errorout(5)
+    return accumulator
+
   # SP_FILE 注意
   def __print(self, _str, flag=False):
-    if flag:
-      print(_str)
+    if flag: print(_str)

@@ -83,8 +83,7 @@ class Generate(SubCommands):
       errorout(7, '%s format is not supported yet.'%file)
 
   def __print(self, msg):
-    if not (self.args.output == SP_FILE):
-      print(msg)
+    if not (self.args.output == SP_FILE): print(msg)
 
 # argparse actions
 class AnalyzeJSONOutPath(argparse.Action):

@@ -23,7 +23,7 @@ class Generate(SubCommands):
   @property
   def help(self): return self.__help
 
-  def run(self, **kwargs):
+  def __run__(self, **kwargs):
     # each process brabrabra
     pass
 
@@ -33,6 +33,7 @@ class Generate(SubCommands):
     myparser.add_argument('-v', '--version',
                         action='version', version='{} {}'.format(self.command_name, VERSION))
 '''
+
 from jsonica import PROGNAME
 from util import Hoare
 

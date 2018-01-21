@@ -62,8 +62,7 @@ class SettingProcessor:
     self.processor.book.save(output)
 
   def __print(self, _str, flag=False):
-    if flag:
-      print(_str)
+    if flag: print(_str)
 
 class SettingsError(Exception):
   """ ローカル設定 に関するエラー """

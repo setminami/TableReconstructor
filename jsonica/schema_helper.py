@@ -67,5 +67,4 @@ class Schema:
     self.schema._validate(evl, sc)
 
     def __print(self, _str, flag=False):
-      if flag:
-        print(_str)
+      if flag: print(_str)
