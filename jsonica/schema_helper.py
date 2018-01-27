@@ -50,16 +50,13 @@ class Schema:
       try:
         validate(evl, schema)
       except ValidationError as ve:
-        self.__print('Validation Error has found.\n%s'%ve)
+        __print('Validation Error has found.\n%s'%ve)
         print('_validate {} with: {}'.format(evl, self.__schemas))
         sys.exit(-1)
       except SchemaError as se:
-        self.__print('Schema Error has found.\n%s'%se)
+        __print('Schema Error has found.\n%s'%se)
         print('Error Schema : %s'%self.__schemas)
         sys.exit(-2)
-
-    def __print(self, _str, flag=False):
-      if flag: print(_str)
 
   def __init__(self, validator):
     self.schema_name = validator
@@ -79,3 +76,6 @@ class Schema:
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, self.makeSchema(desc))
     # print('i\'m {} \nNow I have -> {}'.format(self, self.schema_collection))
+
+def __print(_str, flag=False):
+  if flag: print(_str)
