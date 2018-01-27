@@ -7,7 +7,7 @@ else
   echo 'workspace OK'
 fi
 
-if [ $TRAVIS == true ]; then
+if [ $TRAVIS ]; then
   echo 'TRAVIS BUILD RUNNING...'
   RIGHT_DATA_DIR=./tests/data/travis_right_data
 else
