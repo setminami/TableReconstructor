@@ -1,0 +1,62 @@
+1 {
+2   "$id": "http://example.com/example.json",
+3   "type": "array",
+4   "definitions": {},
+5   "$schema": "http://json-schema.org/draft-06/schema#",
+6   "items": {
+7     "$id": "http://example.com/example.json/items",
+8     "type": "object",
+9     "properties": {
+10       "color": {
+11         "$id": "http://example.com/example.json/items/properties/color",
+12         "type": "string",
+13         "title": "The Color Schema",
+14         "description": "An explanation about the purpose of this instance.",
+15         "default": "",
+16         "examples": [
+17           "fff000"
+18         ]
+19       },
+20       "items": {
+21         "$id": "http://example.com/example.json/items/properties/items",
+22         "type": "array",
+23         "items": {
+24           "$id": "http://example.com/example.json/items/properties/items/items",
+25           "type": "object",
+26           "properties": {
+27             "desc-en": {
+28               "$id": "http://example.com/example.json/items/properties/items/items/properties/desc-en",
+29               "type": "string",
+30               "title": "The Desc-en Schema",
+31               "description": "An explanation about the purpose of this instance.",
+32               "default": "",
+33               "examples": [
+34                 "Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default."
+35               ]
+36             },
+37             "sign": {
+38               "$id": "http://example.com/example.json/items/properties/items/items/properties/sign",
+39               "type": "string",
+40               "title": "The Sign Schema",
+41               "description": "An explanation about the purpose of this instance.",
+42               "default": "",
+43               "examples": [
+44                 "^"
+45               ]
+46             }
+47           }
+48         }
+49       },
+50       "title": {
+51         "$id": "http://example.com/example.json/items/properties/title",
+52         "type": "string",
+53         "title": "The Title Schema",
+54         "description": "An explanation about the purpose of this instance.",
+55         "default": "",
+56         "examples": [
+57           "Anchors"
+58         ]
+59       }
+60     }
+61   }
+62 }

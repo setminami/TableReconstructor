@@ -10,10 +10,31 @@ class XLSX:
   """ xlsx 具象操作クラス """
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
+  @property
+  def schema(self): return self.__schema
+  @schema.setter
+  def schema(self, value):
+    if not hasattr(self, '__schema'):
+      self.__schema = value
+
+  @property
+  def piled_schema(self):
+    """
+    __all_schema: {sheet: [schemas]}
+    """
+    return self.__all_schema
+  @piled_schema.setter
+  def piled_schema(self, value):
+    """ value : (sheet:Some, schema:dict) """
+    if value[0] in self.piled_schema.keys():
+      self.piled_schema[value[0]].update(value[1])
+    else:
+      self.piled_schema[value[0]] = value[1]
 
   def __init__(self, file, enc, forms=None):
     self.filepath = file
     self.filename = os.path.basename(file)
+    self.__all_schema = {}
     if forms:
       self.format = forms[0]
       self.format_delimiter = forms[1]
@@ -69,7 +90,7 @@ class XLSX:
             else:
               self.errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
           else:
-            XLSX.__store(self.typeValidator(v, columns[j]), accumulator=subacc)
+            XLSX.__store(self.typeValidator(sheet_name, v, columns[j]), accumulator=subacc)
         # pass columns
       Util.checkEmptyOr(lambda x: XLSX.__store(x, acc), subacc)
       # pass a row
@@ -120,13 +141,15 @@ class XLSX:
       # TODO: excel rw 状態チェック
       item.encoding = enc
 
-  def typeValidator(self, value, type_desc, validator=Validator.jsonschema):
+  def typeValidator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
-    if not hasattr(self, '__schema'):
-      self.__schema = Schema(validator)
+    self.schema = Schema(validator)
     raw = Util.convEscapedKV(XLSX.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
-    self.__schema.validate(instance, type_desc)
+    self.__print('i\'m %s. call validator'%self, False)
+    self.__print('== %s =='%{type_desc[0]:type_desc[1]}, False)
+    self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
+    self.schema.validate(instance, type_desc)
     Hoare.P(instance is not None)
     return instance
 

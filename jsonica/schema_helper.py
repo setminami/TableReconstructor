@@ -22,7 +22,11 @@ class TypeSign(str, enum.Enum):
   JSON_NULL = 'null'
 
 class Schema:
-  """ abstract """
+  """
+  抽象的な中継クラス
+  下流具象クラスへの中継とreduce以外の作業はさせないこと
+  """
+
   DEBUG = False
   class JsonSchema:
     """ concrete 1 as jsonschema style """
@@ -30,6 +34,9 @@ class Schema:
       self.__schemas = []
 
     def _makeSchema(self, type_desc):
+      """
+      最小粒度でのjsonschema構築
+      """
       schema = {'type':'object'}
       if 'required' in type_desc[1].keys():
         schema['required'] = [type_desc[0]]
@@ -44,13 +51,19 @@ class Schema:
         validate(evl, schema)
       except ValidationError as ve:
         self.__print('Validation Error has found.\n%s'%ve)
+        print('_validate {} with: {}'.format(evl, self.__schemas))
         sys.exit(-1)
       except SchemaError as se:
         self.__print('Schema Error has found.\n%s'%se)
+        print('Error Schema : %s'%self.__schemas)
         sys.exit(-2)
+
+    def __print(self, _str, flag=False):
+      if flag: print(_str)
 
   def __init__(self, validator):
     self.schema_name = validator
+    self.schema_collection = []
     # TEMP: type switch
     if validator == Validator.jsonschema:
       self.schema = Schema.JsonSchema()
@@ -58,13 +71,11 @@ class Schema:
   def makeSchema(self, desc):
     """ 一項目ずつの定義であることに留意 """
     Hoare.P(isinstance(desc[0], str) and isinstance(desc[1], dict))
-    # HACK: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
-    return self.schema._makeSchema(desc)
+    # TEMP: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
+    self.schema_collection.append(self.schema._makeSchema(desc))
+    return self.schema_collection[-1]
 
   def validate(self, evl, desc):
-    sc = self.makeSchema(desc)
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
-    self.schema._validate(evl, sc)
-
-    def __print(self, _str, flag=False):
-      if flag: print(_str)
+    self.schema._validate(evl, self.makeSchema(desc))
+    # print('i\'m {} \nNow I have -> {}'.format(self, self.schema_collection))

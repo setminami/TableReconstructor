@@ -1,0 +1,49 @@
+ 1 $id: http://example.com/example.json
+ 2 type: array
+ 3 definitions: {}
+ 4 $schema: http://json-schema.org/draft-06/schema#
+ 5 items:
+ 6   $id: http://example.com/example.json/items
+ 7   type: object
+ 8   properties:
+ 9     color:
+10       $id: http://example.com/example.json/items/properties/color
+11       type: string
+12       title: The Color Schema
+13       description: An explanation about the purpose of this instance.
+14       default: ''
+15       examples:
+16       - fff000
+17     items:
+18       $id: http://example.com/example.json/items/properties/items
+19       type: array
+20       items:
+21         $id: http://example.com/example.json/items/properties/items/items
+22         type: object
+23         properties:
+24           desc-en:
+25             $id: http://example.com/example.json/items/properties/items/items/properties/desc-en
+26             type: string
+27             title: The Desc-en Schema
+28             description: An explanation about the purpose of this instance.
+29             default: ''
+30             examples:
+31             - Matches at the start of string or start of line if multi-line mode is
+32               enabled. Many regex implementations have multi-line mode enabled by
+33               default.
+34           sign:
+35             $id: http://example.com/example.json/items/properties/items/items/properties/sign
+36             type: string
+37             title: The Sign Schema
+38             description: An explanation about the purpose of this instance.
+39             default: ''
+40             examples:
+41             - ^
+42     title:
+43       $id: http://example.com/example.json/items/properties/title
+44       type: string
+45       title: The Title Schema
+46       description: An explanation about the purpose of this instance.
+47       default: ''
+48       examples:
+49       - Anchors

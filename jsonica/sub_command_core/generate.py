@@ -49,6 +49,7 @@ class Generate(SubCommands):
         errorout(6, args.output)
       else:
         self.__print('Output json Success ➡️  %s'%args.output)
+    # print('XXX %s XXX'%x.piled_schema)
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)
@@ -64,6 +65,12 @@ class Generate(SubCommands):
                             nargs='?', type=str, default='root', # Default root sheet name
                             metavar='sheetname',
                             help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
+#  reserve
+#    myparser.add_argument('-s', '--schema',
+#                            nargs='?', type=str,
+#                            metavar='schema url',
+#                            help='http://json-schema.org/draft-04/schema#')
+
     myparser.add_argument('-o', '--output',
                             nargs='?', type=str, action=AnalyzeJSONOutPath,
                             metavar='path/to/outputfile(.json)',
