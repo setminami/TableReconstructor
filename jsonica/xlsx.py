@@ -89,7 +89,7 @@ class XLSX:
               new_acc = XLSX.__brandnewAccForType(columns[j][1])
               XLSX.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
-              self.errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
+              errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
           else:
             XLSX.__store(self.typeValidator(sheet_name, v, columns[j]), accumulator=subacc)
         # pass columns
