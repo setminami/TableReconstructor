@@ -4,6 +4,8 @@ from jsonica import errorout, refactorCheck
 import os, sys, json, argparse, contextlib
 from functools import reduce
 
+from util import Util
+
 output_formats = ['csv', 'tsv']
 output_delimiters = [',', '\t']
 
@@ -37,7 +39,7 @@ class Generate(SubCommands):
     fileloc = os.path.abspath(os.path.expanduser(args.input))
     workpath = Generate.__treatFileTypes(fileloc)
     from xlsx import XLSX
-    self.__print('Analyzing... %s'%fileloc)
+    self._print('Analyzing... %s'%fileloc)
     x = XLSX(workpath, args.encoding, args.output_format)
     # sys.setrecursionlimit(1024 * 8)
     j = x.generateJSON(sheet_name=args.root_sheet)
@@ -48,8 +50,8 @@ class Generate(SubCommands):
       except:
         errorout(6, args.output)
       else:
-        self.__print('Output json Success ➡️  %s'%args.output)
-    # print('XXX %s XXX'%x.piled_schema)
+        self._print('Output json Success ➡️  %s'%args.output)
+    Util.sprint('XXX %s XXX'%x.piled_schema, True)
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)
@@ -89,7 +91,7 @@ class Generate(SubCommands):
     else:
       errorout(7, '%s format is not supported yet.'%file)
 
-  def __print(self, msg):
+  def _print(self, msg):
     if not (self.args.output == SP_FILE): print(msg)
 
 # argparse actions

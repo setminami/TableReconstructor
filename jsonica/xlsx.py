@@ -8,6 +8,7 @@ from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
+  DEBUG = True
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
   @property
@@ -52,13 +53,13 @@ class XLSX:
     sheets = self.__nameToSheets()
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
-    self.__print('in process %s'%sheet_name)
+    Util.sprint('in process %s'%sheet_name, self.DEBUG)
     Hoare.P(sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names))
     root_sheet = sheets[sheet_name]
     self.checkCharEncode(root_sheet)
     columns = []
     acc = [] if not acc else acc
-    self.__print('I\'ll update {}'.format(acc))
+    Util.sprint('I\'ll update {}'.format(acc), self.DEBUG)
     # COMBAK: 処理速度に問題が出るようであれば分散処理検討
     # A1, B1...で場所を特定するか、indexで回すか
     for i, row in enumerate(root_sheet.iter_rows()):
@@ -83,8 +84,8 @@ class XLSX:
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
               col_name = columns[j][0]
-              self.__print('process %s -> %s'%(col_name, link))
-              self.__print('current acc = %s'%acc)
+              Util.sprint('process %s -> %s'%(col_name, link), self.DEBUG)
+              Util.sprint('current acc = %s'%acc, self.DEBUG)
               new_acc = XLSX.__brandnewAccForType(columns[j][1])
               XLSX.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
@@ -105,7 +106,7 @@ class XLSX:
     xdest = os.path.join(base_path, self.filename)
     os.makedirs(xdest, exist_ok=True)
     xdest_path = os.path.join(xdest, '%s.%s'%(sheet.title ,self.format))
-    self.__print(' > %s'%xdest_path)
+    Util.sprint(' > %s'%xdest_path, self.DEBUG)
     with open(xdest_path, 'w', encoding=enc) as f:
       writer = csv.writer(f, delimiter=self.format_delimiter)
       for cols in sheet.rows:
@@ -126,7 +127,7 @@ class XLSX:
             isinstance(item, openpyxl.worksheet.Worksheet) or \
             isinstance(item, openpyxl.cell.Cell))
     enc = valid_enc if bool(valid_enc) else self.char_encode
-    self.__print(enc)
+    Util.sprint(enc, self.DEBUG)
     if not (item.encoding == enc):
       # TODO: sheet, cellごとにエラーを上げる場合の処理
       if isinstance(item, openpyxl.workbook.workbook.Workbook):
@@ -143,11 +144,12 @@ class XLSX:
 
   def typeValidator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
+    DEBUG = True
     self.schema = Schema(validator)
     raw = Util.convEscapedKV(XLSX.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
-    self.__print('i\'m %s. call validator'%self, False)
-    self.__print('== %s =='%{type_desc[0]:type_desc[1]}, False)
+    Util.sprint('i\'m %s. call validator'%self, DEBUG)
+    Util.sprint('== %s =='%{type_desc[0]:type_desc[1]}, DEBUG)
     self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
     self.schema.validate(instance, type_desc)
     Hoare.P(instance is not None)
@@ -183,7 +185,3 @@ class XLSX:
     else:
       errorout(5)
     return accumulator
-
-  # SP_FILE 注意
-  def __print(self, _str, flag=False):
-    if flag: print(_str)

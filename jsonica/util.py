@@ -51,6 +51,20 @@ class Util:
     """
     if bool(item): proc(item)
 
+  @classmethod
+  def sprint(cls, msg, flag=False):
+    """
+    Util\.sprint\(.+,\s*True\s*\) が見つかったらprintに書き換える
+    """
+    from logging import getLogger, StreamHandler, DEBUG
+    logger = getLogger(__name__)
+    handler = StreamHandler()
+    handler.setLevel(DEBUG)
+    logger.setLevel(DEBUG)
+    logger.addHandler(handler)
+    logger.propagate = False
+    if flag: logger.debug(msg)
+
 # Why Pythonista hates 'assert' a great function?
 # Meybe it is NOT a primary func. or want to use tests forcely.
 class Hoare:
