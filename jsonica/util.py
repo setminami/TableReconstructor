@@ -56,22 +56,23 @@ class Util:
     """
     Util\.sprint\(.+,\s*True\s*\) が見つかったらprintに書き換える
     """
-    if flag:
-      import inspect
-      stack = inspect.stack()
-      the_class = stack[1][0].f_locals["self"].__class__.__name__
-      print('*** %s ***'%str(the_class))
-      # COMBAK: 効率化するならthe_class単位でloggerを切り替える
-      from logging import getLogger, StreamHandler, DEBUG
-      # https://docs.python.jp/3/library/logging.html#logger-objects
-      logger = getLogger(str(the_class))
-      handler = StreamHandler()
-      handler.setLevel(DEBUG)
-      logger.setLevel(DEBUG)
-      logger.addHandler(handler)
-      # https://docs.python.jp/3/library/logging.html#logging.Logger.propagate
-      logger.propagate = False
-      logger.debug(msg)
+#    if flag:
+#      import inspect
+#      stack = inspect.stack()
+#      the_class = stack[1][0].f_locals["self"].__class__.__name__
+#      print('*** %s ***'%str(the_class))
+#      # COMBAK: 効率化するならthe_class単位でloggerを切り替える
+#      from logging import getLogger, StreamHandler, DEBUG
+#      # https://docs.python.jp/3/library/logging.html#logger-objects
+#      logger = getLogger(str(the_class))
+#      handler = StreamHandler()
+#      handler.setLevel(DEBUG)
+#      logger.setLevel(DEBUG)
+#      logger.addHandler(handler)
+#      # https://docs.python.jp/3/library/logging.html#logging.Logger.propagate
+#      logger.propagate = False
+#      logger.debug(msg)
+    pass
     # if flag: print(msg)
 
 # Why Pythonista hates 'assert' a great function?
