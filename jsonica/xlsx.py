@@ -8,7 +8,7 @@ from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
-  DEBUG = True
+  DEBUG = False
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
   @property
@@ -87,11 +87,12 @@ class XLSX:
               Util.sprint('process %s -> %s'%(col_name, link), self.DEBUG)
               Util.sprint('current acc = %s'%acc, self.DEBUG)
               new_acc = XLSX.__brandnewAccForType(columns[j][1])
+              # recursive seed
               XLSX.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
             else:
               errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
           else:
-            XLSX.__store(self.typeValidator(sheet_name, v, columns[j]), accumulator=subacc)
+            XLSX.__store(self.typeValidator(sheet_name, v, columns[j]), subacc)
         # pass columns
       Util.checkEmptyOr(lambda x: XLSX.__store(x, acc), subacc)
       # pass a row
@@ -144,12 +145,11 @@ class XLSX:
 
   def typeValidator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """ Validator switch """
-    DEBUG = True
     self.schema = Schema(validator)
     raw = Util.convEscapedKV(XLSX.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
-    Util.sprint('i\'m %s. call validator'%self, DEBUG)
-    Util.sprint('== %s =='%{type_desc[0]:type_desc[1]}, DEBUG)
+    Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
+    Util.sprint('== %s =='%{type_desc[0]:type_desc[1]}, self.DEBUG)
     self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
     self.schema.validate(instance, type_desc)
     Hoare.P(instance is not None)
@@ -166,6 +166,7 @@ class XLSX:
   def __getType(cls, schema):
     Hoare.P('type' in schema.keys())
     return schema['type']
+
   @classmethod
   def __brandnewAccForType(cls, schema):
     Hoare.P(isinstance(schema, dict))
@@ -176,6 +177,7 @@ class XLSX:
       return {}
     else:
       errorout(4, _type)
+
   @classmethod
   def __store(cls, item, accumulator):
     if isinstance(accumulator, dict):

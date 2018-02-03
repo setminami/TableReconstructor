@@ -18,6 +18,8 @@ class Generate(SubCommands):
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'
 
+  DEBUG = True
+
   def __init__(self):
     super().__init__()
 
@@ -51,7 +53,7 @@ class Generate(SubCommands):
         errorout(6, args.output)
       else:
         self._print('Output json Success ➡️  %s'%args.output)
-    Util.sprint('XXX %s XXX'%x.piled_schema, True)
+    Util.sprint('XXX %s XXX'%x.piled_schema, self.DEBUG)
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)

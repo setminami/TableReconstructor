@@ -72,8 +72,7 @@ class Util:
 #      # https://docs.python.jp/3/library/logging.html#logging.Logger.propagate
 #      logger.propagate = False
 #      logger.debug(msg)
-    pass
-    # if flag: print(msg)
+    if flag: print(msg)
 
 # Why Pythonista hates 'assert' a great function?
 # Meybe it is NOT a primary func. or want to use tests forcely.
@@ -82,9 +81,9 @@ class Hoare:
   def P(cls, *formula):
     comment = lambda x: x[1] if len(x) > 1 else ''
     if __debug__:
-        if not formula[0]:
-          print('%s'%comment(formula))
-          raise AssertionError()
+      if not formula[0]:
+        print('%s'%comment(formula))
+        raise AssertionError()
     else:
       if not formula[0]:
         print('Not correct condition has found. [%s]'%comment(formula))

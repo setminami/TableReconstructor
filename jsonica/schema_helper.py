@@ -26,12 +26,16 @@ class Schema:
   抽象的な中継クラス
   下流具象クラスへの中継とreduce以外の作業はさせないこと
   """
-
-  DEBUG = True
+  schema_url = '' # subclassで設定 mandatoryのため空宣言
+  DEBUG = False
   class JsonSchema:
     """ concrete 1 as jsonschema style """
     def __init__(self):
       self.__schemas = []
+      from jsonschema import Draft4Validator, ValidationError, SchemaError
+      # TEMP: jsonschema の対応状況により切り替える
+      self.schema_url = {'$schema': 'http://json-schema.org/draft-04/schema#'}
+      self.do_validate = Draft4Validator
 
     def _makeSchema(self, type_desc):
       """
@@ -45,10 +49,9 @@ class Schema:
       return schema
 
     def _validate(self, evl, schema):
-      from jsonschema import validate, ValidationError, SchemaError
-      # jsonschema による型チェック
+      # jsonschema による型チェック Draft-04
       try:
-        validate(evl, schema)
+        self.do_validate(evl, schema)
       except ValidationError as ve:
         Util.sprint('Validation Error has found.\n%s'%ve, self.DEBUG)
         print('_validate {} with: {}'.format(evl, self.__schemas), self.DEBUG)
