@@ -8,7 +8,7 @@ from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
-  DEBUG = False
+  DEBUG = not (os.getenv('TRAVIS', False))
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
   @property
@@ -144,12 +144,12 @@ class XLSX:
       item.encoding = enc
 
   def typeValidator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
-    """ Validator switch """
+    """ Validator switcher """
     self.schema = Schema(validator)
     raw = Util.convEscapedKV(XLSX.__getType(type_desc[1]), type_desc[0], value)
     instance = Util.runtimeDictionary('{%s}'%raw)
     Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
-    Util.sprint('== %s =='%{type_desc[0]:type_desc[1]}, self.DEBUG)
+    Util.sprint('== %s : %s =='%(sheet_name, {type_desc[0]:type_desc[1]}), self.DEBUG)
     self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
     self.schema.validate(instance, type_desc)
     Hoare.P(instance is not None)

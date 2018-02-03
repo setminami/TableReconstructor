@@ -18,7 +18,7 @@ class Generate(SubCommands):
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'
 
-  DEBUG = True
+  DEBUG = not (os.getenv('TRAVIS', False))
 
   def __init__(self):
     super().__init__()

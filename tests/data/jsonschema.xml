@@ -1,63 +1,63 @@
-1 <?xml version="1.0" ?>
-2 <root>
-3   <key name="$id">http://example.com/example.json</key>
-4   <type>array</type>
-5   <definitions/>
-6   <key name="$schema">http://json-schema.org/draft-06/schema#</key>
-7   <items>
-8     <key name="$id">http://example.com/example.json/items</key>
-9     <type>object</type>
-10     <properties>
-11       <color>
-12         <key name="$id">http://example.com/example.json/items/properties/color</key>
-13         <type>string</type>
-14         <title>The Color Schema</title>
-15         <description>An explanation about the purpose of this instance.</description>
-16         <default/>
-17         <examples>
-18           <item>fff000</item>
-19         </examples>
-20       </color>
-21       <items>
-22         <key name="$id">http://example.com/example.json/items/properties/items</key>
-23         <type>array</type>
-24         <items>
-25           <key name="$id">http://example.com/example.json/items/properties/items/items</key>
-26           <type>object</type>
-27           <properties>
-28             <desc-en>
-29               <key name="$id">http://example.com/example.json/items/properties/items/items/properties/desc-en</key>
-30               <type>string</type>
-31               <title>The Desc-en Schema</title>
-32               <description>An explanation about the purpose of this instance.</description>
-33               <default/>
-34               <examples>
-35                 <item>Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default.</item>
-36               </examples>
-37             </desc-en>
-38             <sign>
-39               <key name="$id">http://example.com/example.json/items/properties/items/items/properties/sign</key>
-40               <type>string</type>
-41               <title>The Sign Schema</title>
-42               <description>An explanation about the purpose of this instance.</description>
-43               <default/>
-44               <examples>
-45                 <item>^</item>
-46               </examples>
-47             </sign>
-48           </properties>
-49         </items>
-50       </items>
-51       <title>
-52         <key name="$id">http://example.com/example.json/items/properties/title</key>
-53         <type>string</type>
-54         <title>The Title Schema</title>
-55         <description>An explanation about the purpose of this instance.</description>
-56         <default/>
-57         <examples>
-58           <item>Anchors</item>
-59         </examples>
-60       </title>
-61     </properties>
-62   </items>
-63 </root>
+<?xml version="1.0" ?>
+<root>
+ <key name="$id">http://example.com/example.json</key>
+ <type>array</type>
+ <definitions/>
+ <key name="$schema">http://json-schema.org/draft-06/schema#</key>
+ <items>
+   <key name="$id">http://example.com/example.json/items</key>
+   <type>object</type>
+     <properties>
+       <color>
+         <key name="$id">http://example.com/example.json/items/properties/color</key>
+         <type>string</type>
+         <title>The Color Schema</title>
+         <description>An explanation about the purpose of this instance.</description>
+         <default/>
+         <examples>
+           <item>fff000</item>
+         </examples>
+       </color>
+       <items>
+         <key name="$id">http://example.com/example.json/items/properties/items</key>
+         <type>array</type>
+         <items>
+           <key name="$id">http://example.com/example.json/items/properties/items/items</key>
+           <type>object</type>
+           <properties>
+             <desc-en>
+               <key name="$id">http://example.com/example.json/items/properties/items/items/properties/desc-en</key>
+               <type>string</type>
+               <title>The Desc-en Schema</title>
+               <description>An explanation about the purpose of this instance.</description>
+               <default/>
+               <examples>
+                 <item>Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default.</item>
+               </examples>
+             </desc-en>
+             <sign>
+               <key name="$id">http://example.com/example.json/items/properties/items/items/properties/sign</key>
+               <type>string</type>
+               <title>The Sign Schema</title>
+               <description>An explanation about the purpose of this instance.</description>
+               <default/>
+               <examples>
+                 <item>^</item>
+               </examples>
+             </sign>
+           </properties>
+         </items>
+       </items>
+       <title>
+         <key name="$id">http://example.com/example.json/items/properties/title</key>
+         <type>string</type>
+         <title>The Title Schema</title>
+         <description>An explanation about the purpose of this instance.</description>
+         <default/>
+         <examples>
+           <item>Anchors</item>
+         </examples>
+       </title>
+     </properties>
+   </items>
+</root>
