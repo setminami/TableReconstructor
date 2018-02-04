@@ -145,27 +145,32 @@ class XLSX:
       item.encoding = enc
 
   def type_validator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
-    """ Validator switcher """
+    """
+    Validator switcher
+    validation をpassした評価値のみを返す
+    """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
     instance = Util.runtime_dict('{%s}'%raw)
     Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
     self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
-    self.schema.validate(instance, type_desc)
+    Util.sprint('>> %s -> type: %s\n%s'%(sheet_name, type_desc, instance), self.DEBUG)
     Hoare.P(instance is not None)
+    self.schema.validate(instance, type_desc)
     return instance
 
   def generate_sheet(self, name):
     return self.book.create_sheet(name)
 
-  def put_cell_comment(self, cell, text, author=PROGNAME):
-    from openpyxl.comments import Comment
-    cell.comment = Comment(text, author)
-
-  def generate_leaf(self, key, list, schema):
+  def generate_leaf(self, key, l, schema):
     """ schemaに従ったitemを生成 """
     # NOTE: recursive procが分解されている事に留意
-    return {key: self.generate_json(list, XLSX.renew_acc(schema))}
+    return {key: self.generate_json(l, XLSX.renew_acc(schema))}
+
+  @classmethod
+  def put_cell_comment(cls, cell, text, author=PROGNAME):
+    from openpyxl.comments import Comment
+    cell.comment = Comment(text, author)
 
   @classmethod
   def __get_type(cls, schema):
@@ -185,6 +190,10 @@ class XLSX:
 
   @classmethod
   def __store(cls, item, accumulator):
+    """
+    評価済みが保証された値を、rootのleafに連結
+    accumlator: either dict or list
+    """
     if isinstance(accumulator, dict):
       accumulator.update(item)
     elif isinstance(accumulator, list):

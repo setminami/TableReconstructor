@@ -45,7 +45,7 @@ class SettingProcessor:
           # care off-by-one
           cell = sheet.cell(row=1, column=i + 1, value=c[COL_NAME])
           schema = '{}'.format(c[SCHEMA]).lower()
-          self.processor.put_cell_comment(cell, '# {}\n{}'.format(c[NOTES], schema))
+          XLSX.put_cell_comment(cell, '# {}\n{}'.format(c[NOTES], schema))
           if c[SCHEMA][SCHEMA_TYPE] == 'array':
             for csheet in c[CHILD_SHEET]:
               self.create_sheets(c[REL_ITEM], csheet)
