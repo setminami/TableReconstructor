@@ -46,17 +46,17 @@ class XLSX:
     else: # init
       self.book = openpyxl.Workbook()
 
-  def generateJSON(self, sheet_name, acc=None):
+  def generate_json(self, sheet_name, acc=None):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
-    sheets = self.__nameToSheets()
+    sheets = self.__name_to_sheets()
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
     Util.sprint('in process %s'%sheet_name, self.DEBUG)
     Hoare.P(sheet_name in sheet_names, '"%s" not found in %s'%(sheet_name ,sheet_names))
     root_sheet = sheets[sheet_name]
-    self.checkCharEncode(root_sheet)
+    self.check_charcode(root_sheet)
     columns = []
     acc = [] if not acc else acc
     Util.sprint('I\'ll update {}'.format(acc), self.DEBUG)
@@ -65,7 +65,7 @@ class XLSX:
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
-        self.__outputCSV(self.format_output, root_sheet, self.char_encode)
+        self.__output_to_csv(self.format_output, root_sheet, self.char_encode)
       for j, cell in enumerate(row):
         v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
         if v is None: continue # cell check
@@ -73,7 +73,7 @@ class XLSX:
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
-            columns.append((v, Util.runtimeDictionary(cell.comment.text)))
+            columns.append((v, Util.runtime_dict(cell.comment.text)))
           else:
             self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
@@ -83,22 +83,23 @@ class XLSX:
             # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
             link = v.lstrip(XLSX.sheet_link_sign)
             if link in sheet_names:
-              col_name = columns[j][0]
+              col_name, col_schema = columns[j]
               Util.sprint('process %s -> %s'%(col_name, link), self.DEBUG)
               Util.sprint('current acc = %s'%acc, self.DEBUG)
-              new_acc = XLSX.__brandnewAccForType(columns[j][1])
               # recursive seed
-              XLSX.__store({col_name:self.generateJSON(sheet_name=link, acc=new_acc)}, subacc)
+              XLSX.__store(
+                self.generate_leaf(col_name, link, col_schema),
+                subacc)
             else:
               errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
           else:
-            XLSX.__store(self.typeValidator(sheet_name, v, columns[j]), subacc)
+            XLSX.__store(self.type_validator(sheet_name, v, columns[j]), subacc)
         # pass columns
-      Util.checkEmptyOr(lambda x: XLSX.__store(x, acc), subacc)
+      Util.check_emptyOR(lambda x: XLSX.__store(x, acc), subacc)
       # pass a row
     return acc
 
-  def __outputCSV(self, base_path, sheet, enc):
+  def __output_to_csv(self, base_path, sheet, enc):
     """
     CSV, TSV出力
     """
@@ -113,7 +114,7 @@ class XLSX:
       for cols in sheet.rows:
         writer.writerow([str(col.value or '') for col in cols])
 
-  def __nameToSheets(self):
+  def __name_to_sheets(self):
     """
     sheetを{sheet名:sheet}形式にして返す
     instance 生成後、実行中のExcel更新は考えない
@@ -123,7 +124,7 @@ class XLSX:
       self.__sheets_cache = {s.title: s for s in self.book.worksheets}
     return self.__sheets_cache
 
-  def checkCharEncode(self, item, valid_enc=None):
+  def check_charcode(self, item, valid_enc=None):
     Hoare.P(isinstance(item, openpyxl.workbook.workbook.Workbook) or \
             isinstance(item, openpyxl.worksheet.Worksheet) or \
             isinstance(item, openpyxl.cell.Cell))
@@ -143,34 +144,38 @@ class XLSX:
       # TODO: excel rw 状態チェック
       item.encoding = enc
 
-  def typeValidator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
+  def type_validator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """ Validator switcher """
     self.schema = Schema(validator)
-    raw = Util.convEscapedKV(XLSX.__getType(type_desc[1]), type_desc[0], value)
-    instance = Util.runtimeDictionary('{%s}'%raw)
+    raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
+    instance = Util.runtime_dict('{%s}'%raw)
     Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
-    Util.sprint('== %s : %s =='%(sheet_name, {type_desc[0]:type_desc[1]}), self.DEBUG)
     self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
     self.schema.validate(instance, type_desc)
     Hoare.P(instance is not None)
     return instance
 
-  def generateSheet(self, name):
+  def generate_sheet(self, name):
     return self.book.create_sheet(name)
 
-  def putCommentToCell(self, cell, text, author=PROGNAME):
+  def put_cell_comment(self, cell, text, author=PROGNAME):
     from openpyxl.comments import Comment
     cell.comment = Comment(text, author)
 
+  def generate_leaf(self, key, list, schema):
+    """ schemaに従ったitemを生成 """
+    # NOTE: recursive procが分解されている事に留意
+    return {key: self.generate_json(list, XLSX.renew_acc(schema))}
+
   @classmethod
-  def __getType(cls, schema):
+  def __get_type(cls, schema):
     Hoare.P('type' in schema.keys())
     return schema['type']
 
   @classmethod
-  def __brandnewAccForType(cls, schema):
+  def renew_acc(cls, schema):
     Hoare.P(isinstance(schema, dict))
-    _type = XLSX.__getType(schema)
+    _type = XLSX.__get_type(schema)
     if _type == TypeSign.ARRAY:
       return []
     elif _type == TypeSign.OBJ:

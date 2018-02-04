@@ -37,7 +37,7 @@ class Schema:
       self.schema_url = {'$schema': 'http://json-schema.org/draft-04/schema#'}
       self.do_validate = Draft4Validator
 
-    def _makeSchema(self, type_desc):
+    def _make_schema(self, type_desc):
       """
       最小粒度でのjsonschema構築
       """
@@ -68,14 +68,14 @@ class Schema:
     if validator == Validator.jsonschema:
       self.schema = Schema.JsonSchema()
 
-  def makeSchema(self, desc):
+  def make_schema(self, desc):
     """ 一項目ずつの定義であることに留意 """
     Hoare.P(isinstance(desc[0], str) and isinstance(desc[1], dict))
     # TEMP: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
-    self.schema_collection.append(self.schema._makeSchema(desc))
+    self.schema_collection.append(self.schema._make_schema(desc))
     return self.schema_collection[-1]
 
   def validate(self, evl, desc):
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
-    self.schema._validate(evl, self.makeSchema(desc))
+    self.schema._validate(evl, self.make_schema(desc))
     Util.sprint('i\'m {} \nNow I have -> {}'.format(self, self.schema_collection), self.DEBUG)

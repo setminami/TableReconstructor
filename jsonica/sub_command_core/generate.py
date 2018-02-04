@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from jsonica import errorout, refactorCheck
+from jsonica import errorout, refactor_check
 import os, sys, json, argparse, contextlib
 from functools import reduce
 
@@ -34,7 +34,7 @@ class Generate(SubCommands):
     args = kwargs['args']
     # default option 対策 seelaso AnalyzeXSeparatedOutPath
     # https://github.com/setminami/Jsonica/issues/47
-    refactorCheck(args.__class__.__name__ == 'Namespace')
+    refactor_check(args.__class__.__name__ == 'Namespace')
     if not args.output_format:
       args.output_format = ('tsv', output_delimiters[1], './output/')
     self.args = args
@@ -44,7 +44,7 @@ class Generate(SubCommands):
     self._print('Analyzing... %s'%fileloc)
     x = XLSX(workpath, args.encoding, args.output_format)
     # sys.setrecursionlimit(1024 * 8)
-    j = x.generateJSON(sheet_name=args.root_sheet)
+    j = x.generate_json(sheet_name=args.root_sheet)
     with wild_open(args.output, encoding=args.encoding) as f:
       try:
         print(json.dumps(j, sort_keys=True, indent=args.human_readable) \
@@ -55,8 +55,8 @@ class Generate(SubCommands):
         self._print('Output json Success ➡️  %s'%args.output)
     Util.sprint('XXX %s XXX'%x.piled_schema, self.DEBUG)
 
-  def makeArgparse(self, subparser):
-    myparser = super().makeArgparse(subparser)
+  def make_argparse(self, subparser):
+    myparser = super().make_argparse(subparser)
     outs = reduce(lambda l, r: '{} | {}'.format(l, r), output_formats)
     myparser.add_argument('-i', '--input',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',

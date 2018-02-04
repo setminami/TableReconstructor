@@ -5,16 +5,16 @@ class Util:
   comment_sign = ['#', '/{2}']
 
   @classmethod
-  def stripComments(cls, rawStr):
+  def strip_comments(cls, rawStr):
     Hoare.P(isinstance(rawStr, str))
     # ‘/\*/?([^/]|[^*]/)*\*/’ Ctype
     return re.sub(r'\n*[%s].*\n'%''.join(cls.comment_sign), '', rawStr.strip())
 
   @classmethod
-  def __checkValidDictionary(cls, raw_value):
+  def __validate_dict(cls, raw_value):
     """ このmodule で固有の読み替え問題を解決 """
-    local = cls.stripComments(raw_value)
-    local = cls.__convPyBoolean(local)
+    local = cls.strip_comments(raw_value)
+    local = cls.__conv_pyBoolean(local)
     # print('>>> %s'%local)
     # TEMP: 真面目な構文チェック
     if not (local.startswith('{') and local.endswith('}')):
@@ -24,19 +24,19 @@ class Util:
     return asDic
 
   @classmethod
-  def runtimeDictionary(cls, rawStr):
-    asDic = cls.__checkValidDictionary(rawStr)
+  def runtime_dict(cls, rawStr):
+    asDic = cls.__validate_dict(rawStr)
     return ast.literal_eval(asDic)
 
   @classmethod
-  def __convPyBoolean(cls, v):
+  def __conv_pyBoolean(cls, v):
     tr = re.compile(r'true', re.IGNORECASE)
     fr = re.compile(r'false', re.IGNORECASE)
     local = re.sub(tr, 'True', v)
     return re.sub(fr, 'False', local)
 
   @classmethod
-  def convEscapedKV(cls, _type, key, value, enc='utf-8'):
+  def conv_escapedKV(cls, _type, key, value, enc='utf-8'):
     from schema_helper import TypeSign
     key = key.encode('unicode-escape').decode(enc)
     value = value.encode('unicode-escape').decode(enc)
@@ -45,7 +45,7 @@ class Util:
     return local
 
   @classmethod
-  def checkEmptyOr(cls, proc, item):
+  def check_emptyOR(cls, proc, item):
     """
     itemが空(list, dict, '', None...)なら何もしない、空でなければprocを実行
     """

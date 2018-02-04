@@ -43,7 +43,7 @@ class Jsonica:
     subcommand = self.sub_commands[args.subcmd_name]
     subcommand.__run__(args=args)
 
-  def prepareArgParser(self):
+  def prepare_argparser(self):
     argParser = argparse.ArgumentParser(prog=PROGNAME,
                                         description='generate complex JSON structure with analyzing META descripted file like xlsx.')
     # Version desctiprtion
@@ -54,7 +54,7 @@ class Jsonica:
     subParsers = argParser.add_subparsers(dest='subcmd_name', metavar='', help='sub-commands')
     for name, command in self.sub_commands.items():
       if name == command.command_name:
-        command.makeArgparse(subParsers)
+        command.make_argparse(subParsers)
     argParser.add_argument('-e', '--encoding',
                             type=str, default='utf-8', metavar='{python built-in codec}',
                             help='Set default charactor encode. When not set this, it is treated as "utf-8".\
@@ -72,7 +72,7 @@ def errorout(e, additonal=''):
   print('%s : %s'%(errors[e], additonal), file=sys.stderr)
   sys.exit(e)
 
-def refactorCheck(validation): Hoare.P(validation, 'Have you made refactor??')
+def refactor_check(validation): Hoare.P(validation, 'Have you made refactor??')
 
 if __name__ == '__main__':
   ins = Jsonica()
@@ -81,5 +81,5 @@ if __name__ == '__main__':
   # FIXME: とりあえず仮実装 Plugin実装する際に再考
   for x in [Initialize(), Generate()]:
     ins.regist_subcommand(x)
-  ins.prepareArgParser()
+  ins.prepare_argparser()
   ins.test()
