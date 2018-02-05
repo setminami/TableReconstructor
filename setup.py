@@ -4,7 +4,7 @@
 from setuptools import setup, find_packages
 # for PyPI
 setup(name='jsonica',
-      version='0.0.9',
+      version='0.1.0',
       description='manage huge json as xlsx statistically.',
       author='setminami',
       author_email='set.minami@gmail.com',
