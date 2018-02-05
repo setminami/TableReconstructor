@@ -1,0 +1,3 @@
+AnalyzeXSeparatedOutPath called: tsv:./output
+Analyzing... /Users/set/Desktop/Github/JSON_XLSX_Manager/Samples/cheatsheet.xlsx
+Output json Success ➡️  ./output/cheatsheet.json

@@ -23,16 +23,17 @@ class Generate(SubCommands):
   @property
   def help(self): return self.__help
 
-  def run(self, **kwargs):
+  def __run__(self, **kwargs):
     # each process brabrabra
     pass
 
-  def makeArgparse(self, subparser):
-    myparser = super().makeArgparse(subparser)
+  def make_argparse(self, subparser):
+    myparser = super().make_argparse(subparser)
     # write each subcommand arg processor here
     myparser.add_argument('-v', '--version',
                         action='version', version='{} {}'.format(self.command_name, VERSION))
 '''
+
 from jsonica import PROGNAME
 from util import Hoare
 
@@ -81,7 +82,7 @@ class SubCommands:
 
   def __run__(self, **kwargs): Hoare.P(False)
 
-  def makeArgparse(self, subparser):
+  def make_argparse(self, subparser):
     """ 個別optionを登録したargparseをsubparseにして返す """
     parser = subparser.add_parser(self.command_name, aliases=self.aliases, help=self.help)
     parser.add_argument('-v', '--version',
