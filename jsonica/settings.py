@@ -23,19 +23,19 @@ class SettingProcessor:
     self.out = out
     self.enc = enc
 
-  def checkSettingFile(self):
+  def check_settingfile(self):
     with open(self.settings, 'r') as f:
       self.setting_data = yaml.safe_load(f)
     if self.setting_data[ATTACH[0]] == ATTACH[1][0]:
       self.processor = XLSX(self.settings, self.enc)
     Hoare.P(self.processor)
 
-  def createSheets(self, item=ROOT, name=None):
+  def create_sheets(self, item=ROOT, name=None):
     root_item = self.setting_data[item]
     if root_item:
       sheet_name = name if (name and name != '') else root_item[SHEET_NAME]
       if sheet_name:
-        sheet = self.processor.generateSheet(sheet_name)
+        sheet = self.processor.generate_sheet(sheet_name)
       else:
         raise SettingsError('Invalid sheet name', sheet_name)
       cols = root_item[COLUMNS]
@@ -45,10 +45,10 @@ class SettingProcessor:
           # care off-by-one
           cell = sheet.cell(row=1, column=i + 1, value=c[COL_NAME])
           schema = '{}'.format(c[SCHEMA]).lower()
-          self.processor.putCommentToCell(cell, '# {}\n{}'.format(c[NOTES], schema))
+          XLSX.put_cell_comment(cell, '# {}\n{}'.format(c[NOTES], schema))
           if c[SCHEMA][SCHEMA_TYPE] == 'array':
             for csheet in c[CHILD_SHEET]:
-              self.createSheets(c[REL_ITEM], csheet)
+              self.create_sheets(c[REL_ITEM], csheet)
       else:
         # 設定によってエラーとはいえないケースあり
         print('%s : the item no columns.'%sheet_name)
@@ -60,9 +60,6 @@ class SettingProcessor:
     output = self.out
     print(r'generate template to {}'.format(output))
     self.processor.book.save(output)
-
-  def __print(self, _str, flag=False):
-    if flag: print(_str)
 
 class SettingsError(Exception):
   """ ローカル設定 に関するエラー """

@@ -1,0 +1,36 @@
+{
+  "root/color": {"color": {"type": ["string", "null"], "required": True}},
+  "root/title": {"title": {"type": ["string"], "required": True}},
+  "root/items": {"type": "array", "required": True},
+  "root/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-Anchors/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-Anchors/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-CharClass/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-CharClass/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-POSIX-CHAR/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-POSIX-CHAR/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-Groups/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-Groups/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-bracketEx/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-bracketEx/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-Quantifiers/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-Quantifiers/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-spchar/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-spchar/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-assertion/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-assertion/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-Case Modifiers/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-Case Modifiers/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}},
+
+  "items-Modifiers/sign": {"sign": {"type": ["string", "null"], "required": True}},
+  "items-Modifiers/desc-en": {"desc-en": {"type": ["string", "null"], "required": False}}
+}

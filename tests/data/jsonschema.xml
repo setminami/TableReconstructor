@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<root>
+ <key name="$id">http://example.com/example.json</key>
+ <type>array</type>
+ <definitions/>
+ <key name="$schema">http://json-schema.org/draft-06/schema#</key>
+ <items>
+   <key name="$id">http://example.com/example.json/items</key>
+   <type>object</type>
+     <properties>
+       <color>
+         <key name="$id">http://example.com/example.json/items/properties/color</key>
+         <type>string</type>
+         <title>The Color Schema</title>
+         <description>An explanation about the purpose of this instance.</description>
+         <default/>
+         <examples>
+           <item>fff000</item>
+         </examples>
+       </color>
+       <items>
+         <key name="$id">http://example.com/example.json/items/properties/items</key>
+         <type>array</type>
+         <items>
+           <key name="$id">http://example.com/example.json/items/properties/items/items</key>
+           <type>object</type>
+           <properties>
+             <desc-en>
+               <key name="$id">http://example.com/example.json/items/properties/items/items/properties/desc-en</key>
+               <type>string</type>
+               <title>The Desc-en Schema</title>
+               <description>An explanation about the purpose of this instance.</description>
+               <default/>
+               <examples>
+                 <item>Matches at the start of string or start of line if multi-line mode is enabled. Many regex implementations have multi-line mode enabled by default.</item>
+               </examples>
+             </desc-en>
+             <sign>
+               <key name="$id">http://example.com/example.json/items/properties/items/items/properties/sign</key>
+               <type>string</type>
+               <title>The Sign Schema</title>
+               <description>An explanation about the purpose of this instance.</description>
+               <default/>
+               <examples>
+                 <item>^</item>
+               </examples>
+             </sign>
+           </properties>
+         </items>
+       </items>
+       <title>
+         <key name="$id">http://example.com/example.json/items/properties/title</key>
+         <type>string</type>
+         <title>The Title Schema</title>
+         <description>An explanation about the purpose of this instance.</description>
+         <default/>
+         <examples>
+           <item>Anchors</item>
+         </examples>
+       </title>
+     </properties>
+   </items>
+</root>

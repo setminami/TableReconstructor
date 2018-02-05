@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from . import SubCommands
-from jsonica import errorout, refactorCheck
+from jsonica import errorout, refactor_check
 import os, sys, json, argparse, contextlib
 from functools import reduce
+
+from util import Util
 
 output_formats = ['csv', 'tsv']
 output_delimiters = [',', '\t']
@@ -11,10 +13,12 @@ SP_FILE = '-'
 
 class Generate(SubCommands):
   """ generate command """
-  VERSION = '0.0.9'
+  VERSION = '0.1.0'
 
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'
+
+  DEBUG = not (os.getenv('TRAVIS', False))
 
   def __init__(self):
     super().__init__()
@@ -30,17 +34,17 @@ class Generate(SubCommands):
     args = kwargs['args']
     # default option 対策 seelaso AnalyzeXSeparatedOutPath
     # https://github.com/setminami/Jsonica/issues/47
-    refactorCheck(args.__class__.__name__ == 'Namespace')
+    refactor_check(args.__class__.__name__ == 'Namespace')
     if not args.output_format:
       args.output_format = ('tsv', output_delimiters[1], './output/')
     self.args = args
     fileloc = os.path.abspath(os.path.expanduser(args.input))
     workpath = Generate.__treatFileTypes(fileloc)
     from xlsx import XLSX
-    self.__print('Analyzing... %s'%fileloc)
+    self._print('Analyzing... %s'%fileloc)
     x = XLSX(workpath, args.encoding, args.output_format)
     # sys.setrecursionlimit(1024 * 8)
-    j = x.generateJSON(sheet_name=args.root_sheet)
+    j = x.generate_json(sheet_name=args.root_sheet)
     with wild_open(args.output, encoding=args.encoding) as f:
       try:
         print(json.dumps(j, sort_keys=True, indent=args.human_readable) \
@@ -48,10 +52,11 @@ class Generate(SubCommands):
       except:
         errorout(6, args.output)
       else:
-        self.__print('Output json Success ➡️  %s'%args.output)
+        self._print('Output json Success ➡️  %s'%args.output)
+    Util.sprint('XXX %s XXX'%x.piled_schema, self.DEBUG)
 
-  def makeArgparse(self, subparser):
-    myparser = super().makeArgparse(subparser)
+  def make_argparse(self, subparser):
+    myparser = super().make_argparse(subparser)
     outs = reduce(lambda l, r: '{} | {}'.format(l, r), output_formats)
     myparser.add_argument('-i', '--input',
                             nargs='?', type=str, default='./Samples/cheatsheet.xlsx',
@@ -64,6 +69,12 @@ class Generate(SubCommands):
                             nargs='?', type=str, default='root', # Default root sheet name
                             metavar='sheetname',
                             help='set a sheetname in xlsx book have. \nconstruct json tree from the sheet as root item. "root" is Default root sheet name.')
+#  reserve
+#    myparser.add_argument('-s', '--schema',
+#                            nargs='?', type=str,
+#                            metavar='schema url',
+#                            help='http://json-schema.org/draft-04/schema#')
+
     myparser.add_argument('-o', '--output',
                             nargs='?', type=str, action=AnalyzeJSONOutPath,
                             metavar='path/to/outputfile(.json)',
@@ -82,7 +93,7 @@ class Generate(SubCommands):
     else:
       errorout(7, '%s format is not supported yet.'%file)
 
-  def __print(self, msg):
+  def _print(self, msg):
     if not (self.args.output == SP_FILE): print(msg)
 
 # argparse actions
