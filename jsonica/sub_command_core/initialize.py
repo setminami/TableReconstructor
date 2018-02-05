@@ -5,7 +5,7 @@ import os
 
 class Initialize(SubCommands):
   """ initialize command """
-  VERSION = '0.0.9'
+  VERSION = '0.1.0'
 
   __aliases = ['init', 'i']
   __help = 'create formated workbook template.'
@@ -30,17 +30,17 @@ class Initialize(SubCommands):
     else:
       errorout(8, r'Please make sure [%s] location?'%setting_file)
     settings = SettingProcessor(setting_file, args.template_xlsx, args.encoding)
-    settings.checkSettingFile()
+    settings.check_settingfile()
     try:
-      settings.createSheets()
+      settings.create_sheets()
     except SettingsError as se:
       print(se)
     else:
       settings.save()
       print('Construct xlsx file Success ➡️  %s'%args.template_xlsx)
 
-  def makeArgparse(self, subparser):
-    myparser = super().makeArgparse(subparser)
+  def make_argparse(self, subparser):
+    myparser = super().make_argparse(subparser)
     myparser.add_argument('-tx', '--template_xlsx',
                             nargs='?', type=str, default='./template.xlsx', metavar='path/to/outputfile(.xlsx)',
                             help='This is an initialize helper option.\n\

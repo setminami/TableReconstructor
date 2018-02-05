@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys, enum
-from util import Hoare
+from util import Util, Hoare
 
 class Validator(str, enum.Enum):
   """ 対応validator """
@@ -22,14 +22,25 @@ class TypeSign(str, enum.Enum):
   JSON_NULL = 'null'
 
 class Schema:
-  """ abstract """
+  """
+  抽象的な中継クラス
+  下流具象クラスへの中継とreduce以外の作業はさせないこと
+  """
+  schema_url = '' # subclassで設定 mandatoryのため空宣言
   DEBUG = False
   class JsonSchema:
     """ concrete 1 as jsonschema style """
     def __init__(self):
       self.__schemas = []
+      from jsonschema import Draft4Validator, ValidationError, SchemaError
+      # TEMP: jsonschema の対応状況により切り替える
+      self.schema_url = {'$schema': 'http://json-schema.org/draft-04/schema#'}
+      self.do_validate = Draft4Validator
 
-    def _makeSchema(self, type_desc):
+    def _make_schema(self, type_desc):
+      """
+      最小粒度でのjsonschema構築
+      """
       schema = {'type':'object'}
       if 'required' in type_desc[1].keys():
         schema['required'] = [type_desc[0]]
@@ -38,33 +49,38 @@ class Schema:
       return schema
 
     def _validate(self, evl, schema):
-      from jsonschema import validate, ValidationError, SchemaError
-      # jsonschema による型チェック
+      # jsonschema による型チェック Draft-04
       try:
-        validate(evl, schema)
+        self.do_validate(evl, schema)
       except ValidationError as ve:
-        self.__print('Validation Error has found.\n%s'%ve)
+        Util.sprint('Validation Error has found.\n%s'%ve, self.DEBUG)
+        print('_validate {} with: {}'.format(evl, self.__schemas), self.DEBUG)
         sys.exit(-1)
       except SchemaError as se:
-        self.__print('Schema Error has found.\n%s'%se)
+        Util.sprint('Schema Error has found.\n%s'%se, self.DEBUG)
+        print('Error Schema : %s'%self.__schemas)
         sys.exit(-2)
 
   def __init__(self, validator):
     self.schema_name = validator
+    self.schema_collection = []
     # TEMP: type switch
     if validator == Validator.jsonschema:
       self.schema = Schema.JsonSchema()
 
-  def makeSchema(self, desc):
+  def make_schema(self, desc):
     """ 一項目ずつの定義であることに留意 """
     Hoare.P(isinstance(desc[0], str) and isinstance(desc[1], dict))
-    # HACK: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
-    return self.schema._makeSchema(desc)
+    # TEMP: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
+    self.schema_collection.append(self.schema._make_schema(desc))
+    return self.schema_collection[-1]
 
   def validate(self, evl, desc):
-    sc = self.makeSchema(desc)
+    """
+    _validateに流す
+    成功すればスルー、失敗したらその場でcommand error / 判定値は返さない
+    NOTE: 具体的なerrorハンドリングは_validate内で処理すること
+    """
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
-    self.schema._validate(evl, sc)
-
-    def __print(self, _str, flag=False):
-      if flag: print(_str)
+    self.schema._validate(evl, self.make_schema(desc))
+    Util.sprint('i\'m {} \nNow I have -> {}'.format(self, self.schema_collection), self.DEBUG)
