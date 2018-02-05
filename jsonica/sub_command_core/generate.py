@@ -13,7 +13,7 @@ SP_FILE = '-'
 
 class Generate(SubCommands):
   """ generate command """
-  VERSION = '0.0.9'
+  VERSION = '0.1.0'
 
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'

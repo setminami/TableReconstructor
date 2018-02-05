@@ -55,7 +55,7 @@ class Util:
   @classmethod
   def sprint(cls, msg, flag=False):
     """
-    class, f単位で出力制御設定するためのシンプルなDEBUG出力関数 
+    class, f単位で出力制御設定するためのシンプルなDEBUG出力関数
     Util\.sprint\(.+,\s*True\s*\) が見つかったらprintに書き換える
     """
 #    if flag:

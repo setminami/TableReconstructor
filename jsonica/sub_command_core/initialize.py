@@ -5,7 +5,7 @@ import os
 
 class Initialize(SubCommands):
   """ initialize command """
-  VERSION = '0.0.9'
+  VERSION = '0.1.0'
 
   __aliases = ['init', 'i']
   __help = 'create formated workbook template.'

@@ -5,7 +5,7 @@ import argparse
 from util import Hoare
 
 # global settings.
-VERSION = '0.0.9'
+VERSION = '0.1.0'
 PROGNAME = os.path.basename(__file__)
 
 codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encodings'
