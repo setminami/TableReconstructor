@@ -26,11 +26,16 @@ class XLSX:
     return self.__all_schema
   @piled_schema.setter
   def piled_schema(self, value):
-    """ value : (sheet:Some, schema:dict) """
-    if value[0] in self.piled_schema.keys():
-      self.piled_schema[value[0]].update(value[1])
+    """
+    schema用accumrator
+    value : (sheet:Some, column:Some, schema:dict)
+    """
+    sheet, col, schema = value
+    synth_key = '{}/{}'.format(sheet, col)
+    if sheet in self.piled_schema.keys():
+      self.piled_schema[synth_key].update(schema)
     else:
-      self.piled_schema[value[0]] = value[1]
+      self.piled_schema[synth_key] = schema
 
   def __init__(self, file, enc, forms=None):
     self.filepath = file
@@ -78,6 +83,7 @@ class XLSX:
             self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
           # TODO: 関数へ置き換え type = array, objectのケース をカバー
+          # 別sheet評価
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
             # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
             # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
@@ -88,7 +94,7 @@ class XLSX:
               Util.sprint('current acc = %s'%acc, self.DEBUG)
               # recursive seed
               XLSX.__store(
-                self.generate_leaf(col_name, link, col_schema),
+                self.generate_leaf(root_sheet.title, col_name, link, col_schema),
                 subacc)
             else:
               errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
@@ -147,13 +153,14 @@ class XLSX:
   def type_validator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """
     Validator switcher
-    validation をpassした評価値のみを返す
+    validation を passしたら成功した**評価値のみ**を返す
+    失敗したら、その場でcommand errorとする
     """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
     instance = Util.runtime_dict('{%s}'%raw)
     Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
-    self.piled_schema = (sheet_name, {type_desc[0]:type_desc[1]})
+    self.piled_schema = (sheet_name, type_desc[0], {type_desc[0]:type_desc[1]})
     Util.sprint('>> %s -> type: %s\n%s'%(sheet_name, type_desc, instance), self.DEBUG)
     Hoare.P(instance is not None)
     self.schema.validate(instance, type_desc)
@@ -162,9 +169,10 @@ class XLSX:
   def generate_sheet(self, name):
     return self.book.create_sheet(name)
 
-  def generate_leaf(self, key, l, schema):
+  def generate_leaf(self, parent, key, l, schema):
     """ schemaに従ったitemを生成 """
     # NOTE: recursive procが分解されている事に留意
+    self.piled_schema = (parent, key, schema)
     return {key: self.generate_json(l, XLSX.renew_acc(schema))}
 
   @classmethod

@@ -17,6 +17,16 @@
          "fff000"
        ]
      },
+     "title": {
+       "$id": "http://example.com/example.json/items/properties/title",
+       "type": "string",
+       "title": "The Title Schema",
+       "description": "An explanation about the purpose of this instance.",
+       "default": "",
+       "examples": [
+         "Anchors"
+       ]
+     },
      "items": {
        "$id": "http://example.com/example.json/items/properties/items",
        "type": "array",
@@ -46,16 +56,6 @@
            }
          }
        }
-     },
-     "title": {
-       "$id": "http://example.com/example.json/items/properties/title",
-       "type": "string",
-       "title": "The Title Schema",
-       "description": "An explanation about the purpose of this instance.",
-       "default": "",
-       "examples": [
-         "Anchors"
-       ]
      }
    }
  }

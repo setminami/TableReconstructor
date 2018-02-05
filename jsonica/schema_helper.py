@@ -76,6 +76,11 @@ class Schema:
     return self.schema_collection[-1]
 
   def validate(self, evl, desc):
+    """
+    _validateに流す
+    成功すればスルー、失敗したらその場でcommand error / 判定値は返さない
+    NOTE: 具体的なerrorハンドリングは_validate内で処理すること
+    """
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, self.make_schema(desc))
     Util.sprint('i\'m {} \nNow I have -> {}'.format(self, self.schema_collection), self.DEBUG)

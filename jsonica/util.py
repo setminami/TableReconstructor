@@ -47,13 +47,15 @@ class Util:
   @classmethod
   def check_emptyOR(cls, proc, item):
     """
-    itemが空(list, dict, '', None...)なら何もしない、空でなければprocを実行
+    proc: lambda x: ... or function 引数をひとつ持つ関数
+    item: 空 (list|dict|str) | None なら何もしない、空でなければprocを実行
     """
     if bool(item): proc(item)
 
   @classmethod
   def sprint(cls, msg, flag=False):
     """
+    class, f単位で出力制御設定するためのシンプルなDEBUG出力関数 
     Util\.sprint\(.+,\s*True\s*\) が見つかったらprintに書き換える
     """
 #    if flag:
