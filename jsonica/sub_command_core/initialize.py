@@ -12,7 +12,6 @@ class Initialize(SubCommands):
 
   def __init__(self):
     super().__init__()
-    pass
 
   @property
   def command_names(self): return [self.command_name] + self.aliases
@@ -39,7 +38,6 @@ class Initialize(SubCommands):
     else:
       settings.save()
       print('Construct xlsx file Success ➡️  %s'%args.template_xlsx)
-    pass
 
   def makeArgparse(self, subparser):
     myparser = super().makeArgparse(subparser)
@@ -48,4 +46,3 @@ class Initialize(SubCommands):
                             help='This is an initialize helper option.\n\
                             Generate template xlsx file based on same filename.yaml.\
                             \n**And if you set this, other options are ignored.** will be subcommand.')
-    pass

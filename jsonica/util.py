@@ -6,7 +6,7 @@ class Util:
 
   @classmethod
   def stripComments(cls, rawStr):
-    assert isinstance(rawStr, str)
+    Hoare.P(isinstance(rawStr, str))
     # ‘/\*/?([^/]|[^*]/)*\*/’ Ctype
     return re.sub(r'\n*[%s].*\n'%''.join(cls.comment_sign), '', rawStr.strip())
 
@@ -36,11 +36,11 @@ class Util:
     return re.sub(fr, 'False', local)
 
   @classmethod
-  def convEscapedKV(cls, type, key, value, enc='utf-8'):
+  def convEscapedKV(cls, _type, key, value, enc='utf-8'):
     from schema_helper import TypeSign
     key = key.encode('unicode-escape').decode(enc)
     value = value.encode('unicode-escape').decode(enc)
-    value = '{!s}'.format('"%s"'%value if TypeSign.STRING in type else value)
+    value = '{!s}'.format('"%s"'%value if TypeSign.STRING in _type else value)
     local = '"{}": {}'.format(key, value)
     return local
 
@@ -50,3 +50,17 @@ class Util:
     itemが空(list, dict, '', None...)なら何もしない、空でなければprocを実行
     """
     if bool(item): proc(item)
+
+# Why Pythonista hates 'assert' a great function?
+# Meybe it is NOT a primary func. or want to use tests forcely.
+class Hoare:
+  @classmethod
+  def P(cls, *formula):
+    comment = lambda x: x[1] if len(x) > 1 else ''
+    if __debug__:
+        if not formula[0]:
+          print('%s'%comment(formula))
+          raise AssertionError()
+    else:
+      if not formula[0]:
+        print('Not correct condition has found. [%s]'%comment(formula))

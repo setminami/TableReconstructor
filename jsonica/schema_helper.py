@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys, enum
-
+from util import Hoare
 
 class Validator(str, enum.Enum):
   """ 対応validator """
@@ -28,7 +28,6 @@ class Schema:
     """ concrete 1 as jsonschema style """
     def __init__(self):
       self.__schemas = []
-    pass
 
     def _makeSchema(self, type_desc):
       schema = {'type':'object'}
@@ -49,28 +48,23 @@ class Schema:
       except SchemaError as se:
         self.__print('Schema Error has found.\n%s'%se)
         sys.exit(-2)
-      pass
 
   def __init__(self, validator):
     self.schema_name = validator
     # TEMP: type switch
     if validator == Validator.jsonschema:
       self.schema = Schema.JsonSchema()
-    pass
 
   def makeSchema(self, desc):
     """ 一項目ずつの定義であることに留意 """
-    assert isinstance(desc[0], str) and isinstance(desc[1], dict)
+    Hoare.P(isinstance(desc[0], str) and isinstance(desc[1], dict))
     # HACK: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか
     return self.schema._makeSchema(desc)
 
   def validate(self, evl, desc):
     sc = self.makeSchema(desc)
-    assert isinstance(evl, list) or isinstance(evl, dict)
+    Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, sc)
-    pass
 
-    def __print(self, str, flag=False):
-      if flag:
-        print(str)
-      pass
+    def __print(self, _str, flag=False):
+      if flag: print(_str)
