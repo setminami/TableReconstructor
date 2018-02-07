@@ -94,7 +94,7 @@ class XLSX:
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
-        self.__output_to_csv(self.format_output, root_sheet, self.char_encode)
+        self.output_to_csv(self.format_output, root_sheet, self.char_encode)
       for j, cell in enumerate(row):
         v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
         if v is None: continue # cell check
@@ -113,25 +113,25 @@ class XLSX:
             except SheetError as e:
               errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, e.link, j, i))
           else:
-            XLSX.__store(self.type_validator(sheet_name, v, columns[j]), subacc)
+            XLSX.store(self.type_validator(sheet_name, v, columns[j]), subacc)
         # pass columns
-      Util.check_emptyOR(lambda x: XLSX.__store(x, acc), subacc)
+      Util.check_emptyOR(lambda x: XLSX.store(x, acc), subacc)
       # pass a row
     return acc
 
   def __sheet_item_processor(self, sheet_link, sheet_names, title, col, acc):
     # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
-    # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
+    # primitive配列をどう表現するかによって改修が必要 storeに包含させる？
     link = sheet_link.lstrip(XLSX.sheet_link_sign)
     if link in sheet_names:
       col_name, col_schema = col
       Util.sprint('process %s -> %s\ncurrent acc = %s'%(col_name, link, acc), self.DEBUG)
       # recursive seed
-      XLSX.__store(self.generate_leaf(title, col_name, link, col_schema), acc)
+      XLSX.store(self.generate_leaf(title, col_name, link, col_schema), acc)
     else:
       raise SheetError(link)
 
-  def __output_to_csv(self, base_path, sheet, enc):
+  def output_to_csv(self, base_path, sheet, enc):
     """
     CSV, TSV出力
     """
@@ -243,7 +243,7 @@ class XLSX:
       errorout(4, _type)
 
   @classmethod
-  def __store(cls, item, accumulator):
+  def store(cls, item, accumulator):
     """
     評価済みが保証された値を、rootのleafに連結
 
