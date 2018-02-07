@@ -42,9 +42,9 @@ class Generate(SubCommands):
     workpath = Generate.__treatFileTypes(fileloc)
     from xlsx import XLSX
     self._print('Analyzing... %s'%fileloc)
-    x = XLSX(workpath, args.encoding, args.output_format)
+    x = XLSX(args.root_sheet, workpath, args.encoding, args.output_format)
     # sys.setrecursionlimit(1024 * 8)
-    j = x.generate_json(sheet_name=args.root_sheet)
+    j = x.generate_json()
     with wild_open(args.output, encoding=args.encoding) as f:
       try:
         print(json.dumps(j, sort_keys=True, indent=args.human_readable) \
