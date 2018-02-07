@@ -37,9 +37,10 @@ class XLSX:
     else:
       self.piled_schema[synth_key] = schema
 
-  def __init__(self, file, enc, forms=None):
+  def __init__(self, file, enc, root_name=None, forms=None):
     self.filepath = file
     self.filename = os.path.basename(file)
+    self.root_name = root_name
     self.__all_schema = {}
     if forms:
       self.format = forms[0]
@@ -51,11 +52,13 @@ class XLSX:
     else: # init
       self.book = openpyxl.Workbook()
 
-  def generate_json(self, sheet_name, acc=None):
+  def generate_json(self, sheet_name=None, acc=None):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
     """
     sheets = self.__name_to_sheets()
+    if not sheet_name:
+      sheet_name = self.root_name
     # pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため
     sheet_names = list(sheets.keys())
     Util.sprint('in process %s'%sheet_name, self.DEBUG)
