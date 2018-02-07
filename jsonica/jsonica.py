@@ -12,9 +12,10 @@ codec_help_url = 'https://docs.python.org/3.6/library/codecs.html#standard-encod
 
 class Jsonica:
   """ 具象操作に流すための、utility的位置づけ """
-  DEBUG = True
+  __DEBUG = True
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
   # DEBUG出力用 jsonは別扱い
-  # 簡単なので、仮実装　vs. 素直にargparse actionに直接__run__()を割り当てるか、その場合前処理をどうするか。
+  # 簡単なので、仮実装 vs. 素直にargparse actionに直接__run__()を割り当てるか、その場合前処理をどうするか。
   sub_commands = {}
 
   def __init__(self):

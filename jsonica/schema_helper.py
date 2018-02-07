@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, enum
+import sys, os, enum
 from util import Util, Hoare
 
 class Validator(str, enum.Enum):
@@ -27,7 +27,9 @@ class Schema:
   下流具象クラスへの中継とreduce以外の作業はさせないこと
   """
   schema_url = '' # subclassで設定 mandatoryのため空宣言
-  DEBUG = False
+  __DEBUG = False
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
+
   class JsonSchema:
     """ concrete 1 as jsonschema style """
     def __init__(self):

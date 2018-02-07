@@ -8,9 +8,12 @@ from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
-  DEBUG = not (os.getenv('TRAVIS', False))
+  __DEBUG = True
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
+
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
+
   @property
   def schema(self): return self.__schema
   @schema.setter
@@ -28,7 +31,7 @@ class XLSX:
   def piled_schema(self, value):
     """
     schema用accumrator
-    :param tuple value : (sheet:Some, column:Some, schema:dict)
+    :param tuple value: (sheet:Some, column:Some, schema:dict)
     """
     sheet, col, schema = value
     synth_key = '{}/{}'.format(sheet, col)
@@ -38,6 +41,12 @@ class XLSX:
       self.piled_schema[synth_key] = schema
 
   def __init__(self, file, enc, root_name=None, forms=None):
+    """
+    :param str file: xlsx file location
+    :param str enc: encodig指定があった場合 default 'utf8'
+    :param str root_name: root itemを示すシート名 default 'root'
+    :param tuple forms: ?sv 記述フォーマット (?sv, delimiter, output_root_path)
+    """
     self.filepath = file
     self.filename = os.path.basename(file)
     self.root_name = root_name
