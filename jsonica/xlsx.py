@@ -28,7 +28,7 @@ class XLSX:
   def piled_schema(self, value):
     """
     schema用accumrator
-    value : (sheet:Some, column:Some, schema:dict)
+    :param tuple value : (sheet:Some, column:Some, schema:dict)
     """
     sheet, col, schema = value
     synth_key = '{}/{}'.format(sheet, col)
@@ -55,6 +55,9 @@ class XLSX:
   def generate_json(self, sheet_name=None, acc=None):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
+    :param str sheet_name: 別シートに分かれるitemのシート名 Noneの場合はrootと認識
+    :param acc: rootから伝播されるaccumrator
+    :return この処理から得られた連想配列が追加されたaccumratorを返す
     """
     sheets = self.__name_to_sheets()
     if not sheet_name:
@@ -81,7 +84,7 @@ class XLSX:
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
-            columns.append((v, Util.runtime_dict(cell.comment.text)))
+            columns.append((v, Util.runtime_type(cell.comment.text)))
           else:
             self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
@@ -125,8 +128,8 @@ class XLSX:
 
   def __name_to_sheets(self):
     """
-    sheetを{sheet名:sheet}形式にして返す
-    instance 生成後、実行中のExcel更新は考えない
+    | sheetを{sheet名:sheet}形式にして返す
+    | instance 生成後、実行中のExcel更新は考えない
     """
     # TODO: pyxl.get_sheet_names(), get_sheet_by_name()で代用できるか検討
     if not hasattr(self, '__sheets_cache'):
@@ -155,13 +158,13 @@ class XLSX:
 
   def type_validator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """
-    Validator switcher
-    validation を passしたら成功した**評価値のみ**を返す
-    失敗したら、その場でcommand errorとする
+    | Validator switcher
+    | validation を passしたら成功した**評価値のみ**を返す
+    | 失敗したら、その場でcommand errorとする
     """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
-    instance = Util.runtime_dict('{%s}'%raw)
+    instance = Util.runtime_type('{%s}'%raw)
     Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
     self.piled_schema = (sheet_name, type_desc[0], {type_desc[0]:type_desc[1]})
     Util.sprint('>> %s -> type: %s\n%s'%(sheet_name, type_desc, instance), self.DEBUG)
@@ -203,7 +206,7 @@ class XLSX:
   def __store(cls, item, accumulator):
     """
     評価済みが保証された値を、rootのleafに連結
-    accumlator: either dict or list
+    :param accumlator: either dict or list
     """
     if isinstance(accumulator, dict):
       accumulator.update(item)

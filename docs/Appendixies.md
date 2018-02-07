@@ -79,4 +79,4 @@ optional arguments:
 ```
 
 ## Appendix 3. MindMap
-[mindnode(ja only)](https://my.mindnode.com/vWDYEyp9p7s2kFgCr4yzuVrokfimz3Cx2nvGR1Xg/em#97,31,-2)
+[mindnode(ja only)](https://my.mindnode.com/xM2VG2LFpYrtwHNQ4BbFw4ypqMdFMF7567Pnv2iB)
