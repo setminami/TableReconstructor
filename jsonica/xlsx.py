@@ -24,7 +24,8 @@ class XLSX:
   @property
   def piled_schema(self):
     """
-    __all_schema: {sheet: [schemas]}
+    | 外部IF
+    | 実態は __all_schema: {sheet: [schemas]}
     """
     return self.__all_schema
   @piled_schema.setter
@@ -74,7 +75,7 @@ class XLSX:
 
     :param acc: rootから伝播されるaccumrator
 
-    :return この処理から得られた連想配列が追加されたaccumratorを返す
+    :returns この処理から得られた連想配列が追加されたaccumratorを返す
     """
     sheets = self.__name_to_sheets()
     if not sheet_name:
@@ -184,6 +185,8 @@ class XLSX:
     :param value: 評価対象JSON
 
     :param type_desc: schema (format TBD)
+
+    :returns 部分的にtype_descを満たすことが保証されたJSON
     """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
@@ -199,8 +202,20 @@ class XLSX:
     return self.book.create_sheet(name)
 
   def generate_leaf(self, parent, key, l, schema):
-    """ schemaに従ったitemを生成 """
-    # NOTE: recursive procが分解されている事に留意
+    """
+    | schemaに従ったitemを生成
+    | NOTE: recursive procが分解されている事に留意
+
+    :param parent: 幹になるJSON
+
+    :param key: leafのkey指定
+
+    :param l: list sheet名
+
+    :param schema: leafについて記述されたschema 型が記述されていること
+
+    :returns leafとして成立したJSONを連想配列で返す {key: leaf}
+    """
     self.piled_schema = (parent, key, schema)
     return {key: self.generate_json(l, XLSX.renew_acc(schema))}
 
@@ -231,6 +246,8 @@ class XLSX:
     評価済みが保証された値を、rootのleafに連結
 
     :param accumlator: either dict or list
+
+    :returns 連結された状態のacc
     """
     if isinstance(accumulator, dict):
       accumulator.update(item)
