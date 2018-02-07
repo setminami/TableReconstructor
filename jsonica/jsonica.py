@@ -23,8 +23,8 @@ class Jsonica:
 
   def regist_subcommand(self, command):
     """
-    sub_commandsの型に依存させないためのIF
-    型変更の必要がでたら、局所的に操作を書き換える
+    | sub_commandsの型に依存させないためのIF
+    | 型変更の必要がでたら、局所的に操作を書き換える
     """
     from sub_command_core.sub_command import SubCommands
     Hoare.P(issubclass(command.__class__, SubCommands))
