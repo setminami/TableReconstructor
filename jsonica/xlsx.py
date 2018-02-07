@@ -37,7 +37,7 @@ class XLSX:
     else:
       self.piled_schema[synth_key] = schema
 
-  def __init__(self, root_name, file, enc, forms=None):
+  def __init__(self, file, root_name, enc, forms=None):
     self.filepath = file
     self.filename = os.path.basename(file)
     self.root_name = root_name
