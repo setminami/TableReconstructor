@@ -53,7 +53,7 @@ class Util:
 
     :param item: 空 (list|dict|str) | None なら何もしない、空でなければprocを実行
 
-    :returns procが返値を持つ場合は、procに従う
+    :returns procが返値を持つ場合は、procに従う:
     """
     if bool(item): proc(item)
 

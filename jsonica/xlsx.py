@@ -75,7 +75,7 @@ class XLSX:
 
     :param acc: rootから伝播されるaccumrator
 
-    :returns この処理から得られた連想配列が追加されたaccumratorを返す
+    :returns この処理から得られた連想配列が追加されたaccumratorを返す:
     """
     sheets = self.__name_to_sheets()
     if not sheet_name:
@@ -186,7 +186,7 @@ class XLSX:
 
     :param type_desc: schema (format TBD)
 
-    :returns 部分的にtype_descを満たすことが保証されたJSON
+    :returns 部分的にtype_descを満たすことが保証されたJSON:
     """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
@@ -214,7 +214,7 @@ class XLSX:
 
     :param schema: leafについて記述されたschema 型が記述されていること
 
-    :returns leafとして成立したJSONを連想配列で返す {key: leaf}
+    :returns leafとして成立したJSONを連想配列で返す:
     """
     self.piled_schema = (parent, key, schema)
     return {key: self.generate_json(l, XLSX.renew_acc(schema))}
@@ -247,7 +247,7 @@ class XLSX:
 
     :param accumlator: either dict or list
 
-    :returns 連結された状態のacc
+    :returns 連結された状態のacc:
     """
     if isinstance(accumulator, dict):
       accumulator.update(item)
