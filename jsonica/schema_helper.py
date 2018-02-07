@@ -27,7 +27,7 @@ class TypeSign(str, enum.Enum):
 class Schema:
   """
   | 抽象的な中継クラス
-  下流具象クラスへの中継とreduce以外の作業はさせないこと
+  | 下流具象クラスへの中継とreduce以外の作業はさせないこと
   """
   schema_url = '' # subclassで設定 mandatoryのため空宣言
   __DEBUG = False
@@ -84,7 +84,7 @@ class Schema:
     """
     | _validateに流す
     | 成功すればスルー、失敗したらその場でcommand error / 判定値は返さない
-    NOTE: 具体的なerrorハンドリングは_validate内で処理すること
+    | NOTE: 具体的なerrorハンドリングは_validate内で処理すること
     """
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, self.make_schema(desc))

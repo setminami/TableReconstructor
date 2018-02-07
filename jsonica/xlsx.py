@@ -31,6 +31,7 @@ class XLSX:
   def piled_schema(self, value):
     """
     schema用accumrator
+
     :param tuple value: (sheet:Some, column:Some, schema:dict)
     """
     sheet, col, schema = value
@@ -42,9 +43,13 @@ class XLSX:
 
   def __init__(self, file, enc, root_name=None, forms=None):
     """
+
     :param str file: xlsx file location
+
     :param str enc: encodig指定があった場合 default 'utf8'
+
     :param str root_name: root itemを示すシート名 default 'root'
+
     :param tuple forms: ?sv 記述フォーマット (?sv, delimiter, output_root_path)
     """
     self.filepath = file
@@ -64,8 +69,11 @@ class XLSX:
   def generate_json(self, sheet_name=None, acc=None):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
+
     :param str sheet_name: 別シートに分かれるitemのシート名 Noneの場合はrootと認識
+
     :param acc: rootから伝播されるaccumrator
+
     :return この処理から得られた連想配列が追加されたaccumratorを返す
     """
     sheets = self.__name_to_sheets()
@@ -170,6 +178,12 @@ class XLSX:
     | Validator switcher
     | validation を passしたら成功した**評価値のみ**を返す
     | 失敗したら、その場でcommand errorとする
+
+    :param str sheet_name: 評価対象sheet名
+
+    :param value: 評価対象JSON
+
+    :param type_desc: schema (format TBD)
     """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
@@ -215,6 +229,7 @@ class XLSX:
   def __store(cls, item, accumulator):
     """
     評価済みが保証された値を、rootのleafに連結
+
     :param accumlator: either dict or list
     """
     if isinstance(accumulator, dict):
