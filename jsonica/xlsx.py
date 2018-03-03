@@ -8,9 +8,12 @@ from util import Util, Hoare
 
 class XLSX:
   """ xlsx 具象操作クラス """
-  DEBUG = not (os.getenv('TRAVIS', False))
+  __DEBUG = True
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
+
   # childへのリンクを示す接頭辞
   sheet_link_sign = 'sheet://'
+
   @property
   def schema(self): return self.__schema
   @schema.setter
@@ -21,14 +24,16 @@ class XLSX:
   @property
   def piled_schema(self):
     """
-    __all_schema: {sheet: [schemas]}
+    | 外部IF
+    | 実態は __all_schema: {sheet: [schemas]}
     """
     return self.__all_schema
   @piled_schema.setter
   def piled_schema(self, value):
     """
     schema用accumrator
-    value : (sheet:Some, column:Some, schema:dict)
+
+    :param tuple value: (sheet:Some, column:Some, schema:dict)
     """
     sheet, col, schema = value
     synth_key = '{}/{}'.format(sheet, col)
@@ -38,6 +43,16 @@ class XLSX:
       self.piled_schema[synth_key] = schema
 
   def __init__(self, file, enc, root_name=None, forms=None):
+    """
+
+    :param str file: xlsx file location
+
+    :param str enc: encodig指定があった場合 default 'utf8'
+
+    :param str root_name: root itemを示すシート名 default 'root'
+
+    :param tuple forms: ?sv 記述フォーマット (?sv, delimiter, output_root_path)
+    """
     self.filepath = file
     self.filename = os.path.basename(file)
     self.root_name = root_name
@@ -55,6 +70,12 @@ class XLSX:
   def generate_json(self, sheet_name=None, acc=None):
     """
     sheet_nameが指すsheetのJSONをaccに追加する
+
+    :param str sheet_name: 別シートに分かれるitemのシート名 Noneの場合はrootと認識
+
+    :param acc: rootから伝播されるaccumrator
+
+    :returns この処理から得られた連想配列が追加されたaccumratorを返す:
     """
     sheets = self.__name_to_sheets()
     if not sheet_name:
@@ -66,6 +87,7 @@ class XLSX:
     root_sheet = sheets[sheet_name]
     self.check_charcode(root_sheet)
     columns = []
+    # accが存在することを保証
     acc = [] if not acc else acc
     Util.sprint('I\'ll update {}'.format(acc), self.DEBUG)
     # COMBAK: 処理速度に問題が出るようであれば分散処理検討
@@ -73,7 +95,7 @@ class XLSX:
     for i, row in enumerate(root_sheet.iter_rows()):
       subacc = {}
       if self.format:
-        self.__output_to_csv(self.format_output, root_sheet, self.char_encode)
+        self.output_to_csv(self.format_output, root_sheet, self.char_encode)
       for j, cell in enumerate(row):
         v = cell.value # off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う
         if v is None: continue # cell check
@@ -81,34 +103,38 @@ class XLSX:
           # cell.commentは必ずつくが、中身がない場合はNone
           if hasattr(cell, "comment") and cell.comment:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
-            columns.append((v, Util.runtime_dict(cell.comment.text)))
+            columns.append((v, Util.runtime_type(cell.comment.text)))
           else:
-            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
+            errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
-          # TODO: 関数へ置き換え type = array, objectのケース をカバー
           # 別sheet評価
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
-            # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
-            # primitive配列をどう表現するかによって改修が必要 __storeに包含させる？
-            link = v.lstrip(XLSX.sheet_link_sign)
-            if link in sheet_names:
-              col_name, col_schema = columns[j]
-              Util.sprint('process %s -> %s'%(col_name, link), self.DEBUG)
-              Util.sprint('current acc = %s'%acc, self.DEBUG)
-              # recursive seed
-              XLSX.__store(
-                self.generate_leaf(root_sheet.title, col_name, link, col_schema),
-                subacc)
-            else:
-              errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, link, j, i))
+            link, title = v.lstrip(XLSX.sheet_link_sign), root_sheet.title
+            try:
+              self.__sheet_item_processor(link, sheet_names, title, columns[j], subacc)
+            except:
+              errorout(1, 'sheet from %s to %s, col = %d, row = %d\nin %s'%\
+                                            (sheet_name, link, j, i, sheet_names))
           else:
-            XLSX.__store(self.type_validator(sheet_name, v, columns[j]), subacc)
+            XLSX.store(self.type_validator(sheet_name, v, columns[j]), subacc)
         # pass columns
-      Util.check_emptyOR(lambda x: XLSX.__store(x, acc), subacc)
+      Util.check_emptyOR(lambda x: XLSX.store(x, acc), subacc)
       # pass a row
     return acc
 
-  def __output_to_csv(self, base_path, sheet, enc):
+  def __sheet_item_processor(self, link, sheet_names, title, col, acc):
+    # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
+    # primitive配列をどう表現するかによって改修が必要 storeに包含させる？
+    if link in sheet_names:
+      col_name, col_schema = col
+      Util.sprint('process %s -> %s\ncurrent acc = %s'%(col_name, link, acc), self.DEBUG)
+      # recursive seed
+      leaf = self.generate_leaf(title, col_name, link, col_schema)
+      XLSX.store(self.type_validator(link, leaf, col), acc)
+    else:
+      raise
+
+  def output_to_csv(self, base_path, sheet, enc):
     """
     CSV, TSV出力
     """
@@ -125,8 +151,8 @@ class XLSX:
 
   def __name_to_sheets(self):
     """
-    sheetを{sheet名:sheet}形式にして返す
-    instance 生成後、実行中のExcel更新は考えない
+    | sheetを{sheet名:sheet}形式にして返す
+    | instance 生成後、実行中のExcel更新は考えない
     """
     # TODO: pyxl.get_sheet_names(), get_sheet_by_name()で代用できるか検討
     if not hasattr(self, '__sheets_cache'):
@@ -155,13 +181,21 @@ class XLSX:
 
   def type_validator(self, sheet_name, value, type_desc, validator=Validator.jsonschema):
     """
-    Validator switcher
-    validation を passしたら成功した**評価値のみ**を返す
-    失敗したら、その場でcommand errorとする
+    | Validator switcher
+    | validation を passしたら成功した**評価値のみ**を返す
+    | 失敗したら、その場でcommand errorとする
+
+    :param str sheet_name: 評価対象sheet名
+
+    :param value: 評価対象JSON
+
+    :param type_desc: schema (format TBD)
+
+    :returns 部分的にtype_descを満たすことが保証されたJSON:
     """
     self.schema = Schema(validator)
     raw = Util.conv_escapedKV(XLSX.__get_type(type_desc[1]), type_desc[0], value)
-    instance = Util.runtime_dict('{%s}'%raw)
+    instance = Util.runtime_type('{%s}'%raw)
     Util.sprint('i\'m %s. call validator'%self, self.DEBUG)
     self.piled_schema = (sheet_name, type_desc[0], {type_desc[0]:type_desc[1]})
     Util.sprint('>> %s -> type: %s\n%s'%(sheet_name, type_desc, instance), self.DEBUG)
@@ -173,8 +207,20 @@ class XLSX:
     return self.book.create_sheet(name)
 
   def generate_leaf(self, parent, key, l, schema):
-    """ schemaに従ったitemを生成 """
-    # NOTE: recursive procが分解されている事に留意
+    """
+    | schemaに従ったitemを生成
+    | NOTE: recursive procが分解されている事に留意
+
+    :param parent: 幹になるJSON
+
+    :param key: leafのkey指定
+
+    :param l: list sheet名
+
+    :param schema: leafについて記述されたschema 型が記述されていること
+
+    :returns leafとして成立したJSONを連想配列で返す:
+    """
     self.piled_schema = (parent, key, schema)
     return {key: self.generate_json(l, XLSX.renew_acc(schema))}
 
@@ -200,10 +246,13 @@ class XLSX:
       errorout(4, _type)
 
   @classmethod
-  def __store(cls, item, accumulator):
+  def store(cls, item, accumulator):
     """
     評価済みが保証された値を、rootのleafに連結
-    accumlator: either dict or list
+
+    :param accumlator: either dict or list
+
+    :returns 連結された状態のacc:
     """
     if isinstance(accumulator, dict):
       accumulator.update(item)

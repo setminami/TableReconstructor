@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys, enum
+import sys, os, enum
 from util import Util, Hoare
 
 class Validator(str, enum.Enum):
@@ -7,7 +7,10 @@ class Validator(str, enum.Enum):
   jsonschema = 'jsonschema'
 
 class TypeSign(str, enum.Enum):
-  """ Type adhoc """
+  """
+  | Type adhoc
+  | schemaからダイナミックに取得するのが理想
+  """
   # https://tools.ietf.org/html/draft-zyp-json-schema-04
   # RFC 4627#2.1 https://tools.ietf.org/html/rfc4627
   OBJ = 'object'
@@ -23,11 +26,13 @@ class TypeSign(str, enum.Enum):
 
 class Schema:
   """
-  抽象的な中継クラス
-  下流具象クラスへの中継とreduce以外の作業はさせないこと
+  | 抽象的な中継クラス
+  | 下流具象クラスへの中継とreduce以外の作業はさせないこと
   """
   schema_url = '' # subclassで設定 mandatoryのため空宣言
-  DEBUG = False
+  __DEBUG = False
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
+
   class JsonSchema:
     """ concrete 1 as jsonschema style """
     def __init__(self):
@@ -77,9 +82,9 @@ class Schema:
 
   def validate(self, evl, desc):
     """
-    _validateに流す
-    成功すればスルー、失敗したらその場でcommand error / 判定値は返さない
-    NOTE: 具体的なerrorハンドリングは_validate内で処理すること
+    | _validateに流す
+    | 成功すればスルー、失敗したらその場でcommand error / 判定値は返さない
+    | NOTE: 具体的なerrorハンドリングは_validate内で処理すること
     """
     Hoare.P(isinstance(evl, list) or isinstance(evl, dict))
     self.schema._validate(evl, self.make_schema(desc))

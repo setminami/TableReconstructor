@@ -1,7 +1,13 @@
-python3 setup.py sdist
-twine upload dist/*
+# 配布作業メモ
+(作業が安定したら.travis.ymlに追加)
+
+1. ./setup.py編集
+1. python3 setup.py sdist
+1. twine upload dist/*
+1. [pypi](https://pypi.python.org/pypi?%3Aaction=pkg_edit&name=jsonica)確認
 
 
+```
 $ python3 setup.py sdist
 running sdist
 running egg_info
@@ -51,3 +57,4 @@ Uploading distributions to https://upload.pypi.org/legacy/
 Enter your username: setminami
 Enter your password:
 Uploading jsonica-0.0.9.tar.gz
+```

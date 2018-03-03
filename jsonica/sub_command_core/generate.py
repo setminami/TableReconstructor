@@ -18,7 +18,8 @@ class Generate(SubCommands):
   __aliases = ['gen', 'g']
   __help = 'generate analyzed files as TEXT from META descritor file. (e.g., Excel)'
 
-  DEBUG = not (os.getenv('TRAVIS', False))
+  __DEBUG = True
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
 
   def __init__(self):
     super().__init__()
@@ -117,7 +118,8 @@ class AnalyzeJSONOutPath(argparse.Action):
 
 class AnalyzeXSeparatedOutPath(argparse.Action):
   """ sv出力先と形式を解析する """
-  DEBUG = False
+  __DEBUG = False
+  DEBUG = not (os.getenv('TRAVIS', not __DEBUG))
   def __call__(self, parser, namespace, values, option_string=None):
     if self.DEBUG:
         print('{} called: {}'.format(self.__class__.__name__, values))
