@@ -87,6 +87,7 @@ class XLSX:
     root_sheet = sheets[sheet_name]
     self.check_charcode(root_sheet)
     columns = []
+    # accが存在することを保証
     acc = [] if not acc else acc
     Util.sprint('I\'ll update {}'.format(acc), self.DEBUG)
     # COMBAK: 処理速度に問題が出るようであれば分散処理検討
@@ -104,14 +105,16 @@ class XLSX:
             # column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証
             columns.append((v, Util.runtime_type(cell.comment.text)))
           else:
-            self.errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
+            errorout(2, 'sheet = {}, col = {}, row = {}'.format(sheet_name, j, i))
         else:
           # 別sheet評価
           if isinstance(v, str) and v.startswith(XLSX.sheet_link_sign):
+            link, title = v.lstrip(XLSX.sheet_link_sign), root_sheet.title
             try:
-              self.__sheet_item_processor(v, sheet_names, root_sheet.title, columns[j], subacc)
-            except SheetError as e:
-              errorout(1, 'sheet = from %s to %s, col = %d, row = %d'%(sheet_name, e.link, j, i))
+              self.__sheet_item_processor(link, sheet_names, title, columns[j], subacc)
+            except:
+              errorout(1, 'sheet from %s to %s, col = %d, row = %d\nin %s'%\
+                                            (sheet_name, link, j, i, sheet_names))
           else:
             XLSX.store(self.type_validator(sheet_name, v, columns[j]), subacc)
         # pass columns
@@ -119,17 +122,17 @@ class XLSX:
       # pass a row
     return acc
 
-  def __sheet_item_processor(self, sheet_link, sheet_names, title, col, acc):
+  def __sheet_item_processor(self, link, sheet_names, title, col, acc):
     # COMBAK: sheetであることがarray, objectの必要条件になってしまっている
     # primitive配列をどう表現するかによって改修が必要 storeに包含させる？
-    link = sheet_link.lstrip(XLSX.sheet_link_sign)
     if link in sheet_names:
       col_name, col_schema = col
       Util.sprint('process %s -> %s\ncurrent acc = %s'%(col_name, link, acc), self.DEBUG)
       # recursive seed
-      XLSX.store(self.generate_leaf(title, col_name, link, col_schema), acc)
+      leaf = self.generate_leaf(title, col_name, link, col_schema)
+      XLSX.store(self.type_validator(link, leaf, col), acc)
     else:
-      raise SheetError(link)
+      raise
 
   def output_to_csv(self, base_path, sheet, enc):
     """
@@ -258,8 +261,3 @@ class XLSX:
     else:
       errorout(5)
     return accumulator
-
-class SheetError(Exception):
-  """ シート処理 に関するエラー """
-  def __init__(self, link):
-    self.link = link
